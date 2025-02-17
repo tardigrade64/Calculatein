@@ -43,235 +43,129 @@
             background-color: #ecf0f1;
             color: black;
         }
+        .scientific-mode .basic-buttons {
+            display: none;
+        }
+        .basic-mode .scientific-buttons {
+            display: none;
+        }
     </style>
 </head>
-<body class="light-mode">
+<body class="light-mode basic-mode">
     <div class="container">
         <input type="text" id="result" disabled>
         <br>
         <button onclick="clearScreen()">C</button>
-        <button onclick="toggleNotation()">Toggle Notation</button>
-        <button onclick="calculateFactorial()">n!</button>
-        <button onclick="calculateGamma()">Γ(n)</button>
+        <button onclick="toggleMode()">Toggle Mode</button>
         <br>
-        <button onclick="plotFactorial()">Plot Factorial</button>
-        <button onclick="calculateBeta()">B(x, y)</button>
-        <button onclick="calculateZeta()">ζ(n)</button>
-        <br>
-        <button class="btn-toggle" onclick="toggleMode()">Toggle Dark Mode</button>
-        <canvas id="factorialChart"></canvas>
-        <canvas id="gammaChart" style="display: none;"></canvas>
-        <canvas id="betaChart" style="display: none;"></canvas>
+        <div class="basic-buttons">
+            <button onclick="appendNumber(7)">7</button>
+            <button onclick="appendNumber(8)">8</button>
+            <button onclick="appendNumber(9)">9</button>
+            <button onclick="appendOperator('+')">+</button>
+            <br>
+            <button onclick="appendNumber(4)">4</button>
+            <button onclick="appendNumber(5)">5</button>
+            <button onclick="appendNumber(6)">6</button>
+            <button onclick="appendOperator('-')">-</button>
+            <br>
+            <button onclick="appendNumber(1)">1</button>
+            <button onclick="appendNumber(2)">2</button>
+            <button onclick="appendNumber(3)">3</button>
+            <button onclick="appendOperator('*')">*</button>
+            <br>
+            <button onclick="appendNumber(0)">0</button>
+            <button onclick="appendDecimal()">.</button>
+            <button onclick="calculateResult()">=</button>
+            <button onclick="appendOperator('/')">/</button>
+        </div>
+        <div class="scientific-buttons">
+            <button onclick="appendNumber(7)">7</button>
+            <button onclick="appendNumber(8)">8</button>
+            <button onclick="appendNumber(9)">9</button>
+            <button onclick="appendOperator('+')">+</button>
+            <br>
+            <button onclick="appendNumber(4)">4</button>
+            <button onclick="appendNumber(5)">5</button>
+            <button onclick="appendNumber(6)">6</button>
+            <button onclick="appendOperator('-')">-</button>
+            <br>
+            <button onclick="appendNumber(1)">1</button>
+            <button onclick="appendNumber(2)">2</button>
+            <button onclick="appendNumber(3)">3</button>
+            <button onclick="appendOperator('*')">*</button>
+            <br>
+            <button onclick="appendNumber(0)">0</button>
+            <button onclick="appendDecimal()">.</button>
+            <button onclick="calculateResult()">=</button>
+            <button onclick="appendOperator('/')">/</button>
+            <br>
+            <button onclick="appendFunction('sin')">sin</button>
+            <button onclick="appendFunction('cos')">cos</button>
+            <button onclick="appendFunction('tan')">tan</button>
+            <button onclick="appendFunction('log')">log</button>
+            <br>
+            <button onclick="appendFunction('sqrt')">√</button>
+            <button onclick="appendFunction('exp')">exp</button>
+            <button onclick="appendFunction('ln')">ln</button>
+            <button onclick="appendFunction('factorial')">n!</button>
+        </div>
     </div>
 
     <script>
-        let useScientificNotation = true;
-        let darkMode = false;
+        let currentInput = '';
+        let currentMode = 'basic'; // 'basic' or 'scientific'
 
         function toggleMode() {
-            darkMode = !darkMode;
-            document.body.className = darkMode ? "dark-mode" : "light-mode";
-        }
-
-        function toggleNotation() {
-            useScientificNotation = !useScientificNotation;
-            alert("Scientific Notation: " + (useScientificNotation ? "ON" : "OFF"));
-        }
-
-        function formatNumber(num) {
-            if (typeof num !== "number") return num;
-            if (useScientificNotation && Math.abs(num) >= 1e15) {
-                return num.toExponential(10);
-            }
-            return num.toFixed(20).replace(/\.?0+$/, '');
-        }
-
-        function gammaFunction(z) {
-            const g = 7;
-            const coefficients = [0.99999999999980993, 676.5203681218851, -1259.1392167224028,
-                771.32342877765313, -176.61502916214059, 12.507343278686905,
-                -0.13857109526572012, 9.9843695780195716e-6, 1.5056327351493116e-7];
-
-            if (z < 0.5) {
-                return Math.PI / (Math.sin(Math.PI * z) * gammaFunction(1 - z));
+            if (currentMode === 'basic') {
+                currentMode = 'scientific';
+                document.body.classList.remove('basic-mode');
+                document.body.classList.add('scientific-mode');
             } else {
-                z -= 1;
-                let x = coefficients[0];
-                for (let i = 1; i < g + 2; i++) {
-                    x += coefficients[i] / (z + i);
-                }
-                let t = z + g + 0.5;
-                return Math.sqrt(2 * Math.PI) * Math.pow(t, z + 0.5) * Math.exp(-t) * x;
+                currentMode = 'basic';
+                document.body.classList.remove('scientific-mode');
+                document.body.classList.add('basic-mode');
             }
-        }
-
-        function factorial(n) {
-            if (n > 170) {
-                // For n > 170, use Stirling's approximation
-                return stirlingApproximation(n);
-            }
-            if (Number.isInteger(n)) {
-                if (n < 0) return "Undefined";
-                let result = BigInt(1);
-                for (let i = BigInt(2); i <= BigInt(n); i++) {
-                    result *= i;
-                }
-                return result.toString();
-            } else {
-                return formatNumber(gammaFunction(n + 1));
-            }
-        }
-
-        // Stirling's approximation for large n!
-        function stirlingApproximation(n) {
-            const sqrtTwoPi = Math.sqrt(2 * Math.PI * n);
-            const powerTerm = Math.pow(n / Math.E, n);
-            return formatNumber(sqrtTwoPi * powerTerm);
-        }
-
-        function betaFunction(x, y) {
-            return formatNumber(gammaFunction(x) * gammaFunction(y) / gammaFunction(x + y));
-        }
-
-        function zetaFunction(s, terms = 100) {
-            if (s <= 1) return "Divergent";
-            let sum = 0;
-            for (let n = 1; n <= terms; n++) {
-                sum += 1 / Math.pow(n, s);
-            }
-            return formatNumber(sum);
         }
 
         function clearScreen() {
-            document.getElementById("result").value = "";
+            currentInput = '';
+            document.getElementById('result').value = currentInput;
         }
 
-        function calculateFactorial() {
-            let value = parseFloat(document.getElementById("result").value);
-            if (isNaN(value)) {
-                document.getElementById("result").value = "Error";
-                return;
-            }
-            document.getElementById("result").value = factorial(value);
+        function appendNumber(number) {
+            currentInput += number;
+            document.getElementById('result').value = currentInput;
         }
 
-        function calculateGamma() {
-            let value = parseFloat(document.getElementById("result").value);
-            if (isNaN(value)) {
-                document.getElementById("result").value = "Error";
-                return;
-            }
-            document.getElementById("result").value = formatNumber(gammaFunction(value));
+        function appendOperator(operator) {
+            currentInput += ' ' + operator + ' ';
+            document.getElementById('result').value = currentInput;
         }
 
-        function calculateBeta() {
-            let x = parseFloat(prompt("Enter x:"));
-            let y = parseFloat(prompt("Enter y:"));
-            if (isNaN(x) || isNaN(y)) {
-                document.getElementById("result").value = "Error";
-                return;
+        function appendDecimal() {
+            if (!currentInput.includes('.')) {
+                currentInput += '.';
+                document.getElementById('result').value = currentInput;
             }
-            document.getElementById("result").value = betaFunction(x, y);
         }
 
-        function calculateZeta() {
-            let s = parseFloat(prompt("Enter s:"));
-            if (isNaN(s)) {
-                document.getElementById("result").value = "Error";
-                return;
-            }
-            document.getElementById("result").value = zetaFunction(s);
+        function appendFunction(func) {
+            currentInput += func + '(';
+            document.getElementById('result').value = currentInput;
         }
 
-        function plotFactorial() {
-            let ctx = document.getElementById('factorialChart').getContext('2d');
-            let labels = [];
-            let data = [];
-            for (let i = 0; i <= 10; i++) {
-                labels.push(i);
-                data.push(parseFloat(factorial(i)));
-            }
-
-            new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: labels,
-                    datasets: [{
-                        label: 'Factorial Growth',
-                        data: data,
-                        borderColor: 'blue',
-                        fill: false
-                    }]
-                },
-                options: {
-                    scales: {
-                        y: {
-                            beginAtZero: true
-                        }
-                    }
+        function calculateResult() {
+            try {
+                let result = eval(currentInput);
+                if (isNaN(result) || result === Infinity || result === -Infinity) {
+                    throw new Error('Invalid result');
                 }
-            });
-        }
-
-        // Add plotting functionality for Gamma and Beta
-        function plotGamma() {
-            let ctx = document.getElementById('gammaChart').getContext('2d');
-            let labels = [];
-            let data = [];
-            for (let i = 0; i <= 10; i++) {
-                labels.push(i);
-                data.push(parseFloat(formatNumber(gammaFunction(i))));
+                currentInput = result.toString();
+                document.getElementById('result').value = currentInput;
+            } catch (error) {
+                document.getElementById('result').value = 'Error';
             }
-
-            new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: labels,
-                    datasets: [{
-                        label: 'Gamma Function',
-                        data: data,
-                        borderColor: 'green',
-                        fill: false
-                    }]
-                },
-                options: {
-                    scales: {
-                        y: {
-                            beginAtZero: true
-                        }
-                    }
-                }
-            });
-        }
-
-        function plotBeta() {
-            let ctx = document.getElementById('betaChart').getContext('2d');
-            let labels = [];
-            let data = [];
-            for (let i = 1; i <= 10; i++) {
-                labels.push(i);
-                data.push(parseFloat(formatNumber(betaFunction(i, i+1))));
-            }
-
-            new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: labels,
-                    datasets: [{
-                        label: 'Beta Function',
-                        data: data,
-                        borderColor: 'red',
-                        fill: false
-                    }]
-                },
-                options: {
-                    scales: {
-                        y: {
-                            beginAtZero: true
-                        }
-                    }
-                }
-            });
         }
     </script>
 </body>
