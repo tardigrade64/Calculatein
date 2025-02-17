@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Scientific Calculator</title>
+  <link rel="stylesheet" href="styles.css">  <!-- Links the CSS file -->
+</head>
+<body>
+  <div id="calculator">
+    <input type="text" id="display" disabled>
+
+    <div id="buttons">
+      <!-- Basic Calculator Buttons -->
+      <button onclick="appendNumber(7)">7</button>
+      <button onclick="appendNumber(8)">8</button>
+      <button onclick="appendNumber(9)">9</button>
+      <button onclick="setOperation('+')">+</button>
+      
+      <button onclick="appendNumber(4)">4</button>
+      <button onclick="appendNumber(5)">5</button>
+      <button onclick="appendNumber(6)">6</button>
+      <button onclick="setOperation('-')">-</button>
+      
+      <button onclick="appendNumber(1)">1</button>
+      <button onclick="appendNumber(2)">2</button>
+      <button onclick="appendNumber(3)">3</button>
+      <button onclick="setOperation('*')">*</button>
+      
+      <button onclick="appendNumber(0)">0</button>
+      <button onclick="clearDisplay()">C</button>
+      <button onclick="calculate()">=</button>
+      <button onclick="setOperation('/')">/</button>
+
+      <!-- Scientific Functions -->
+      <button onclick="appendFunction('Math.sqrt')">√</button>
+      <button onclick="appendFunction('Math.pow')">xⁿ</button>
+      <button onclick="appendFunction('Math.sin')">sin</button>
+      <button onclick="appendFunction('Math.cos')">cos</button>
+      <button onclick="appendFunction('Math.tan')">tan</button>
+      <button onclick="appendNumber(Math.PI)">π</button>
+      <button onclick="appendNumber(Math.E)">e</button>
+
+      <!-- Toggle Scientific Mode -->
+      <button onclick="toggleMode()">Scientific Mode</button>
+    </div>
+  </div>
+
+  <script src="calculator.js" defer></script>  <!-- Links the JavaScript file -->
+</body>
+</html>
