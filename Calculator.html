@@ -1,247 +1,36 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Advanced Scientific Calculator</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            transition: background-color 0.3s, color 0.3s;
-        }
-        .container {
-            width: 320px;
-            margin: auto;
-            text-align: center;
-            padding: 20px;
-        }
-        #result {
-            width: 100%;
-            text-align: right;
-            font-size: 24px;
-            margin-bottom: 20px;
-        }
-        button {
-            font-size: 18px;
-            margin: 5px;
-            padding: 10px;
-            width: 70px;
-        }
-        .btn-toggle, .btn-graph {
-            width: 150px;
-        }
-        canvas {
-            margin-top: 20px;
-            max-width: 100%;
-        }
-        .dark-mode {
-            background-color: #2c3e50;
-            color: white;
-        }
-        .light-mode {
-            background-color: #ecf0f1;
-            color: black;
-        }
-        .scientific-mode .basic-buttons {
-            display: none;
-        }
-        .basic-mode .scientific-buttons {
-            display: none;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calculator</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
-<body class="light-mode basic-mode">
-    <div class="container">
-        <input type="text" id="result" disabled>
-        <br>
-        <button onclick="clearScreen()">C</button>
-        <button onclick="toggleMode()">Toggle Mode</button>
-        <button onclick="toggleTheme()">Toggle Theme</button>
-        <br>
-        <div class="basic-buttons">
-            <button onclick="appendNumber(7)">7</button>
-            <button onclick="appendNumber(8)">8</button>
-            <button onclick="appendNumber(9)">9</button>
-            <button onclick="appendOperator('+')">+</button>
-            <br>
-            <button onclick="appendNumber(4)">4</button>
-            <button onclick="appendNumber(5)">5</button>
-            <button onclick="appendNumber(6)">6</button>
-            <button onclick="appendOperator('-')">-</button>
-            <br>
-            <button onclick="appendNumber(1)">1</button>
-            <button onclick="appendNumber(2)">2</button>
-            <button onclick="appendNumber(3)">3</button>
-            <button onclick="appendOperator('*')">*</button>
-            <br>
-            <button onclick="appendNumber(0)">0</button>
-            <button onclick="appendDecimal()">.</button>
-            <button onclick="calculateResult()">=</button>
-            <button onclick="appendOperator('/')">/</button>
-        </div>
-        <div class="scientific-buttons">
-            <button onclick="appendNumber(7)">7</button>
-            <button onclick="appendNumber(8)">8</button>
-            <button onclick="appendNumber(9)">9</button>
-            <button onclick="appendOperator('+')">+</button>
-            <br>
-            <button onclick="appendNumber(4)">4</button>
-            <button onclick="appendNumber(5)">5</button>
-            <button onclick="appendNumber(6)">6</button>
-            <button onclick="appendOperator('-')">-</button>
-            <br>
-            <button onclick="appendNumber(1)">1</button>
-            <button onclick="appendNumber(2)">2</button>
-            <button onclick="appendNumber(3)">3</button>
-            <button onclick="appendOperator('*')">*</button>
-            <br>
-            <button onclick="appendNumber(0)">0</button>
-            <button onclick="appendDecimal()">.</button>
-            <button onclick="calculateResult()">=</button>
-            <button onclick="appendOperator('/')">/</button>
-            <br>
-            <button onclick="appendFunction('sin')">sin</button>
-            <button onclick="appendFunction('cos')">cos</button>
-            <button onclick="appendFunction('tan')">tan</button>
-            <button onclick="appendFunction('log')">log</button>
-            <br>
-            <button onclick="appendFunction('sqrt')">√</button>
-            <button onclick="appendFunction('exp')">exp</button>
-            <button onclick="appendFunction('ln')">ln</button>
-            <button onclick="appendFunction('factorial')">n!</button>
-            <br>
-            <button onclick="appendFunction('gamma')">Γ(x)</button>
-            <button onclick="appendFunction('beta')">B(x, y)</button>
-            <br>
-            <button onclick="generateGraph()">Graph</button>
-        </div>
-        <canvas id="graphCanvas" style="display: none;"></canvas>
+<body>
+  <div id="calculator">
+    <input type="text" id="display" disabled>
+    <div id="buttons">
+      <!-- Basic mode buttons -->
+      <button class="button" onclick="appendNumber(7)">7</button>
+      <button class="button" onclick="appendNumber(8)">8</button>
+      <button class="button" onclick="appendNumber(9)">9</button>
+      <button class="button" onclick="setOperation('+')">+</button>
+      <button class="button" onclick="appendNumber(4)">4</button>
+      <button class="button" onclick="appendNumber(5)">5</button>
+      <button class="button" onclick="appendNumber(6)">6</button>
+      <button class="button" onclick="setOperation('-')">-</button>
+      <button class="button" onclick="appendNumber(1)">1</button>
+      <button class="button" onclick="appendNumber(2)">2</button>
+      <button class="button" onclick="appendNumber(3)">3</button>
+      <button class="button" onclick="setOperation('*')">*</button>
+      <button class="button" onclick="appendNumber(0)">0</button>
+      <button class="button" onclick="clearDisplay()">C</button>
+      <button class="button" onclick="calculate()">=</button>
+      <button class="button" onclick="setOperation('/')">/</button>
+      <button class="button" onclick="toggleMode()">Scientific Mode</button>
     </div>
+  </div>
 
-    <script>
-        let currentInput = '';
-        let currentMode = 'basic'; // 'basic' or 'scientific'
-
-        function toggleMode() {
-            if (currentMode === 'basic') {
-                currentMode = 'scientific';
-                document.body.classList.remove('basic-mode');
-                document.body.classList.add('scientific-mode');
-            } else {
-                currentMode = 'basic';
-                document.body.classList.remove('scientific-mode');
-                document.body.classList.add('basic-mode');
-            }
-        }
-
-        function toggleTheme() {
-            document.body.classList.toggle('dark-mode');
-            document.body.classList.toggle('light-mode');
-        }
-
-        function clearScreen() {
-            currentInput = '';
-            document.getElementById('result').value = currentInput;
-        }
-
-        function appendNumber(number) {
-            currentInput += number;
-            document.getElementById('result').value = currentInput;
-        }
-
-        function appendOperator(operator) {
-            currentInput += ' ' + operator + ' ';
-            document.getElementById('result').value = currentInput;
-        }
-
-        function appendDecimal() {
-            if (!currentInput.includes('.')) {
-                currentInput += '.';
-                document.getElementById('result').value = currentInput;
-            }
-        }
-
-        function appendFunction(func) {
-            currentInput += func + '(';
-            document.getElementById('result').value = currentInput;
-        }
-
-        function calculateResult() {
-            try {
-                let result = eval(currentInput);
-                if (isNaN(result) || result === Infinity || result === -Infinity) {
-                    throw new Error('Invalid result');
-                }
-                currentInput = result.toString();
-                document.getElementById('result').value = currentInput;
-            } catch (error) {
-                document.getElementById('result').value = 'Error';
-            }
-        }
-
-        function generateGraph() {
-            let graphCanvas = document.getElementById('graphCanvas');
-            graphCanvas.style.display = 'block';
-
-            let data = [];
-            for (let i = -10; i <= 10; i += 0.1) {
-                data.push({x: i, y: Math.sin(i)});
-            }
-
-            new Chart(graphCanvas, {
-                type: 'line',
-                data: {
-                    datasets: [{
-                        label: 'sin(x)',
-                        data: data,
-                        borderColor: 'rgba(75, 192, 192, 1)',
-                        borderWidth: 2,
-                        fill: false
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    scales: {
-                        x: {
-                            type: 'linear',
-                            position: 'bottom'
-                        },
-                        y: {
-                            min: -1,
-                            max: 1
-                        }
-                    }
-                }
-            });
-        }
-
-        // Gamma Function (Lanczos Approximation)
-        function gamma(z) {
-            const g = 7;
-            const p = [
-                0.99999999999980993,
-                676.5203681218851,
-                -1259.1392167224028,
-                771.32342877765313,
-                -176.61502916214059,
-                12.507343278686905,
-                -0.1385710331296526,
-                9.984369578019570e-6,
-                1.5056327351493116e-7
-            ];
-            if (z < 0.5) {
-                return Math.PI / (Math.sin(Math.PI * z) * gamma(1 - z));
-            }
-            z -= 1;
-            let x = p[0];
-            for (let i = 1; i < p.length; i++) {
-                x += p[i] / (z + i);
-            }
-            const t = z + g + 0.5;
-            return Math.sqrt(2 * Math.PI) * Math.pow(t, z + 0.5) * Math.exp(-t) * x;
-        }
-
-        // Beta Function
-        function beta(x, y) {
-            return (gamma
+  <script src="calculator.js"></script>
+</body>
+</html>
