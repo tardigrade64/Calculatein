@@ -55,7 +55,7 @@
     }
 
     .scientific { 
-      display: none; /* Hidden by default */
+      display: none; /* Hidden in Basic Mode */
     }
   </style>
 </head>
@@ -82,11 +82,14 @@
       <button onclick="setOperation('*')">*</button>
       
       <button onclick="appendNumber(0)">0</button>
-      <button onclick="clearDisplay()">C</button>
+      <button onclick="appendDecimal()">.</button>
       <button onclick="calculate()">=</button>
       <button onclick="setOperation('/')">/</button>
 
-      <!-- Scientific Functions (Initially Hidden) -->
+      <button onclick="calculatePercentage()">%</button>
+      <button onclick="clearDisplay()">C</button>
+
+      <!-- Scientific Functions (Hidden in Basic Mode) -->
       <button class="scientific" onclick="appendFunction('Math.sqrt')">√</button>
       <button class="scientific" onclick="appendFunction('Math.pow')">xⁿ</button>
       <button class="scientific" onclick="appendFunction('Math.sin')">sin</button>
@@ -115,6 +118,13 @@
       updateDisplay();
     }
 
+    function appendDecimal() {
+      if (!currentInput.includes('.')) {
+        currentInput += '.';
+        updateDisplay();
+      }
+    }
+
     function setOperation(op) {
       if (currentInput === '') return;
       if (firstOperand === null) {
@@ -138,24 +148,22 @@
       let secondOperand = parseFloat(currentInput);
       let result;
       switch (operation) {
-        case '+':
-          result = firstOperand + secondOperand;
-          break;
-        case '-':
-          result = firstOperand - secondOperand;
-          break;
-        case '*':
-          result = firstOperand * secondOperand;
-          break;
-        case '/':
-          result = firstOperand / secondOperand;
-          break;
-        default:
-          return;
+        case '+': result = firstOperand + secondOperand; break;
+        case '-': result = firstOperand - secondOperand; break;
+        case '*': result = firstOperand * secondOperand; break;
+        case '/': result = firstOperand / secondOperand; break;
+        default: return;
       }
       currentInput = result.toString();
       firstOperand = result;
       operation = null;
+      updateDisplay();
+    }
+
+    function calculatePercentage() {
+      if (currentInput === '') return;
+      let num = parseFloat(currentInput);
+      currentInput = (num / 100).toString();
       updateDisplay();
     }
 
@@ -164,24 +172,15 @@
       let num = parseFloat(currentInput);
       let result;
       switch (func) {
-        case 'Math.sqrt':
-          result = Math.sqrt(num);
-          break;
-        case 'Math.sin':
-          result = Math.sin(num);
-          break;
-        case 'Math.cos':
-          result = Math.cos(num);
-          break;
-        case 'Math.tan':
-          result = Math.tan(num);
-          break;
-        case 'Math.pow':
+        case 'Math.sqrt': result = Math.sqrt(num); break;
+        case 'Math.sin': result = Math.sin(num); break;
+        case 'Math.cos': result = Math.cos(num); break;
+        case 'Math.tan': result = Math.tan(num); break;
+        case 'Math.pow': 
           let exponent = prompt("Enter exponent:");
-          result = Math.pow(num, parseFloat(exponent));
+          result = Math.pow(num, parseFloat(exponent)); 
           break;
-        default:
-          return;
+        default: return;
       }
       currentInput = result.toString();
       updateDisplay();
