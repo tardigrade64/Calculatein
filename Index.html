@@ -4,31 +4,42 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Scientific Calculator</title>
-  
+
   <style>
+    :root {
+      --bg-color: black;
+      --text-color: white;
+      --button-color: blue;
+    }
+
     body {
       font-family: Arial, sans-serif;
       display: flex;
       justify-content: center;
       align-items: center;
       height: 100vh;
-      background-color: #f4f4f4;
+      background-color: var(--bg-color);
+      transition: 0.3s;
     }
 
     #calculator {
-      width: 350px;
+      width: 90vw;
+      max-width: 400px;
       padding: 20px;
-      background: white;
+      background: var(--bg-color);
       border-radius: 10px;
-      box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+      box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
     }
 
     #display {
       width: 100%;
-      height: 50px;
-      font-size: 24px;
+      height: 60px;
+      font-size: 32px;
       text-align: right;
-      margin-bottom: 10px;
+      color: var(--text-color);
+      background: none;
+      border: none;
+      margin-bottom: 15px;
     }
 
     #buttons {
@@ -38,25 +49,32 @@
     }
 
     button {
-      padding: 15px;
-      font-size: 18px;
+      padding: 20px;
+      font-size: 20px;
       border: none;
-      background: #ddd;
+      background: var(--button-color);
+      color: white;
       cursor: pointer;
-      border-radius: 5px;
+      border-radius: 50%;
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      transition: 0.2s;
     }
 
     button:hover {
-      background: #ccc;
-    }
-
-    button:active {
-      background: #bbb;
+      opacity: 0.8;
     }
 
     .scientific { 
       display: none; /* Hidden in Basic Mode */
     }
+
+    .settings-btn {
+      grid-column: span 2;
+      border-radius: 10px;
+      background: gray;
+    }
+
   </style>
 </head>
 
@@ -65,7 +83,6 @@
     <input type="text" id="display" disabled>
 
     <div id="buttons">
-      <!-- Basic Buttons -->
       <button onclick="appendNumber(7)">7</button>
       <button onclick="appendNumber(8)">8</button>
       <button onclick="appendNumber(9)">9</button>
@@ -89,7 +106,7 @@
       <button onclick="calculatePercentage()">%</button>
       <button onclick="clearDisplay()">C</button>
 
-      <!-- Scientific Functions (Hidden in Basic Mode) -->
+      <!-- Scientific Functions -->
       <button class="scientific" onclick="appendFunction('Math.sqrt')">√</button>
       <button class="scientific" onclick="appendFunction('Math.pow')">xⁿ</button>
       <button class="scientific" onclick="appendFunction('Math.sin')">sin</button>
@@ -97,13 +114,14 @@
       <button class="scientific" onclick="appendFunction('Math.tan')">tan</button>
       <button class="scientific" onclick="appendNumber(Math.PI)">π</button>
       <button class="scientific" onclick="appendNumber(Math.E)">e</button>
-      
+
       <!-- Gamma & Beta Functions -->
       <button class="scientific" onclick="calculateGamma()">Γ(x)</button>
       <button class="scientific" onclick="calculateBeta()">B(x, y)</button>
 
       <!-- Toggle Scientific Mode -->
-      <button onclick="toggleMode()">Scientific Mode</button>
+      <button class="settings-btn" onclick="toggleMode()">Scientific Mode</button>
+      <button class="settings-btn" onclick="toggleTheme()">Toggle Theme</button>
     </div>
   </div>
 
@@ -112,6 +130,7 @@
     let operation = null;
     let firstOperand = null;
     let isScientificMode = false;
+    let isDarkMode = true;
 
     function appendNumber(number) {
       currentInput += number;
@@ -217,14 +236,13 @@
 
     function toggleMode() {
       isScientificMode = !isScientificMode;
-      const modeButton = document.querySelector('button[onclick="toggleMode()"]');
-      const scientificButtons = document.querySelectorAll('.scientific');
-      
-      scientificButtons.forEach(button => {
-        button.style.display = isScientificMode ? 'block' : 'none';
-      });
+      document.querySelectorAll('.scientific').forEach(btn => btn.style.display = isScientificMode ? 'block' : 'none');
+    }
 
-      modeButton.textContent = isScientificMode ? 'Basic Mode' : 'Scientific Mode';
+    function toggleTheme() {
+      isDarkMode = !isDarkMode;
+      document.documentElement.style.setProperty('--bg-color', isDarkMode ? 'black' : 'white');
+      document.documentElement.style.setProperty('--text-color', isDarkMode ? 'white' : 'black');
     }
   </script>
 </body>
