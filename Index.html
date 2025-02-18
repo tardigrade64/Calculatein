@@ -17,7 +17,7 @@
     }
 
     #calculator {
-      width: 300px;
+      width: 350px;
       padding: 20px;
       background: white;
       border-radius: 10px;
@@ -91,6 +91,10 @@
       <button onclick="appendFunction('Math.tan')">tan</button>
       <button onclick="appendNumber(Math.PI)">π</button>
       <button onclick="appendNumber(Math.E)">e</button>
+      
+      <!-- Gamma & Beta Functions -->
+      <button onclick="calculateGamma()">Γ(x)</button>
+      <button onclick="calculateBeta()">B(x, y)</button>
 
       <!-- Toggle Scientific Mode -->
       <button onclick="toggleMode()">Scientific Mode</button>
@@ -181,6 +185,31 @@
       updateDisplay();
     }
 
+    function calculateGamma() {
+      if (currentInput === '') return;
+      let num = parseFloat(currentInput);
+      let gamma = factorial(num - 1);
+      currentInput = gamma.toString();
+      updateDisplay();
+    }
+
+    function factorial(n) {
+      if (n === 0 || n === 1) return 1;
+      let result = 1;
+      for (let i = 2; i <= n; i++) {
+        result *= i;
+      }
+      return result;
+    }
+
+    function calculateBeta() {
+      let x = parseFloat(prompt("Enter x:"));
+      let y = parseFloat(prompt("Enter y:"));
+      let beta = (factorial(x - 1) * factorial(y - 1)) / factorial(x + y - 1);
+      currentInput = beta.toString();
+      updateDisplay();
+    }
+
     function updateDisplay() {
       document.getElementById('display').value = currentInput;
     }
@@ -188,11 +217,7 @@
     function toggleMode() {
       isScientificMode = !isScientificMode;
       const modeButton = document.querySelector('button[onclick="toggleMode()"]');
-      if (isScientificMode) {
-        modeButton.textContent = 'Basic Mode';
-      } else {
-        modeButton.textContent = 'Scientific Mode';
-      }
+      modeButton.textContent = isScientificMode ? 'Basic Mode' : 'Scientific Mode';
     }
   </script>
 </body>
