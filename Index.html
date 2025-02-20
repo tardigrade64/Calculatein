@@ -20,15 +20,19 @@
       height: 100vh;
       background-color: var(--bg-color);
       transition: 0.3s;
+      margin: 0;
     }
 
     #calculator {
-      width: 80vw;
-      max-width: 360px;
+      width: 90vw;
+      max-width: 400px;
       padding: 20px;
       background: var(--bg-color);
       border-radius: 10px;
       box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
 
     #display {
@@ -49,6 +53,7 @@
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       gap: 10px;
+      width: 100%;
     }
 
     button {
@@ -68,14 +73,19 @@
       opacity: 0.8;
     }
 
-    .scientific { 
-      display: none; /* Hidden in Basic Mode */
+    .scientific-buttons {
+      display: none;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin-top: 10px;
+      width: 100%;
     }
 
     .settings-btn {
       grid-column: span 2;
       border-radius: 10px;
       background: gray;
+      padding: 12px;
     }
 
   </style>
@@ -108,24 +118,24 @@
 
       <button onclick="calculatePercentage()">%</button>
       <button onclick="clearDisplay()">C</button>
-
-      <!-- Scientific Functions -->
-      <button class="scientific" onclick="appendFunction('Math.sqrt')">√</button>
-      <button class="scientific" onclick="appendFunction('Math.pow')">xⁿ</button>
-      <button class="scientific" onclick="appendFunction('Math.sin')">sin</button>
-      <button class="scientific" onclick="appendFunction('Math.cos')">cos</button>
-      <button class="scientific" onclick="appendFunction('Math.tan')">tan</button>
-      <button class="scientific" onclick="appendNumber(Math.PI)">π</button>
-      <button class="scientific" onclick="appendNumber(Math.E)">e</button>
-
-      <!-- Gamma & Beta Functions -->
-      <button class="scientific" onclick="calculateGamma()">Γ(x)</button>
-      <button class="scientific" onclick="calculateBeta()">B(x, y)</button>
-
-      <!-- Toggle Scientific Mode -->
-      <button class="settings-btn" onclick="toggleMode()">Scientific Mode</button>
-      <button class="settings-btn" onclick="toggleTheme()">Toggle Theme</button>
     </div>
+
+    <!-- Scientific Functions -->
+    <div id="scientific" class="scientific-buttons">
+      <button onclick="appendFunction('Math.sqrt')">√</button>
+      <button onclick="appendFunction('Math.pow')">xⁿ</button>
+      <button onclick="appendFunction('Math.sin')">sin</button>
+      <button onclick="appendFunction('Math.cos')">cos</button>
+      <button onclick="appendFunction('Math.tan')">tan</button>
+      <button onclick="appendNumber(Math.PI)">π</button>
+      <button onclick="appendNumber(Math.E)">e</button>
+      <button onclick="calculateGamma()">Γ(x)</button>
+      <button onclick="calculateBeta()">B(x, y)</button>
+    </div>
+
+    <!-- Settings -->
+    <button class="settings-btn" onclick="toggleMode()">Scientific Mode</button>
+    <button class="settings-btn" onclick="toggleTheme()">Toggle Theme</button>
   </div>
 
   <script>
@@ -210,7 +220,7 @@
 
     function toggleMode() {
       isScientificMode = !isScientificMode;
-      document.querySelectorAll('.scientific').forEach(btn => btn.style.display = isScientificMode ? 'block' : 'none');
+      document.getElementById('scientific').style.display = isScientificMode ? 'grid' : 'none';
     }
 
     function toggleTheme() {
