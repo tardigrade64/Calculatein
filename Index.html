@@ -10,6 +10,7 @@
       --bg-color: black;
       --text-color: white;
       --button-color: blue;
+      --ac-button-color: red;
     }
 
     body {
@@ -24,8 +25,8 @@
     }
 
     #calculator {
-      width: 90%;
-      max-width: 700px;
+      width: 100%;
+      max-width: 900px;
       padding: 20px;
       background: var(--bg-color);
       border-radius: 15px;
@@ -37,8 +38,8 @@
 
     #display {
       width: 100%;
-      height: 60px;
-      font-size: 30px;
+      height: 80px;
+      font-size: 36px;
       text-align: right;
       color: var(--text-color);
       background: none;
@@ -57,16 +58,20 @@
     }
 
     button {
-      padding: 5px;
-      font-size: 12px;
+      padding: 8px;
+      font-size: 16px;
       border: none;
       background: var(--button-color);
       color: white;
       cursor: pointer;
       border-radius: 50%;
-      width: 80%;
+      width: 70%;
       aspect-ratio: 1 / 1;
       transition: 0.2s;
+    }
+
+    #ac-button {
+      background: var(--ac-button-color);
     }
 
     button:hover {
@@ -81,13 +86,20 @@
       width: 100%;
     }
 
-    /* iPad-specific layout */
     @media (min-width: 768px) {
       #calculator {
-        max-width: 700px;
+        max-width: 900px;
       }
+
       button {
-        width: 75%;
+        width: 60%;
+        padding: 6px;
+        font-size: 14px;
+      }
+
+      #display {
+        font-size: 36px;
+        height: 80px;
       }
     }
   </style>
@@ -102,12 +114,12 @@
       <button onclick="appendNumber(8)">8</button>
       <button onclick="appendNumber(9)">9</button>
       <button onclick="setOperation('+')">+</button>
-      <button onclick="setOperation('-')">-</button>
+      <button onclick="clearDisplay()" id="ac-button">AC</button>
       
       <button onclick="appendNumber(4)">4</button>
       <button onclick="appendNumber(5)">5</button>
       <button onclick="appendNumber(6)">6</button>
-      <button onclick="setOperation('*')">*</button>
+      <button onclick="setOperation('-')">-</button>
       <button onclick="setOperation('/')">/</button>
       
       <button onclick="appendNumber(1)">1</button>
@@ -117,13 +129,12 @@
       <button onclick="appendDecimal()">.</button>
       
       <button onclick="calculatePercentage()">%</button>
-      <button onclick="clearDisplay()">C</button>
       <button onclick="calculate()">=</button>
       <button onclick="toggleMode()">Sci</button>
       <button onclick="toggleTheme()">T</button>
+      <button onclick="setOperation('*')">*</button>
     </div>
 
-    <!-- Scientific Functions -->
     <div id="scientific">
       <button onclick="appendFunction('Math.sqrt')">√</button>
       <button onclick="appendFunction('Math.pow')">xⁿ</button>
