@@ -81,14 +81,6 @@
       width: 100%;
     }
 
-    .settings-btn {
-      grid-column: span 2;
-      border-radius: 50%;
-      background: var(--button-color);
-      padding: 12px;
-      font-size: 18px;
-    }
-
   </style>
 </head>
 
@@ -119,6 +111,8 @@
 
       <button onclick="calculatePercentage()">%</button>
       <button onclick="clearDisplay()">C</button>
+      <button onclick="toggleMode()">Sci</button>
+      <button onclick="toggleTheme()">T</button>
     </div>
 
     <!-- Scientific Functions -->
@@ -133,10 +127,6 @@
       <button onclick="calculateGamma()">Γ(x)</button>
       <button onclick="calculateBeta()">B(x, y)</button>
     </div>
-
-    <!-- Settings -->
-    <button class="settings-btn" onclick="toggleMode()">Scientific Mode</button>
-    <button class="settings-btn" onclick="toggleTheme()">Toggle Theme</button>
   </div>
 
   <script>
