@@ -24,8 +24,8 @@
     }
 
     #calculator {
-      width: 90%;
-      max-width: 700px;
+      width: 100%;
+      max-width: 900px; /* Increased width for iPad */
       padding: 20px;
       background: var(--bg-color);
       border-radius: 15px;
@@ -37,8 +37,8 @@
 
     #display {
       width: 100%;
-      height: 60px;
-      font-size: 30px;
+      height: 80px;
+      font-size: 36px;
       text-align: right;
       color: var(--text-color);
       background: none;
@@ -52,19 +52,19 @@
     #buttons {
       display: grid;
       grid-template-columns: repeat(5, 1fr);
-      gap: 8px;
+      gap: 10px;
       width: 100%;
     }
 
     button {
-      padding: 5px;
-      font-size: 12px;
+      padding: 12px;
+      font-size: 18px;
       border: none;
       background: var(--button-color);
       color: white;
       cursor: pointer;
       border-radius: 50%;
-      width: 80%;
+      width: 90%;
       aspect-ratio: 1 / 1;
       transition: 0.2s;
     }
@@ -73,21 +73,30 @@
       opacity: 0.8;
     }
 
+    /* Adjustments for Scientific Mode */
     #scientific {
       display: none;
       grid-template-columns: repeat(5, 1fr);
-      gap: 8px;
+      gap: 10px;
       margin-top: 10px;
       width: 100%;
     }
 
-    /* iPad-specific layout */
+    /* iPad-Specific Layout */
     @media (min-width: 768px) {
       #calculator {
-        max-width: 700px;
+        max-width: 900px;
       }
+
       button {
-        width: 75%;
+        width: 80%;
+        padding: 10px;
+        font-size: 16px;
+      }
+
+      #display {
+        font-size: 40px;
+        height: 90px;
       }
     }
   </style>
