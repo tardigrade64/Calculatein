@@ -24,8 +24,8 @@
     }
 
     #calculator {
-      width: 100%;
-      max-width: 900px;
+      width: 90%;
+      max-width: 700px;
       padding: 20px;
       background: var(--bg-color);
       border-radius: 15px;
@@ -37,8 +37,8 @@
 
     #display {
       width: 100%;
-      height: 80px;
-      font-size: 36px;
+      height: 60px;
+      font-size: 30px;
       text-align: right;
       color: var(--text-color);
       background: none;
@@ -57,14 +57,14 @@
     }
 
     button {
-      padding: 8px;
-      font-size: 16px;
+      padding: 5px;
+      font-size: 12px;
       border: none;
       background: var(--button-color);
       color: white;
       cursor: pointer;
       border-radius: 50%;
-      width: 70%;
+      width: 80%;
       aspect-ratio: 1 / 1;
       transition: 0.2s;
     }
@@ -81,20 +81,13 @@
       width: 100%;
     }
 
+    /* iPad-specific layout */
     @media (min-width: 768px) {
       #calculator {
-        max-width: 900px;
+        max-width: 700px;
       }
-
       button {
-        width: 60%;
-        padding: 6px;
-        font-size: 14px;
-      }
-
-      #display {
-        font-size: 36px;
-        height: 80px;
+        width: 75%;
       }
     }
   </style>
@@ -130,6 +123,7 @@
       <button onclick="toggleTheme()">T</button>
     </div>
 
+    <!-- Scientific Functions -->
     <div id="scientific">
       <button onclick="appendFunction('Math.sqrt')">√</button>
       <button onclick="appendFunction('Math.pow')">xⁿ</button>
