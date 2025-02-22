@@ -7,68 +7,38 @@
 
   <style>
     :root {
-      --bg-color: #212121; /* Dark grey background */
+      --bg-color: black; /* Keep background black */
       --text-color: white;
-      --button-color: #0d47a1; /* Dark blue */
-      --ac-button-color: #1565c0; /* Darker blue */
+      --button-color: #0d47a1; /* Default: Dark Blue */
+      --ac-button-color: #1565c0;
       --button-border: 1px solid #bbb;
     }
 
-    /* Red Mode - Darker red */
+    /* Red Mode */
     .red-mode {
-      --bg-color: #212121;
-      --text-color: white;
       --button-color: #d32f2f;
-      --ac-button-color: #c62828;
-      --button-border: 1px solid #bbb;
+      --ac-button-color: #b71c1c;
     }
 
-    /* Yellow Mode - Darker yellow */
-    .yellow-mode {
-      --bg-color: #212121;
-      --text-color: white;
-      --button-color: #f57f17;
-      --ac-button-color: #fbc02d;
-      --button-border: 1px solid #bbb;
+    /* Blue Mode */
+    .blue-mode {
+      --button-color: #1565c0;
+      --ac-button-color: #0d47a1;
     }
 
-    /* Orange Mode - Darker orange */
-    .orange-mode {
-      --bg-color: #212121;
-      --text-color: white;
-      --button-color: #fb8c00;
-      --ac-button-color: #f57c00;
-      --button-border: 1px solid #bbb;
-    }
-
-    /* Green Mode - Darker green */
+    /* Green Mode */
     .green-mode {
-      --bg-color: #212121;
-      --text-color: white;
       --button-color: #388e3c;
       --ac-button-color: #2e7d32;
-      --button-border: 1px solid #bbb;
     }
 
-    /* Blue Mode - Darker blue */
-    .blue-mode {
-      --bg-color: #212121;
-      --text-color: white;
-      --button-color: #0277bd;
-      --ac-button-color: #01579b;
-      --button-border: 1px solid #bbb;
+    /* Yellow Mode */
+    .yellow-mode {
+      --button-color: #f9a825;
+      --ac-button-color: #f57f17;
     }
 
-    /* Purple Mode - Darker purple */
-    .purple-mode {
-      --bg-color: #212121;
-      --text-color: white;
-      --button-color: #7b1fa2;
-      --ac-button-color: #6a1b9a;
-      --button-border: 1px solid #bbb;
-    }
-
-    /* Basic Layout */
+    /* General Styles */
     body {
       font-family: Arial, sans-serif;
       display: flex;
@@ -87,7 +57,6 @@
       padding: 20px;
       background: none;
       border-radius: 15px;
-      box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.3);
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -103,7 +72,6 @@
       border: none;
       padding: 10px;
       margin-bottom: 20px;
-      box-sizing: border-box;
       font-weight: bold;
     }
 
@@ -211,7 +179,6 @@
     let operation = null;
     let firstOperand = null;
     let isScientificMode = false;
-    let isDarkMode = true;
 
     function appendNumber(number) {
       currentInput += number;
@@ -267,32 +234,13 @@
       updateDisplay();
     }
 
-    function appendFunction(func) {
-      if (currentInput === '') return;
-      let num = parseFloat(currentInput);
-      let result;
-      switch (func) {
-        case 'Math.sqrt': result = Math.sqrt(num); break;
-        case 'Math.sin': result = Math.sin(num); break;
-        case 'Math.cos': result = Math.cos(num); break;
-        case 'Math.tan': result = Math.tan(num); break;
-        case 'Math.pow': 
-          let exponent = prompt("Enter exponent:");
-          result = Math.pow(num, parseFloat(exponent)); 
-          break;
-        default: return;
-      }
-      currentInput = result.toString();
-      updateDisplay();
-    }
-
     function toggleMode() {
       isScientificMode = !isScientificMode;
       document.getElementById('scientific').style.display = isScientificMode ? 'grid' : 'none';
     }
 
     function toggleTheme() {
-      let themes = ['red-mode', 'yellow-mode', 'orange-mode', 'green-mode', 'blue-mode', 'purple-mode'];
+      let themes = ['red-mode', 'blue-mode', 'green-mode', 'yellow-mode'];
       let currentTheme = document.body.className;
       let nextTheme = themes[(themes.indexOf(currentTheme) + 1) % themes.length];
       document.body.className = nextTheme;
