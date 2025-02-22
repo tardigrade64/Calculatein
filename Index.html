@@ -75,24 +75,6 @@
             background-color: #555;
         }
 
-        .mode-toggle {
-            grid-column: span 4;
-            text-align: center;
-        }
-
-        .theme-button {
-            background-color: #666;
-            padding: 10px;
-            font-size: 18px;
-            border-radius: 50%;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-
-        .theme-button:active {
-            background-color: #777;
-        }
-
     </style>
 </head>
 <body>
@@ -146,133 +128,124 @@
         let firstOperand = null;
         let secondOperand = null;
         let memory = 0;  // Variable to store memory value
-        let isScientificMode = false;
         let isDegreeMode = true; // Degree mode flag
 
+        // Update display
+        function updateDisplay() {
+            document.getElementById('display').value = currentInput;
+        }
+
+        // Append number to the display
         function appendNumber(number) {
-          currentInput += number;
-          updateDisplay();
+            currentInput += number;
+            updateDisplay();
         }
 
+        // Append decimal point to the display
         function appendDecimal() {
-          if (!currentInput.includes('.')) {
-            currentInput += '.';
-            updateDisplay();
-          }
+            if (!currentInput.includes('.')) {
+                currentInput += '.';
+                updateDisplay();
+            }
         }
 
+        // Set the operation
         function setOperation(op) {
-          if (currentInput === '') return;
-          if (firstOperand === null) {
-            firstOperand = parseFloat(currentInput);
-          } else if (operation) {
-            firstOperand = calculate();
-          }
-          operation = op;
-          currentInput = '';
+            if (currentInput === '') return;
+            if (firstOperand === null) {
+                firstOperand = parseFloat(currentInput);
+            } else {
+                firstOperand = calculate();
+            }
+            operation = op;
+            currentInput = '';
         }
 
-        function clearDisplay() {
-          currentInput = '';
-          firstOperand = null;
-          secondOperand = null;
-          operation = null;
-          updateDisplay();
-        }
-
+        // Calculate the result
         function calculate() {
-          if (currentInput === '' || firstOperand === null || !operation) return;
-          let result;
+            if (currentInput === '' || firstOperand === null || !operation) return;
+            let result;
 
-          switch (operation) {
-            case '+': result = firstOperand + parseFloat(currentInput); break;
-            case '-': result = firstOperand - parseFloat(currentInput); break;
-            case '*': result = firstOperand * parseFloat(currentInput); break;
-            case '/': result = firstOperand / parseFloat(currentInput); break;
-            case '^': result = Math.pow(firstOperand, parseFloat(currentInput)); break;
-            default: return;
-          }
+            switch (operation) {
+                case '+': result = firstOperand + parseFloat(currentInput); break;
+                case '-': result = firstOperand - parseFloat(currentInput); break;
+                case '*': result = firstOperand * parseFloat(currentInput); break;
+                case '/': result = firstOperand / parseFloat(currentInput); break;
+                case '^': result = Math.pow(firstOperand, parseFloat(currentInput)); break;
+                default: return;
+            }
 
-          currentInput = result.toString();
-          firstOperand = null;
-          operation = null;
-          updateDisplay();
-        }
-
-        function calculatePercentage() {
-          if (currentInput !== '') {
-            currentInput = (parseFloat(currentInput) / 100).toString();
-            updateDisplay();
-          }
-        }
-
-        function toggleMode() {
-          isScientificMode = !isScientificMode;
-          document.getElementById('scientific').style.display = isScientificMode ? 'grid' : 'none';
-        }
-
-        function toggleTheme() {
-          const themes = ['blue-mode', 'red-mode', 'green-mode', 'yellow-mode'];
-          let currentTheme = document.body.classList[0]; // Get current theme class
-          let nextThemeIndex = (themes.indexOf(currentTheme) + 1) % themes.length;
-          
-          // Remove all theme classes and apply the new one
-          document.body.classList.remove(...themes);
-          document.body.classList.add(themes[nextThemeIndex]);
-        }
-
-        function appendFunction(func) {
-          currentInput += func + '(';
-          updateDisplay();
-        }
-
-        function calculateGamma() {
-          if (currentInput !== '') {
-            const result = gamma(parseFloat(currentInput));
             currentInput = result.toString();
+            firstOperand = null;
+            operation = null;
             updateDisplay();
-          }
         }
 
-        function calculateBeta() {
-          if (currentInput !== '') {
-            const result = beta(parseFloat(currentInput), 2); // Using '2' as an example for the second argument
-            currentInput = result.toString();
+        // Clear the display
+        function clearDisplay() {
+            currentInput = '';
+            firstOperand = null;
+            secondOperand = null;
+            operation = null;
             updateDisplay();
-          }
         }
 
-        function gamma(x) {
-          return Math.exp(-x) * Math.pow(x, 2);
-        }
-
-        function beta(x, y) {
-          return Math.exp(-x - y);
-        }
-
+        // Toggle between degree and radian mode
         function toggleDegRad() {
-          isDegreeMode = !isDegreeMode; // Toggle between degree and radian mode
-          if (isDegreeMode) {
-            alert('Now in Degree mode');
-          } else {
-            alert('Now in Radian mode');
-          }
+            isDegreeMode = !isDegreeMode;
+            if (isDegreeMode) {
+                alert('Now in Degree mode');
+            } else {
+                alert('Now in Radian mode');
+            }
         }
 
+        // Generate random number
         function generateRand() {
-          currentInput = (Math.random()).toString();
-          updateDisplay();
+            currentInput = (Math.random()).toString();
+            updateDisplay();
         }
 
+        // Append function (sin, cos, tan, etc.)
+        function appendFunction(func) {
+            currentInput += func + '(';
+            updateDisplay();
+        }
+
+        // Memory Recall (MR)
         function memoryRecall() {
-          currentInput = memory.toString();
-          updateDisplay();
+            currentInput = memory.toString();
+            updateDisplay();
         }
 
+        // Memory Clear (MC)
         function memoryClear() {
-          memory = 0;
-          currentInput = '';
-          updateDisplay();
+            memory = 0;
+            currentInput = '';
+            updateDisplay();
         }
 
+        // Memory Add (M+)
         function memoryAdd() {
+            memory += parseFloat(currentInput);
+            currentInput = '';
+            updateDisplay();
+        }
+
+        // Memory Subtract (M-)
+        function memorySubtract() {
+            memory -= parseFloat(currentInput);
+            currentInput = '';
+            updateDisplay();
+        }
+
+        // Toggle theme between different colors
+        function toggleTheme() {
+            const body = document.body;
+            body.style.backgroundColor = body.style.backgroundColor === 'black' ? '#333' : 'black';
+            body.style.color = body.style.color === 'white' ? 'black' : 'white';
+        }
+    </script>
+
+</body>
+</html>
