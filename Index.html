@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Scientific Calculator</title>
     <style>
-        /* Body and overall design */
         body {
             font-family: Arial, sans-serif;
             background-color: #333;
@@ -24,7 +23,7 @@
             grid-template-columns: repeat(7, 1fr); /* 7 columns */
             grid-gap: 10px;
             width: 100%;
-            max-width: 700px;  /* Limit to iPad width */
+            max-width: 700px;
             padding: 20px;
         }
 
@@ -61,40 +60,6 @@
             margin-bottom: 20px;
             font-weight: bold;
         }
-
-        /* Responsive design */
-        @media (max-width: 768px) {
-            #calculator {
-                grid-template-columns: repeat(5, 1fr); /* 5 columns for smaller screens */
-                max-width: 500px;
-            }
-
-            .button {
-                padding: 15px;
-                font-size: 16px; /* Smaller font for mobile */
-            }
-
-            #display {
-                font-size: 24px;  /* Smaller text for display */
-            }
-        }
-
-        @media (max-width: 600px) {
-            #calculator {
-                grid-template-columns: repeat(4, 1fr); /* 4 columns for very small screens */
-                max-width: 400px;
-            }
-
-            .button {
-                padding: 12px;
-                font-size: 14px; /* Smaller font size */
-            }
-
-            #display {
-                font-size: 20px;  /* Smaller text for display */
-            }
-        }
-
     </style>
 </head>
 <body>
@@ -265,3 +230,7 @@
                 result *= i;
             }
             return result;
+        }
+    </script>
+</body>
+</html>
