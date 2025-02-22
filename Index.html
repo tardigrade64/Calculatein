@@ -4,13 +4,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Scientific Calculator</title>
-
   <style>
     :root {
       --bg-color: #000000; /* Fully Black Background */
       --text-color: white;
-      --button-color: #007bff; /* Normal Blue Buttons */
-      --ac-button-color: #0056b3; /* Slightly Darker Blue for AC */
+      --button-color: #00338D; /* Buffalo Bills Royal Blue */
+      --ac-button-color: #002366; /* Slightly Darker Shade for AC Button */
     }
 
     /* Red Mode */
@@ -19,10 +18,10 @@
       --ac-button-color: #9a0007;
     }
 
-    /* Blue Mode (Normal Blue) */
+    /* Blue Mode - Buffalo Bills Royal Blue */
     .blue-mode {
-      --button-color: #007bff; /* Normal Blue */
-      --ac-button-color: #0056b3; /* Slightly Darker Blue */
+      --button-color: #00338D; /* Buffalo Bills Royal Blue */
+      --ac-button-color: #002366; /* Slightly Darker Shade for AC Button */
     }
 
     /* Green Mode */
@@ -128,12 +127,9 @@
     }
   </style>
 </head>
-
 <body class="blue-mode"> <!-- Default mode is Blue Mode -->
-
   <div id="calculator">
     <input type="text" id="display" disabled>
-
     <div id="buttons">
       <button onclick="appendNumber(7)">7</button>
       <button onclick="appendNumber(8)">8</button>
@@ -141,25 +137,21 @@
       <button onclick="setOperation('+')">+</button>
       <button onclick="clearDisplay()" id="ac-button">AC</button>
       <button onclick="calculate()" id="equals-button">=</button>
-
       <button onclick="appendNumber(4)">4</button>
       <button onclick="appendNumber(5)">5</button>
       <button onclick="appendNumber(6)">6</button>
       <button onclick="setOperation('-')">-</button>
       <button onclick="setOperation('/')">/</button>
-
       <button onclick="appendNumber(1)">1</button>
       <button onclick="appendNumber(2)">2</button>
       <button onclick="appendNumber(3)">3</button>
       <button onclick="appendNumber(0)">0</button>
       <button onclick="appendDecimal()">.</button>
-
       <button onclick="calculatePercentage()">%</button>
       <button onclick="toggleMode()">Sci</button>
       <button onclick="toggleTheme()">&#9881;</button> <!-- Gear Symbol -->
       <button onclick="setOperation('*')">*</button>
     </div>
-
     <div id="scientific">
       <button onclick="appendFunction('Math.sqrt')">√</button>
       <button onclick="appendFunction('Math.pow')">xⁿ</button>
@@ -172,7 +164,6 @@
       <button onclick="calculateBeta()">B(x, y)</button>
     </div>
   </div>
-
   <script>
     let currentInput = '';
     let operation = null;
@@ -210,44 +201,4 @@
     }
 
     function calculate() {
-      if (currentInput === '' || firstOperand === null) return;
-      let secondOperand = parseFloat(currentInput);
-      let result;
-      switch (operation) {
-        case '+': result = firstOperand + secondOperand; break;
-        case '-': result = firstOperand - secondOperand; break;
-        case '*': result = firstOperand * secondOperand; break;
-        case '/': result = firstOperand / secondOperand; break;
-        default: return;
-      }
-      currentInput = result.toString();
-      firstOperand = result;
-      operation = null;
-      updateDisplay();
-    }
-
-    function calculatePercentage() {
-      if (currentInput === '') return;
-      let num = parseFloat(currentInput);
-      currentInput = (num / 100).toString();
-      updateDisplay();
-    }
-
-    function toggleMode() {
-      isScientificMode = !isScientificMode;
-      document.getElementById('scientific').style.display = isScientificMode ? 'grid' : 'none';
-    }
-
-    function toggleTheme() {
-      let themes = ['red-mode', 'blue-mode', 'green-mode', 'yellow-mode'];
-      let currentTheme = document.body.className;
-      let nextTheme = themes[(themes.indexOf(currentTheme) + 1) % themes.length];
-      document.body.className = nextTheme;
-    }
-
-    function updateDisplay() {
-      document.getElementById('display').value = currentInput;
-    }
-  </script>
-</body>
-</html>
+      if (currentInput === '' || firstOperand === 
