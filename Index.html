@@ -101,7 +101,7 @@
 
     <div id="calculator">
         <input id="display" type="text" disabled>
-        <button class="button" onclick="clearDisplay()">❌</button>
+        <button class="button" onclick="clearDisplay()">✖</button> <!-- Correct ✖ symbol -->
         <button class="button" onclick="appendNumber('7')">7</button>
         <button class="button" onclick="appendNumber('8')">8</button>
         <button class="button" onclick="appendNumber('9')">9</button>
@@ -109,7 +109,7 @@
         <button class="button" onclick="appendNumber('4')">4</button>
         <button class="button" onclick="appendNumber('5')">5</button>
         <button class="button" onclick="appendNumber('6')">6</button>
-        <button class="button" onclick="setOperation('*')">*</button>
+        <button class="button" onclick="setOperation('×')">×</button> <!-- Real multiplication symbol -->
         <button class="button" onclick="appendNumber('1')">1</button>
         <button class="button" onclick="appendNumber('2')">2</button>
         <button class="button" onclick="appendNumber('3')">3</button>
@@ -184,8 +184,8 @@
                 case '-':
                     result = firstOperand - secondOperand;
                     break;
-                case '*':
-                    result = firstOperand * secondOperand;
+                case '×':
+                    result = firstOperand * secondOperand;  // Using the real multiplication symbol
                     break;
                 case '/':
                     result = firstOperand / secondOperand;
