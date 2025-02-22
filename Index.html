@@ -128,7 +128,6 @@
         let currentInput = '';
         let firstOperand = null;
         let operation = null;
-        let scientificFunction = null;
 
         // Update display
         function updateDisplay() {
@@ -159,6 +158,38 @@
             }
             operation = op;
             currentInput = '';
+        }
+
+        // Calculate the result
+        function calculate() {
+            let result = 0;
+            let secondOperand = parseFloat(currentInput);
+
+            switch (operation) {
+                case '+':
+                    result = firstOperand + secondOperand;
+                    break;
+                case '-':
+                    result = firstOperand - secondOperand;
+                    break;
+                case '*':
+                    result = firstOperand * secondOperand;
+                    break;
+                case '/':
+                    if (secondOperand !== 0) {
+                        result = firstOperand / secondOperand;
+                    } else {
+                        result = 'Error';
+                    }
+                    break;
+                default:
+                    return;
+            }
+
+            currentInput = result.toString();
+            firstOperand = null;
+            operation = null;
+            updateDisplay();
         }
 
         // Set scientific function
@@ -195,38 +226,6 @@
                 default:
                     return;
             }
-            updateDisplay();
-        }
-
-        // Calculate the result
-        function calculate() {
-            let result = 0;
-            let secondOperand = parseFloat(currentInput);
-
-            switch (operation) {
-                case '+':
-                    result = firstOperand + secondOperand;
-                    break;
-                case '-':
-                    result = firstOperand - secondOperand;
-                    break;
-                case '*':
-                    result = firstOperand * secondOperand;
-                    break;
-                case '/':
-                    if (secondOperand !== 0) {
-                        result = firstOperand / secondOperand;
-                    } else {
-                        result = 'Error';
-                    }
-                    break;
-                default:
-                    return;
-            }
-
-            currentInput = result.toString();
-            firstOperand = null;
-            operation = null;
             updateDisplay();
         }
 
