@@ -4,38 +4,19 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Scientific Calculator</title>
-
   <style>
     :root {
-      --bg-color: #000000; /* Fully Black Background */
+      --bg-color: #000000; /* Black background */
       --text-color: white;
-      --button-color: #007bff; /* Normal Blue Buttons */
-      --ac-button-color: #0056b3; /* Slightly Darker Blue for AC */
+      --button-color: #00338D; /* Buffalo Bills Blue */
+      --ac-button-color: #002366; /* Darker blue for AC */
     }
 
-    /* Red Mode */
-    .red-mode {
-      --button-color: #b71c1c;
-      --ac-button-color: #9a0007;
-    }
-
-    /* Blue Mode (Normal Blue) */
-    .blue-mode {
-      --button-color: #007bff; /* Normal Blue */
-      --ac-button-color: #0056b3; /* Slightly Darker Blue */
-    }
-
-    /* Green Mode */
-    .green-mode {
-      --button-color: #1b5e20;
-      --ac-button-color: #104314;
-    }
-
-    /* Yellow Mode */
-    .yellow-mode {
-      --button-color: #f57f17;
-      --ac-button-color: #e65100;
-    }
+    /* Theme Colors */
+    .blue-mode { --button-color: #00338D; } /* Blue */
+    .red-mode { --button-color: #D32F2F; } /* Red */
+    .green-mode { --button-color: #388E3C; } /* Green */
+    .yellow-mode { --button-color: #FBC02D; } /* Yellow */
 
     /* General Styles */
     body {
@@ -52,10 +33,8 @@
 
     #calculator {
       width: 100%;
-      max-width: 900px;
+      max-width: 500px;
       padding: 20px;
-      background: none;
-      border-radius: 15px;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -63,21 +42,20 @@
 
     #display {
       width: 100%;
-      height: 80px;
-      font-size: 36px;
+      height: 60px;
+      font-size: 32px;
       text-align: right;
       color: var(--text-color);
       background: none;
       border: none;
       padding: 10px;
-      margin-bottom: 20px;
       font-weight: bold;
     }
 
     #buttons {
       display: grid;
-      grid-template-columns: repeat(5, 1fr);
-      gap: 8px;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 5px;
       width: 100%;
     }
 
@@ -88,7 +66,7 @@
       color: white;
       cursor: pointer;
       border-radius: 50%;
-      width: 70%;
+      width: 24%; /* Adjusted for uniform size */
       aspect-ratio: 1 / 1;
       transition: 0.2s;
       border: none;
@@ -98,68 +76,59 @@
       background: var(--ac-button-color);
     }
 
+    .operation {
+      background: #ff9800; /* Orange for operations */
+    }
+
     button:hover {
       opacity: 0.8;
     }
 
     #scientific {
       display: none;
-      grid-template-columns: repeat(5, 1fr);
-      gap: 8px;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 5px;
       margin-top: 10px;
       width: 100%;
     }
 
     @media (min-width: 768px) {
       #calculator {
-        max-width: 900px;
-      }
-
-      button {
-        width: 60%;
-        padding: 6px;
-        font-size: 14px;
-      }
-
-      #display {
-        font-size: 36px;
-        height: 80px;
+        max-width: 600px;
       }
     }
   </style>
 </head>
-
-<body class="blue-mode"> <!-- Default mode is Blue Mode -->
-
+<body class="blue-mode"> 
   <div id="calculator">
     <input type="text" id="display" disabled>
-
     <div id="buttons">
+      <button onclick="clearDisplay()" id="ac-button">AC</button>
+      <button onclick="calculatePercentage()">%</button>
+      <button onclick="appendDecimal()">.</button>
+      <button class="operation" onclick="calculate()" id="equals-button">=</button> 
+
       <button onclick="appendNumber(7)">7</button>
       <button onclick="appendNumber(8)">8</button>
       <button onclick="appendNumber(9)">9</button>
-      <button onclick="setOperation('+')">+</button>
-      <button onclick="clearDisplay()" id="ac-button">AC</button>
-      <button onclick="calculate()" id="equals-button">=</button>
+      <button class="operation" onclick="setOperation('+')">+</button>
 
       <button onclick="appendNumber(4)">4</button>
       <button onclick="appendNumber(5)">5</button>
       <button onclick="appendNumber(6)">6</button>
-      <button onclick="setOperation('-')">-</button>
-      <button onclick="setOperation('/')">/</button>
+      <button class="operation" onclick="setOperation('-')">-</button>
 
       <button onclick="appendNumber(1)">1</button>
       <button onclick="appendNumber(2)">2</button>
       <button onclick="appendNumber(3)">3</button>
-      <button onclick="appendNumber(0)">0</button>
-      <button onclick="appendDecimal()">.</button>
+      <button class="operation" onclick="setOperation('*')">*</button>
 
-      <button onclick="calculatePercentage()">%</button>
+      <button onclick="appendNumber(0)">0</button>
       <button onclick="toggleMode()">Sci</button>
       <button onclick="toggleTheme()">&#9881;</button> <!-- Gear Symbol -->
-      <button onclick="setOperation('*')">*</button>
+      <button class="operation" onclick="setOperation('/')">/</button>
     </div>
-
+    
     <div id="scientific">
       <button onclick="appendFunction('Math.sqrt')">√</button>
       <button onclick="appendFunction('Math.pow')">xⁿ</button>
@@ -210,27 +179,29 @@
     }
 
     function calculate() {
-      if (currentInput === '' || firstOperand === null) return;
+      if (currentInput === '' || firstOperand === null || !operation) return;
       let secondOperand = parseFloat(currentInput);
       let result;
+
       switch (operation) {
         case '+': result = firstOperand + secondOperand; break;
         case '-': result = firstOperand - secondOperand; break;
         case '*': result = firstOperand * secondOperand; break;
-        case '/': result = firstOperand / secondOperand; break;
+        case '/': result = secondOperand !== 0 ? firstOperand / secondOperand : 'Error'; break;
         default: return;
       }
+
       currentInput = result.toString();
-      firstOperand = result;
+      firstOperand = null;
       operation = null;
       updateDisplay();
     }
 
     function calculatePercentage() {
-      if (currentInput === '') return;
-      let num = parseFloat(currentInput);
-      currentInput = (num / 100).toString();
-      updateDisplay();
+      if (currentInput !== '') {
+        currentInput = (parseFloat(currentInput) / 100).toString();
+        updateDisplay();
+      }
     }
 
     function toggleMode() {
@@ -239,10 +210,13 @@
     }
 
     function toggleTheme() {
-      let themes = ['red-mode', 'blue-mode', 'green-mode', 'yellow-mode'];
-      let currentTheme = document.body.className;
-      let nextTheme = themes[(themes.indexOf(currentTheme) + 1) % themes.length];
-      document.body.className = nextTheme;
+      const themes = ['blue-mode', 'red-mode', 'green-mode', 'yellow-mode'];
+      let currentTheme = document.body.classList[0]; // Get current theme class
+      let nextThemeIndex = (themes.indexOf(currentTheme) + 1) % themes.length;
+      
+      // Remove all theme classes and apply the new one
+      document.body.classList.remove(...themes);
+      document.body.classList.add(themes[nextThemeIndex]);
     }
 
     function updateDisplay() {
