@@ -79,6 +79,20 @@
             grid-column: span 4;
             text-align: center;
         }
+
+        .theme-button {
+            background-color: #666;
+            padding: 10px;
+            font-size: 18px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .theme-button:active {
+            background-color: #777;
+        }
+
     </style>
 </head>
 <body>
@@ -262,23 +276,3 @@
         }
 
         function memoryAdd() {
-          memory += parseFloat(currentInput);
-          currentInput = '';
-          updateDisplay();
-        }
-
-        function memorySubtract() {
-          memory -= parseFloat(currentInput);
-          currentInput = '';
-          updateDisplay();
-        }
-
-        // Added functionality for parentheses
-        function appendParenthesis() {
-          currentInput += ')';
-          updateDisplay();
-        }
-
-        function appendLeftParenthesis() {
-          currentInput += '(';
-          updateDisplay
