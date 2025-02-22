@@ -101,7 +101,7 @@
 
     <div id="calculator">
         <input id="display" type="text" disabled>
-        <button class="button" onclick="clearDisplay()">✖</button> <!-- Correct ✖ symbol -->
+        <button class="button" onclick="clearDisplay()">✖️</button> <!-- Correct ✖️ symbol -->
         <button class="button" onclick="appendNumber('7')">7</button>
         <button class="button" onclick="appendNumber('8')">8</button>
         <button class="button" onclick="appendNumber('9')">9</button>
@@ -200,11 +200,9 @@
             updateDisplay();
         }
 
-        // Clear the display
+        // Clear the display (deletes one character at a time)
         function clearDisplay() {
-            currentInput = '';
-            firstOperand = null;
-            operation = null;
+            currentInput = currentInput.slice(0, -1); // Remove last character
             updateDisplay();
         }
 
@@ -267,7 +265,3 @@
                 result *= i;
             }
             return result;
-        }
-    </script>
-</body>
-</html>
