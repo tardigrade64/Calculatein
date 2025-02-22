@@ -122,6 +122,36 @@
         <button class="button" onclick="setScientific('sqrt')">√</button>
         <button class="button" onclick="setScientific('exp')">exp</button>
         <button class="button" onclick="setScientific('pi')">π</button>
+        <button class="button" onclick="setScientific('abs')">abs</button>
+        <button class="button" onclick="setScientific('factorial')">x!</button>
+        <button class="button" onclick="setScientific('asin')">asin</button>
+        <button class="button" onclick="setScientific('acos')">acos</button>
+        <button class="button" onclick="setScientific('atan')">atan</button>
+        <button class="button" onclick="setScientific('csc')">csc</button>
+        <button class="button" onclick="setScientific('sec')">sec</button>
+        <button class="button" onclick="setScientific('cot')">cot</button>
+        <button class="button" onclick="setScientific('rad')">rad</button>
+        <button class="button" onclick="setScientific('deg')">deg</button>
+        <button class="button" onclick="setScientific('rand')">rand</button>
+        <button class="button" onclick="setScientific('sinh')">sinh</button>
+        <button class="button" onclick="setScientific('cosh')">cosh</button>
+        <button class="button" onclick="setScientific('tanh')">tanh</button>
+        <button class="button" onclick="setScientific('factor')">factor</button>
+        <button class="button" onclick="setScientific('int')">int</button>
+        <button class="button" onclick="setScientific('ceil')">ceil</button>
+        <button class="button" onclick="setScientific('floor')">floor</button>
+        <button class="button" onclick="setScientific('max')">max</button>
+        <button class="button" onclick="setScientific('min')">min</button>
+        <button class="button" onclick="setScientific('exp10')">exp10</button>
+        <button class="button" onclick="setScientific('gcd')">gcd</button>
+        <button class="button" onclick="setScientific('lcm')">lcm</button>
+        <button class="button" onclick="setScientific('round')">round</button>
+
+        <!-- Conversion Functions -->
+        <button class="button" onclick="convert('currency')">Currency</button>
+        <button class="button" onclick="convert('weight')">Weight</button>
+        <button class="button" onclick="convert('volume')">Volume</button>
+        <button class="button" onclick="convert('time')">Time</button>
     </div>
 
     <script>
@@ -206,37 +236,4 @@
                     currentInput = Math.cos(num).toString();
                     break;
                 case 'tan':
-                    currentInput = Math.tan(num).toString();
-                    break;
-                case 'log':
-                    currentInput = Math.log10(num).toString();
-                    break;
-                case 'ln':
-                    currentInput = Math.log(num).toString();
-                    break;
-                case 'sqrt':
-                    currentInput = Math.sqrt(num).toString();
-                    break;
-                case 'exp':
-                    currentInput = Math.exp(num).toString();
-                    break;
-                case 'pi':
-                    currentInput = Math.PI.toString();
-                    break;
-                default:
-                    return;
-            }
-            updateDisplay();
-        }
-
-        // Clear the display
-        function clearDisplay() {
-            currentInput = '';
-            firstOperand = null;
-            operation = null;
-            updateDisplay();
-        }
-    </script>
-
-</body>
-</html>
+                    currentInput
