@@ -15,10 +15,10 @@
 
         #calculator {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
+            grid-template-columns: repeat(5, 1fr);
             grid-gap: 10px;
             padding: 20px;
-            max-width: 400px;
+            max-width: 500px;
             margin: 0 auto;
         }
 
@@ -31,6 +31,7 @@
             border-radius: 50%;
             cursor: pointer;
             transition: background-color 0.3s ease;
+            text-align: center;
         }
 
         .button:active {
@@ -43,7 +44,7 @@
         }
 
         #display {
-            grid-column: span 4;
+            grid-column: span 5;
             padding: 20px;
             text-align: right;
             font-size: 30px;
@@ -77,12 +78,26 @@
         <button class="button" onclick="appendDecimal()">.</button>
         <button class="button" onclick="calculate()">=</button>
         <button class="button" onclick="setOperation('+')">+</button>
+
+        <!-- Scientific Functions -->
+        <button class="button" onclick="setScientific('sin')">sin</button>
+        <button class="button" onclick="setScientific('cos')">cos</button>
+        <button class="button" onclick="setScientific('tan')">tan</button>
+        <button class="button" onclick="setScientific('log')">log</button>
+        <button class="button" onclick="setScientific('ln')">ln</button>
+        <button class="button" onclick="setScientific('sqrt')">√</button>
+        <button class="button" onclick="setScientific('exp')">exp</button>
+        <button class="button" onclick="setScientific('pi')">π</button>
+        <button class="button" onclick="setScientific('e')">e</button>
+        <button class="button" onclick="setScientific('pow')">^</button>
+        <button class="button" onclick="setScientific('factorial')">x!</button>
     </div>
 
     <script>
         let currentInput = '';
         let operation = null;
         let firstOperand = null;
+        let scientificFunction = null;
 
         // Update display
         function updateDisplay() {
@@ -103,7 +118,7 @@
             }
         }
 
-        // Set the operation
+        // Set the operation (addition, subtraction, etc.)
         function setOperation(op) {
             if (currentInput === '') return;
             if (firstOperand === null) {
@@ -115,7 +130,54 @@
             currentInput = '';
         }
 
-        // Calculate the result
+        // Set scientific function
+        function setScientific(func) {
+            if (currentInput === '') return;
+
+            let num = parseFloat(currentInput);
+
+            switch (func) {
+                case 'sin':
+                    currentInput = Math.sin(num).toString();
+                    break;
+                case 'cos':
+                    currentInput = Math.cos(num).toString();
+                    break;
+                case 'tan':
+                    currentInput = Math.tan(num).toString();
+                    break;
+                case 'log':
+                    currentInput = Math.log10(num).toString();
+                    break;
+                case 'ln':
+                    currentInput = Math.log(num).toString();
+                    break;
+                case 'sqrt':
+                    currentInput = Math.sqrt(num).toString();
+                    break;
+                case 'exp':
+                    currentInput = Math.exp(num).toString();
+                    break;
+                case 'pi':
+                    currentInput = Math.PI.toString();
+                    break;
+                case 'e':
+                    currentInput = Math.E.toString();
+                    break;
+                case 'pow':
+                    currentInput = Math.pow(num, 2).toString(); // ^ as square for simplicity
+                    break;
+                case 'factorial':
+                    currentInput = factorial(num).toString();
+                    break;
+                default:
+                    return;
+            }
+
+            updateDisplay();
+        }
+
+        // Calculate the result based on operation
         function calculate() {
             if (currentInput === '' || firstOperand === null || !operation) return;
             let result;
@@ -139,7 +201,18 @@
             currentInput = '';
             firstOperand = null;
             operation = null;
+            scientificFunction = null;
             updateDisplay();
+        }
+
+        // Factorial function
+        function factorial(num) {
+            if (num === 0 || num === 1) return 1;
+            let result = 1;
+            for (let i = 2; i <= num; i++) {
+                result *= i;
+            }
+            return result;
         }
     </script>
 
