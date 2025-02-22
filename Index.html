@@ -29,7 +29,7 @@
         }
 
         .button {
-            background-color: #444;
+            background-color: blue; /* Set buttons to blue */
             border: none;
             color: white;
             padding: 20px;
@@ -41,7 +41,7 @@
         }
 
         .button:active {
-            background-color: #555;
+            background-color: darkblue; /* Slightly darker blue when pressed */
         }
 
         .button:disabled {
@@ -101,7 +101,7 @@
 
     <div id="calculator">
         <input id="display" type="text" disabled>
-        <button class="button" onclick="clearDisplay()">AC</button>
+        <button class="button" onclick="clearDisplay()">❌</button>
         <button class="button" onclick="appendNumber('7')">7</button>
         <button class="button" onclick="appendNumber('8')">8</button>
         <button class="button" onclick="appendNumber('9')">9</button>
@@ -241,4 +241,7 @@
                     currentInput = (1 / Math.cos(num)).toString();
                     break;
                 case 'cot':
-                    currentInput = (1 /
+                    currentInput = (1 / Math.tan(num)).toString();
+                    break;
+                case 'deg':
+                    currentInput = (num * (Math.PI / 180)).toString();
