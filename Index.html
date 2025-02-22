@@ -236,4 +236,59 @@
                     currentInput = Math.cos(num).toString();
                     break;
                 case 'tan':
-                    currentInput
+                    currentInput = Math.tan(num).toString();
+                    break;
+                case 'log':
+                    currentInput = Math.log10(num).toString();
+                    break;
+                case 'ln':
+                    currentInput = Math.log(num).toString();
+                    break;
+                case 'sqrt':
+                    currentInput = Math.sqrt(num).toString();
+                    break;
+                case 'exp':
+                    currentInput = Math.exp(num).toString();
+                    break;
+                case 'pi':
+                    currentInput = Math.PI.toString();
+                    break;
+                case 'abs':
+                    currentInput = Math.abs(num).toString();
+                    break;
+                case 'factorial':
+                    currentInput = factorial(num).toString();
+                    break;
+                default:
+                    break;
+            }
+            updateDisplay();
+        }
+
+        // Factorial function
+        function factorial(n) {
+            if (n === 0) return 1;
+            let result = 1;
+            for (let i = 1; i <= n; i++) {
+                result *= i;
+            }
+            return result;
+        }
+
+        // Conversion functions
+        function convert(type) {
+            let value = parseFloat(currentInput);
+            if (isNaN(value)) {
+                currentInput = "Invalid Input";
+                updateDisplay();
+                return;
+            }
+            
+            switch (type) {
+                case 'currency':
+                    // Example conversion: USD to EUR (1 USD = 0.92 EUR)
+                    currentInput = (value * 0.92).toFixed(2) + " EUR";
+                    break;
+                case 'weight':
+                    // Example conversion: kg to lb (1 kg = 2.20462 lb)
+                    currentInput = (value * 2
