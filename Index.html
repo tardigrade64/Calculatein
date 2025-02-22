@@ -55,7 +55,7 @@
 
     #buttons {
       display: grid;
-      grid-template-columns: repeat(4, 1fr) auto; /* Four main columns + one for operations */
+      grid-template-columns: repeat(3, 1fr) auto; /* Number grid + right-side operations */
       gap: 5px;
       width: 100%;
     }
@@ -115,29 +115,30 @@
   <div id="calculator">
     <input type="text" id="display" disabled>
     <div id="buttons">
+      <button onclick="clearDisplay()" id="ac-button">AC</button>
+      <button onclick="calculatePercentage()">%</button>
+      <button onclick="appendDecimal()">.</button>
+      <button class="operation" onclick="calculate()" id="equals-button">=</button> <!-- Equals at top right -->
+
       <button onclick="appendNumber(7)">7</button>
       <button onclick="appendNumber(8)">8</button>
       <button onclick="appendNumber(9)">9</button>
-      <button onclick="clearDisplay()" id="ac-button">AC</button>
       <button class="operation" onclick="setOperation('+')">+</button>
 
       <button onclick="appendNumber(4)">4</button>
       <button onclick="appendNumber(5)">5</button>
       <button onclick="appendNumber(6)">6</button>
-      <button onclick="appendDecimal()">.</button>
       <button class="operation" onclick="setOperation('-')">-</button>
 
       <button onclick="appendNumber(1)">1</button>
       <button onclick="appendNumber(2)">2</button>
       <button onclick="appendNumber(3)">3</button>
-      <button onclick="appendNumber(0)">0</button>
       <button class="operation" onclick="setOperation('*')">*</button>
 
-      <button onclick="calculatePercentage()">%</button>
+      <button onclick="appendNumber(0)">0</button>
       <button onclick="toggleMode()">Sci</button>
       <button onclick="toggleTheme()">&#9881;</button> <!-- Gear Symbol -->
-      <button onclick="setOperation('/')">/</button>
-      <button class="operation" onclick="calculate()" id="equals-button">=</button>
+      <button class="operation" onclick="setOperation('/')">/</button>
     </div>
     
     <div id="scientific">
