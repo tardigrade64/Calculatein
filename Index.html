@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Scientific Calculator</title>
     <style>
-        /* Body and overall design */
         body {
             font-family: Arial, sans-serif;
             background-color: #333;
@@ -24,12 +23,12 @@
             grid-template-columns: repeat(7, 1fr); /* 7 columns */
             grid-gap: 10px;
             width: 100%;
-            max-width: 700px;  /* Limit to iPad width */
+            max-width: 700px;
             padding: 20px;
         }
 
         .button {
-            background-color: blue; /* Set buttons to blue */
+            background-color: blue;
             border: none;
             color: white;
             padding: 20px;
@@ -41,12 +40,7 @@
         }
 
         .button:active {
-            background-color: darkblue; /* Slightly darker blue when pressed */
-        }
-
-        .button:disabled {
-            background-color: #666;
-            cursor: not-allowed;
+            background-color: darkblue;
         }
 
         #display {
@@ -101,7 +95,7 @@
 
     <div id="calculator">
         <input id="display" type="text" disabled>
-        <button class="button" onclick="clearDisplay()">✖️</button> <!-- Correct ✖️ symbol -->
+        <button class="button" onclick="clearDisplay()">AC</button>
         <button class="button" onclick="appendNumber('7')">7</button>
         <button class="button" onclick="appendNumber('8')">8</button>
         <button class="button" onclick="appendNumber('9')">9</button>
@@ -109,7 +103,7 @@
         <button class="button" onclick="appendNumber('4')">4</button>
         <button class="button" onclick="appendNumber('5')">5</button>
         <button class="button" onclick="appendNumber('6')">6</button>
-        <button class="button" onclick="setOperation('×')">×</button> <!-- Real multiplication symbol -->
+        <button class="button" onclick="setOperation('*')">*</button>
         <button class="button" onclick="appendNumber('1')">1</button>
         <button class="button" onclick="appendNumber('2')">2</button>
         <button class="button" onclick="appendNumber('3')">3</button>
@@ -123,25 +117,20 @@
         <button class="button" onclick="setScientific('sin')">sin</button>
         <button class="button" onclick="setScientific('cos')">cos</button>
         <button class="button" onclick="setScientific('tan')">tan</button>
-        <button class="button" onclick="setScientific('asin')">asin</button>
-        <button class="button" onclick="setScientific('acos')">acos</button>
-        <button class="button" onclick="setScientific('atan')">atan</button>
         <button class="button" onclick="setScientific('log')">log</button>
         <button class="button" onclick="setScientific('ln')">ln</button>
         <button class="button" onclick="setScientific('sqrt')">√</button>
         <button class="button" onclick="setScientific('exp')">exp</button>
         <button class="button" onclick="setScientific('pi')">π</button>
-        <button class="button" onclick="setScientific('e')">e</button>
-        <button class="button" onclick="setScientific('pow')">^</button>
-        <button class="button" onclick="setScientific('factorial')">x!</button>
     </div>
 
     <script>
         let currentInput = '';
         let firstOperand = null;
         let operation = null;
+        let scientificFunction = null;
 
-        // Update the display
+        // Update display
         function updateDisplay() {
             document.getElementById('display').value = currentInput;
         }
@@ -172,44 +161,12 @@
             currentInput = '';
         }
 
-        // Calculate the result
-        function calculate() {
-            let result = 0;
-            let secondOperand = parseFloat(currentInput);
-
-            switch (operation) {
-                case '+':
-                    result = firstOperand + secondOperand;
-                    break;
-                case '-':
-                    result = firstOperand - secondOperand;
-                    break;
-                case '×':
-                    result = firstOperand * secondOperand;  // Using the real multiplication symbol
-                    break;
-                case '/':
-                    result = firstOperand / secondOperand;
-                    break;
-                default:
-                    return;
-            }
-
-            currentInput = result.toString();
-            firstOperand = null;
-            operation = null;
-            updateDisplay();
-        }
-
-        // Clear the display (deletes one character at a time)
-        function clearDisplay() {
-            currentInput = currentInput.slice(0, -1); // Remove last character
-            updateDisplay();
-        }
-
-        // Scientific functions
+        // Set scientific function
         function setScientific(func) {
             if (currentInput === '') return;
+
             let num = parseFloat(currentInput);
+
             switch (func) {
                 case 'sin':
                     currentInput = Math.sin(num).toString();
@@ -219,15 +176,6 @@
                     break;
                 case 'tan':
                     currentInput = Math.tan(num).toString();
-                    break;
-                case 'asin':
-                    currentInput = Math.asin(num).toString();
-                    break;
-                case 'acos':
-                    currentInput = Math.acos(num).toString();
-                    break;
-                case 'atan':
-                    currentInput = Math.atan(num).toString();
                     break;
                 case 'log':
                     currentInput = Math.log10(num).toString();
@@ -244,24 +192,52 @@
                 case 'pi':
                     currentInput = Math.PI.toString();
                     break;
-                case 'e':
-                    currentInput = Math.E.toString();
-                    break;
-                case 'pow':
-                    currentInput = Math.pow(num, 2).toString(); // Power of 2
-                    break;
-                case 'factorial':
-                    currentInput = factorial(num).toString();
-                    break;
+                default:
+                    return;
             }
             updateDisplay();
         }
 
-        // Factorial function
-        function factorial(n) {
-            if (n === 0 || n === 1) return 1;
-            let result = 1;
-            for (let i = n; i > 1; i--) {
-                result *= i;
+        // Calculate the result
+        function calculate() {
+            let result = 0;
+            let secondOperand = parseFloat(currentInput);
+
+            switch (operation) {
+                case '+':
+                    result = firstOperand + secondOperand;
+                    break;
+                case '-':
+                    result = firstOperand - secondOperand;
+                    break;
+                case '*':
+                    result = firstOperand * secondOperand;
+                    break;
+                case '/':
+                    if (secondOperand !== 0) {
+                        result = firstOperand / secondOperand;
+                    } else {
+                        result = 'Error';
+                    }
+                    break;
+                default:
+                    return;
             }
-            return result;
+
+            currentInput = result.toString();
+            firstOperand = null;
+            operation = null;
+            updateDisplay();
+        }
+
+        // Clear the display
+        function clearDisplay() {
+            currentInput = '';
+            firstOperand = null;
+            operation = null;
+            updateDisplay();
+        }
+    </script>
+
+</body>
+</html>
