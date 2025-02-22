@@ -43,11 +43,6 @@
             background-color: darkblue;
         }
 
-        .button:disabled {
-            background-color: #666;
-            cursor: not-allowed;
-        }
-
         #display {
             grid-column: span 7; /* Full width of the grid */
             padding: 20px;
@@ -66,7 +61,7 @@
 
     <div id="calculator">
         <input id="display" type="text" disabled>
-        <button class="button" onclick="clearDisplay()">✖️</button> <!-- Correct ✖️ symbol -->
+        <button class="button" onclick="clearDisplay()">✖️</button>
         <button class="button" onclick="appendNumber('7')">7</button>
         <button class="button" onclick="appendNumber('8')">8</button>
         <button class="button" onclick="appendNumber('9')">9</button>
@@ -74,7 +69,7 @@
         <button class="button" onclick="appendNumber('4')">4</button>
         <button class="button" onclick="appendNumber('5')">5</button>
         <button class="button" onclick="appendNumber('6')">6</button>
-        <button class="button" onclick="setOperation('×')">×</button> <!-- Real multiplication symbol -->
+        <button class="button" onclick="setOperation('*')">×</button> <!-- Using * for multiplication -->
         <button class="button" onclick="appendNumber('1')">1</button>
         <button class="button" onclick="appendNumber('2')">2</button>
         <button class="button" onclick="appendNumber('3')">3</button>
@@ -83,43 +78,12 @@
         <button class="button" onclick="appendDecimal()">.</button>
         <button class="button" onclick="calculate()">=</button>
         <button class="button" onclick="setOperation('+')">+</button>
-
-        <!-- Scientific Functions -->
-        <button class="button" onclick="setScientific('sin')">sin</button>
-        <button class="button" onclick="setScientific('cos')">cos</button>
-        <button class="button" onclick="setScientific('tan')">tan</button>
-        <button class="button" onclick="setScientific('asin')">asin</button>
-        <button class="button" onclick="setScientific('acos')">acos</button>
-        <button class="button" onclick="setScientific('atan')">atan</button>
-        <button class="button" onclick="setScientific('log')">log</button>
-        <button class="button" onclick="setScientific('ln')">ln</button>
-        <button class="button" onclick="setScientific('sqrt')">√</button>
-        <button class="button" onclick="setScientific('exp')">exp</button>
-        <button class="button" onclick="setScientific('pi')">π</button>
-        <button class="button" onclick="setScientific('e')">e</button>
-        <button class="button" onclick="setScientific('pow')">^</button>
-        <button class="button" onclick="setScientific('factorial')">x!</button>
-
-        <!-- Memory Buttons -->
-        <button class="button" onclick="memoryClear()">MC</button>
-        <button class="button" onclick="memoryRecall()">MR</button>
-        <button class="button" onclick="memoryAdd()">M+</button>
-        <button class="button" onclick="memorySubtract()">M-</button>
-
-        <!-- Clear/Parentheses/Percent/Inverse -->
-        <button class="button" onclick="clearCurrent()">C</button> <!-- Clear current input -->
-        <button class="button" onclick="appendParenthesis('(')">(</button>
-        <button class="button" onclick="appendParenthesis(')')">)</button>
-        <button class="button" onclick="calculatePercentage()">%</button>
-        <button class="button" onclick="inverse()">1/x</button> <!-- Inverse -->
-        <button class="button" onclick="random()">rand</button>
     </div>
 
     <script>
         let currentInput = '';
         let firstOperand = null;
         let operation = null;
-        let memory = 0; // Memory store
 
         // Update the display
         function updateDisplay() {
@@ -164,11 +128,15 @@
                 case '-':
                     result = firstOperand - secondOperand;
                     break;
-                case '×':
-                    result = firstOperand * secondOperand;  // Using the real multiplication symbol
+                case '*': // Using * for multiplication
+                    result = firstOperand * secondOperand;
                     break;
                 case '/':
-                    result = firstOperand / secondOperand;
+                    if (secondOperand !== 0) {
+                        result = firstOperand / secondOperand;
+                    } else {
+                        result = 'Error';
+                    }
                     break;
                 default:
                     return;
@@ -185,86 +153,6 @@
             currentInput = currentInput.slice(0, -1); // Remove last character
             updateDisplay();
         }
-
-        // Clear current input
-        function clearCurrent() {
-            currentInput = '';
-            updateDisplay();
-        }
-
-        // Memory functions
-        function memoryClear() {
-            memory = 0;
-        }
-
-        function memoryRecall() {
-            currentInput = memory.toString();
-            updateDisplay();
-        }
-
-        function memoryAdd() {
-            memory += parseFloat(currentInput);
-        }
-
-        function memorySubtract() {
-            memory -= parseFloat(currentInput);
-        }
-
-        // Parentheses
-        function appendParenthesis(par) {
-            currentInput += par;
-            updateDisplay();
-        }
-
-        // Percentage calculation
-        function calculatePercentage() {
-            currentInput = (parseFloat(currentInput) / 100).toString();
-            updateDisplay();
-        }
-
-        // Inverse (1/x)
-        function inverse() {
-            currentInput = (1 / parseFloat(currentInput)).toString();
-            updateDisplay();
-        }
-
-        // Random number generator
-        function random() {
-            currentInput = Math.random().toString();
-            updateDisplay();
-        }
-
-        // Scientific functions
-        function setScientific(func) {
-            if (currentInput === '') return;
-            let num = parseFloat(currentInput);
-            switch (func) {
-                case 'sin':
-                    currentInput = Math.sin(num).toString();
-                    break;
-                case 'cos':
-                    currentInput = Math.cos(num).toString();
-                    break;
-                case 'tan':
-                    currentInput = Math.tan(num).toString();
-                    break;
-                case 'asin':
-                    currentInput = Math.asin(num).toString();
-                    break;
-                case 'acos':
-                    currentInput = Math.acos(num).toString();
-                    break;
-                case 'atan':
-                    currentInput = Math.atan(num).toString();
-                    break;
-                case 'log':
-                    currentInput = Math.log10(num).toString();
-                    break;
-                case 'ln':
-                    currentInput = Math.log(num).toString();
-                    break;
-                case 'sqrt':
-                    currentInput = Math.sqrt(num).toString();
-                    break;
-                case 'exp':
-                    currentInput = Math.exp(num).to
+    </script>
+</body>
+</html>
