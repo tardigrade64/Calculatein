@@ -56,39 +56,6 @@
             font-weight: bold;
         }
 
-        /* Responsive design */
-        @media (max-width: 768px) {
-            #calculator {
-                grid-template-columns: repeat(5, 1fr); /* 5 columns for smaller screens */
-                max-width: 500px;
-            }
-
-            .button {
-                padding: 15px;
-                font-size: 16px; /* Smaller font for mobile */
-            }
-
-            #display {
-                font-size: 24px;  /* Smaller text for display */
-            }
-        }
-
-        @media (max-width: 600px) {
-            #calculator {
-                grid-template-columns: repeat(4, 1fr); /* 4 columns for very small screens */
-                max-width: 400px;
-            }
-
-            .button {
-                padding: 12px;
-                font-size: 14px; /* Smaller font size */
-            }
-
-            #display {
-                font-size: 20px;  /* Smaller text for display */
-            }
-        }
-
     </style>
 </head>
 <body>
@@ -118,34 +85,7 @@
         <button class="button" onclick="setScientific('cos')">cos</button>
         <button class="button" onclick="setScientific('tan')">tan</button>
         <button class="button" onclick="setScientific('log')">log</button>
-        <button class="button" onclick="setScientific('ln')">ln</button>
         <button class="button" onclick="setScientific('sqrt')">√</button>
-        <button class="button" onclick="setScientific('exp')">exp</button>
-        <button class="button" onclick="setScientific('pi')">π</button>
-        <button class="button" onclick="setScientific('abs')">abs</button>
-        <button class="button" onclick="setScientific('factorial')">x!</button>
-        <button class="button" onclick="setScientific('asin')">asin</button>
-        <button class="button" onclick="setScientific('acos')">acos</button>
-        <button class="button" onclick="setScientific('atan')">atan</button>
-        <button class="button" onclick="setScientific('csc')">csc</button>
-        <button class="button" onclick="setScientific('sec')">sec</button>
-        <button class="button" onclick="setScientific('cot')">cot</button>
-        <button class="button" onclick="setScientific('rad')">rad</button>
-        <button class="button" onclick="setScientific('deg')">deg</button>
-        <button class="button" onclick="setScientific('rand')">rand</button>
-        <button class="button" onclick="setScientific('sinh')">sinh</button>
-        <button class="button" onclick="setScientific('cosh')">cosh</button>
-        <button class="button" onclick="setScientific('tanh')">tanh</button>
-        <button class="button" onclick="setScientific('factor')">factor</button>
-        <button class="button" onclick="setScientific('int')">int</button>
-        <button class="button" onclick="setScientific('ceil')">ceil</button>
-        <button class="button" onclick="setScientific('floor')">floor</button>
-        <button class="button" onclick="setScientific('max')">max</button>
-        <button class="button" onclick="setScientific('min')">min</button>
-        <button class="button" onclick="setScientific('exp10')">exp10</button>
-        <button class="button" onclick="setScientific('gcd')">gcd</button>
-        <button class="button" onclick="setScientific('lcm')">lcm</button>
-        <button class="button" onclick="setScientific('round')">round</button>
 
         <!-- Conversion Functions -->
         <button class="button" onclick="convert('currency')">Currency</button>
@@ -159,18 +99,26 @@
         let firstOperand = null;
         let operation = null;
 
-        // Update display
+        // Update the display
         function updateDisplay() {
             document.getElementById('display').value = currentInput;
         }
 
-        // Append number to the display
+        // Clear the display
+        function clearDisplay() {
+            currentInput = '';
+            firstOperand = null;
+            operation = null;
+            updateDisplay();
+        }
+
+        // Append a number to the display
         function appendNumber(number) {
             currentInput += number;
             updateDisplay();
         }
 
-        // Append decimal point to the display
+        // Append decimal to the display
         function appendDecimal() {
             if (!currentInput.includes('.')) {
                 currentInput += '.';
@@ -190,7 +138,7 @@
             currentInput = '';
         }
 
-        // Calculate the result
+        // Perform the calculation
         function calculate() {
             let result = 0;
             let secondOperand = parseFloat(currentInput);
@@ -222,7 +170,7 @@
             updateDisplay();
         }
 
-        // Set scientific function
+        // Scientific functions (sin, cos, etc.)
         function setScientific(func) {
             if (currentInput === '') return;
 
@@ -241,23 +189,8 @@
                 case 'log':
                     currentInput = Math.log10(num).toString();
                     break;
-                case 'ln':
-                    currentInput = Math.log(num).toString();
-                    break;
                 case 'sqrt':
                     currentInput = Math.sqrt(num).toString();
-                    break;
-                case 'exp':
-                    currentInput = Math.exp(num).toString();
-                    break;
-                case 'pi':
-                    currentInput = Math.PI.toString();
-                    break;
-                case 'abs':
-                    currentInput = Math.abs(num).toString();
-                    break;
-                case 'factorial':
-                    currentInput = factorial(num).toString();
                     break;
                 default:
                     break;
@@ -265,17 +198,7 @@
             updateDisplay();
         }
 
-        // Factorial function
-        function factorial(n) {
-            if (n === 0) return 1;
-            let result = 1;
-            for (let i = 1; i <= n; i++) {
-                result *= i;
-            }
-            return result;
-        }
-
-        // Conversion functions
+        // Conversion functions (currency, weight, etc.)
         function convert(type) {
             let value = parseFloat(currentInput);
             if (isNaN(value)) {
@@ -283,7 +206,7 @@
                 updateDisplay();
                 return;
             }
-            
+
             switch (type) {
                 case 'currency':
                     // Example conversion: USD to EUR (1 USD = 0.92 EUR)
@@ -291,4 +214,23 @@
                     break;
                 case 'weight':
                     // Example conversion: kg to lb (1 kg = 2.20462 lb)
-                    currentInput = (value * 2
+                    currentInput = (value * 2.20462).toFixed(2) + " lb";
+                    break;
+                case 'volume':
+                    // Example conversion: liter to gallon (1 liter = 0.264172 gallon)
+                    currentInput = (value * 0.264172).toFixed(2) + " gal";
+                    break;
+                case 'time':
+                    // Example conversion: hours to minutes (1 hour = 60 minutes)
+                    currentInput = (value * 60).toFixed(2) + " min";
+                    break;
+                default:
+                    break;
+            }
+
+            updateDisplay();
+        }
+    </script>
+
+</body>
+</html>
