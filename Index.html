@@ -11,7 +11,6 @@
       --text-color: white;
       --button-color: #0d47a1; /* Dark Blue Buttons */
       --ac-button-color: #1565c0; /* Slightly Darker Blue for AC */
-      --button-border: 1px solid #bbb;
     }
 
     /* Red Mode */
@@ -85,7 +84,6 @@
     button {
       padding: 8px;
       font-size: 16px;
-      border: var(--button-border);
       background: var(--button-color);
       color: white;
       cursor: pointer;
@@ -93,6 +91,7 @@
       width: 70%;
       aspect-ratio: 1 / 1;
       transition: 0.2s;
+      border: none; /* Removed the border */
     }
 
     #ac-button {
