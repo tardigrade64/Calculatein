@@ -5,116 +5,167 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Scientific Calculator</title>
     <style>
+        /* Body and overall design */
         body {
             font-family: Arial, sans-serif;
             background-color: #333;
             color: white;
+            margin: 0;
+            padding: 0;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
-            margin: 0;
+            background-color: #1e1e1e;
         }
+
         #calculator {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 10px;
-            max-width: 400px;
+            grid-template-columns: repeat(7, 1fr); /* 7 columns */
+            grid-gap: 10px;
             width: 100%;
-        }
-        #display {
-            grid-column: span 4;
+            max-width: 700px;  /* Limit to iPad width */
             padding: 20px;
-            font-size: 2em;
-            text-align: right;
-            background-color: #222;
-            border: none;
-            color: white;
-            border-radius: 5px;
         }
+
         .button {
-            padding: 20px;
-            font-size: 1.2em;
             background-color: #444;
             border: none;
-            border-radius: 5px;
+            color: white;
+            padding: 20px;
+            font-size: 18px;
+            border-radius: 50%;
             cursor: pointer;
-            transition: background-color 0.3s;
+            transition: background-color 0.3s ease;
+            text-align: center;
         }
+
         .button:active {
             background-color: #555;
         }
-        .function-key {
-            background-color: #555;
-        }
-        .operator-key {
+
+        .button:disabled {
             background-color: #666;
+            cursor: not-allowed;
         }
-        .scientific-key {
-            background-color: #777;
+
+        #display {
+            grid-column: span 7; /* Full width of the grid */
+            padding: 20px;
+            text-align: right;
+            font-size: 30px;
+            background-color: #222;
+            border-radius: 10px;
+            border: none;
+            color: white;
+            margin-bottom: 20px;
+            font-weight: bold;
         }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            #calculator {
+                grid-template-columns: repeat(5, 1fr); /* 5 columns for smaller screens */
+                max-width: 500px;
+            }
+
+            .button {
+                padding: 15px;
+                font-size: 16px; /* Smaller font for mobile */
+            }
+
+            #display {
+                font-size: 24px;  /* Smaller text for display */
+            }
+        }
+
+        @media (max-width: 600px) {
+            #calculator {
+                grid-template-columns: repeat(4, 1fr); /* 4 columns for very small screens */
+                max-width: 400px;
+            }
+
+            .button {
+                padding: 12px;
+                font-size: 14px; /* Smaller font size */
+            }
+
+            #display {
+                font-size: 20px;  /* Smaller text for display */
+            }
+        }
+
     </style>
 </head>
 <body>
+
     <div id="calculator">
-        <input type="text" id="display" disabled>
-        <!-- Function Keys -->
-        <button class="button function-key" onclick="clearDisplay()">AC</button>
-        <button class="button function-key" onclick="toggleSign()">±</button>
-        <button class="button function-key" onclick="percentage()">%</button>
-        <button class="button function-key" onclick="insertConstant('π')">π</button>
-        <!-- Number Pad and Operators -->
+        <input id="display" type="text" disabled>
+        <button class="button" onclick="clearDisplay()">AC</button>
         <button class="button" onclick="appendNumber('7')">7</button>
         <button class="button" onclick="appendNumber('8')">8</button>
         <button class="button" onclick="appendNumber('9')">9</button>
-        <button class="button operator-key" onclick="setOperation('divide')">÷</button>
-
+        <button class="button" onclick="setOperation('/')">/</button>
         <button class="button" onclick="appendNumber('4')">4</button>
         <button class="button" onclick="appendNumber('5')">5</button>
         <button class="button" onclick="appendNumber('6')">6</button>
-        <button class="button operator-key" onclick="setOperation('multiply')">×</button>
-
+        <button class="button" onclick="setOperation('*')">*</button>
         <button class="button" onclick="appendNumber('1')">1</button>
         <button class="button" onclick="appendNumber('2')">2</button>
         <button class="button" onclick="appendNumber('3')">3</button>
-        <button class="button operator-key" onclick="setOperation('subtract')">−</button>
-
+        <button class="button" onclick="setOperation('-')">-</button>
         <button class="button" onclick="appendNumber('0')">0</button>
         <button class="button" onclick="appendDecimal()">.</button>
-        <button class="button operator-key" onclick="calculate()">=</button>
-        <button class="button operator-key" onclick="setOperation('add')">+</button>
+        <button class="button" onclick="calculate()">=</button>
+        <button class="button" onclick="setOperation('+')">+</button>
+
         <!-- Scientific Functions -->
-        <button class="button scientific-key" onclick="applyFunction('sin')">sin</button>
-        <button class="button scientific-key" onclick="applyFunction('cos')">cos</button>
-        <button class="button scientific-key" onclick="applyFunction('tan')">tan</button>
-        <button class="button scientific-key" onclick="applyFunction('asin')">asin</button>
-
-        <button class="button scientific-key" onclick="applyFunction('acos')">acos</button>
-        <button class="button scientific-key" onclick="applyFunction('atan')">atan</button>
-        <button class="button scientific-key" onclick="applyFunction('log')">log</button>
-        <button class="button scientific-key" onclick="applyFunction('ln')">ln</button>
-
-        <button class="button scientific-key" onclick="applyFunction('sqrt')">√</button>
-        <button class="button scientific-key" onclick="applyFunction('square')">x²</button>
-        <button class="button scientific-key" onclick="applyFunction('cube')">x³</button>
-        <button class="button scientific-key" onclick="applyFunction('factorial')">x!</button>
+        <button class="button" onclick="setScientific('sin')">sin</button>
+        <button class="button" onclick="setScientific('cos')">cos</button>
+        <button class="button" onclick="setScientific('tan')">tan</button>
+        <button class="button" onclick="setScientific('asin')">asin</button>
+        <button class="button" onclick="setScientific('acos')">acos</button>
+        <button class="button" onclick="setScientific('atan')">atan</button>
+        <button class="button" onclick="setScientific('log')">log</button>
+        <button class="button" onclick="setScientific('ln')">ln</button>
+        <button class="button" onclick="setScientific('sqrt')">√</button>
+        <button class="button" onclick="setScientific('exp')">exp</button>
+        <button class="button" onclick="setScientific('pi')">π</button>
+        <button class="button" onclick="setScientific('e')">e</button>
+        <button class="button" onclick="setScientific('pow')">^</button>
+        <button class="button" onclick="setScientific('factorial')">x!</button>
+        <button class="button" onclick="setScientific('csc')">csc</button>
+        <button class="button" onclick="setScientific('sec')">sec</button>
+        <button class="button" onclick="setScientific('cot')">cot</button>
+        <button class="button" onclick="setScientific('deg')">deg</button>
+        <button class="button" onclick="setScientific('rad')">rad</button>
+        <button class="button" onclick="setScientific('rand')">rand</button>
+        <button class="button" onclick="setScientific('sinh')">sinh</button>
+        <button class="button" onclick="setScientific('cosh')">cosh</button>
+        <button class="button" onclick="setScientific('tanh')">tanh</button>
+        <button class="button" onclick="setScientific('abs')">abs</button>
+        <button class="button" onclick="setScientific('int')">int</button>
+        <button class="button" onclick="setScientific('factor')">factor</button>
     </div>
+
     <script>
-        // JavaScript functions to handle calculator operations
-        let display = document.getElementById('display');
         let currentInput = '';
         let operation = null;
         let firstOperand = null;
+        let scientificFunction = null;
 
+        // Update display
         function updateDisplay() {
-            display.value = currentInput || '0';
+            document.getElementById('display').value = currentInput;
         }
 
+        // Append number to the display
         function appendNumber(number) {
             currentInput += number;
             updateDisplay();
         }
 
+        // Append decimal point to the display
         function appendDecimal() {
             if (!currentInput.includes('.')) {
                 currentInput += '.';
@@ -122,15 +173,148 @@
             }
         }
 
-        function clearDisplay() {
+        // Set the operation (addition, subtraction, etc.)
+        function setOperation(op) {
+            if (currentInput === '') return;
+            if (firstOperand === null) {
+                firstOperand = parseFloat(currentInput);
+            } else {
+                firstOperand = calculate();
+            }
+            operation = op;
             currentInput = '';
+        }
+
+        // Set scientific function
+        function setScientific(func) {
+            if (currentInput === '') return;
+
+            let num = parseFloat(currentInput);
+
+            switch (func) {
+                case 'sin':
+                    currentInput = Math.sin(num).toString();
+                    break;
+                case 'cos':
+                    currentInput = Math.cos(num).toString();
+                    break;
+                case 'tan':
+                    currentInput = Math.tan(num).toString();
+                    break;
+                case 'asin':
+                    currentInput = Math.asin(num).toString();
+                    break;
+                case 'acos':
+                    currentInput = Math.acos(num).toString();
+                    break;
+                case 'atan':
+                    currentInput = Math.atan(num).toString();
+                    break;
+                case 'log':
+                    currentInput = Math.log10(num).toString();
+                    break;
+                case 'ln':
+                    currentInput = Math.log(num).toString();
+                    break;
+                case 'sqrt':
+                    currentInput = Math.sqrt(num).toString();
+                    break;
+                case 'exp':
+                    currentInput = Math.exp(num).toString();
+                    break;
+                case 'pi':
+                    currentInput = Math.PI.toString();
+                    break;
+                case 'e':
+                    currentInput = Math.E.toString();
+                    break;
+                case 'pow':
+                    currentInput = Math.pow(num, 2).toString(); // ^ as square for simplicity
+                    break;
+                case 'factorial':
+                    currentInput = factorial(num).toString();
+                    break;
+                case 'csc':
+                    currentInput = (1 / Math.sin(num)).toString();
+                    break;
+                case 'sec':
+                    currentInput = (1 / Math.cos(num)).toString();
+                    break;
+                case 'cot':
+                    currentInput = (1 / Math.tan(num)).toString();
+                    break;
+                case 'deg':
+                    currentInput = (num * (Math.PI / 180)).toString(); // Convert to radians
+                    break;
+                case 'rad':
+                    currentInput = (num * (180 / Math.PI)).toString(); // Convert to degrees
+                    break;
+                case 'rand':
+                    currentInput = (Math.random()).toString();
+                    break;
+                case 'sinh':
+                    currentInput = Math.sinh(num).toString();
+                    break;
+                case 'cosh':
+                    currentInput = Math.cosh(num).toString();
+                    break;
+                case 'tanh':
+                    currentInput = Math.tanh(num).toString();
+                    break;
+                case 'abs':
+                    currentInput = Math.abs(num).toString();
+                    break;
+                case 'int':
+                    currentInput = Math.floor(num).toString();
+                    break;
+                case 'factor':
+                    currentInput = factorial(num).toString();
+                    break;
+                default:
+                    return;
+            }
+
+            updateDisplay();
+        }
+
+        // Calculate the result based on operation
+        function calculate() {
+            if (currentInput === '' || firstOperand === null || !operation) return;
+            let result;
+
+            switch (operation) {
+                case '+': result = firstOperand + parseFloat(currentInput); break;
+                case '-': result = firstOperand - parseFloat(currentInput); break;
+                case '*': result = firstOperand * parseFloat(currentInput); break;
+                case '/': result = firstOperand / parseFloat(currentInput); break;
+                default: return;
+            }
+
+            currentInput = result.toString();
             firstOperand = null;
             operation = null;
             updateDisplay();
         }
 
-        function toggleSign() {
-            if (currentInput) {
-                currentInput = currentInput.startsWith('-') ? currentInput.slice(1) : '-' + currentInput;
-                updateDisplay();
-            
+        // Clear the display
+        function clearDisplay() {
+            currentInput = '';
+            firstOperand = null;
+            operation = null;
+            scientificFunction = null;
+            updateDisplay();
+        }
+
+        // Factorial function
+        function factorial(num) {
+            if (num === 0 || num === 1) return 1;
+            let result = 1;
+            for (let i = 2; i <= num; i++) {
+                result *= i;
+            }
+            return result;
+        }
+    </script>
+
+</body>
+</html>
