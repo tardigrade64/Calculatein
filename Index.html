@@ -43,8 +43,7 @@
       text-align: right;
       color: var(--text-color);
       background: none;
-      border: 2px solid var(--text-color);
-      border-radius: 10px;
+      border: none; /* Removed the border */
       padding: 10px;
       margin-bottom: 20px;
       box-sizing: border-box;
@@ -115,21 +114,21 @@
       <button onclick="appendNumber(9)">9</button>
       <button onclick="setOperation('+')">+</button>
       <button onclick="clearDisplay()" id="ac-button">AC</button>
-      
+      <button onclick="calculate()" id="equals-button">=</button>  <!-- New = button next to AC -->
+
       <button onclick="appendNumber(4)">4</button>
       <button onclick="appendNumber(5)">5</button>
       <button onclick="appendNumber(6)">6</button>
       <button onclick="setOperation('-')">-</button>
       <button onclick="setOperation('/')">/</button>
-      
+
       <button onclick="appendNumber(1)">1</button>
       <button onclick="appendNumber(2)">2</button>
       <button onclick="appendNumber(3)">3</button>
       <button onclick="appendNumber(0)">0</button>
       <button onclick="appendDecimal()">.</button>
-      
+
       <button onclick="calculatePercentage()">%</button>
-      <button onclick="calculate()">=</button>
       <button onclick="toggleMode()">Sci</button>
       <button onclick="toggleTheme()">&#9881;</button>  <!-- Gear Symbol -->
       <button onclick="setOperation('*')">*</button>
