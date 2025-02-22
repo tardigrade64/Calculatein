@@ -8,15 +8,15 @@
     :root {
       --bg-color: #000000; /* Black background */
       --text-color: white;
-      --button-color: #00338D; /* Default: Buffalo Bills Blue */
-      --ac-button-color: #002366; /* Darker blue for AC button */
+      --button-color: #00338D; /* Buffalo Bills Blue */
+      --ac-button-color: #002366; /* Darker blue for AC */
     }
 
     /* Theme Colors */
-    .blue-mode { --button-color: #00338D; }
-    .red-mode { --button-color: #D32F2F; }
-    .green-mode { --button-color: #388E3C; }
-    .yellow-mode { --button-color: #FBC02D; }
+    .blue-mode { --button-color: #00338D; } /* Blue */
+    .red-mode { --button-color: #D32F2F; } /* Red */
+    .green-mode { --button-color: #388E3C; } /* Green */
+    .yellow-mode { --button-color: #FBC02D; } /* Yellow */
 
     /* General Styles */
     body {
@@ -35,7 +35,6 @@
       width: 100%;
       max-width: 600px;
       padding: 20px;
-      background: none;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -55,7 +54,7 @@
 
     #buttons {
       display: grid;
-      grid-template-columns: repeat(3, 1fr) auto; /* Number grid + right-side operations */
+      grid-template-columns: repeat(3, 1fr) auto;
       gap: 5px;
       width: 100%;
     }
@@ -78,7 +77,7 @@
     }
 
     .operation {
-      background: #ff9800; /* Orange for operation buttons */
+      background: #ff9800; /* Orange for operations */
     }
 
     button:hover {
@@ -97,17 +96,6 @@
       #calculator {
         max-width: 600px;
       }
-
-      button {
-        width: 80%;
-        padding: 8px;
-        font-size: 16px;
-      }
-
-      #display {
-        font-size: 32px;
-        height: 60px;
-      }
     }
   </style>
 </head>
@@ -118,7 +106,7 @@
       <button onclick="clearDisplay()" id="ac-button">AC</button>
       <button onclick="calculatePercentage()">%</button>
       <button onclick="appendDecimal()">.</button>
-      <button class="operation" onclick="calculate()" id="equals-button">=</button> <!-- Equals at top right -->
+      <button class="operation" onclick="calculate()" id="equals-button">=</button> 
 
       <button onclick="appendNumber(7)">7</button>
       <button onclick="appendNumber(8)">8</button>
@@ -153,6 +141,7 @@
       <button onclick="calculateBeta()">B(x, y)</button>
     </div>
   </div>
+
   <script>
     let currentInput = '';
     let operation = null;
@@ -222,9 +211,12 @@
 
     function toggleTheme() {
       const themes = ['blue-mode', 'red-mode', 'green-mode', 'yellow-mode'];
-      let currentTheme = document.body.className;
+      let currentTheme = document.body.classList[0]; // Get current theme class
       let nextThemeIndex = (themes.indexOf(currentTheme) + 1) % themes.length;
-      document.body.className = themes[nextThemeIndex];
+      
+      // Remove all theme classes and apply the new one
+      document.body.classList.remove(...themes);
+      document.body.classList.add(themes[nextThemeIndex]);
     }
 
     function updateDisplay() {
