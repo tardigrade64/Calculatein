@@ -6,34 +6,10 @@
   <title>Scientific Calculator</title>
   <style>
     :root {
-      --bg-color: #000000; /* Fully Black Background */
+      --bg-color: #000000; /* Black Background */
       --text-color: white;
       --button-color: #00338D; /* Buffalo Bills Royal Blue */
-      --ac-button-color: #002366; /* Slightly Darker Shade for AC Button */
-    }
-
-    /* Red Mode */
-    .red-mode {
-      --button-color: #b71c1c;
-      --ac-button-color: #9a0007;
-    }
-
-    /* Blue Mode - Buffalo Bills Royal Blue */
-    .blue-mode {
-      --button-color: #00338D; /* Buffalo Bills Royal Blue */
-      --ac-button-color: #002366; /* Slightly Darker Shade for AC Button */
-    }
-
-    /* Green Mode */
-    .green-mode {
-      --button-color: #1b5e20;
-      --ac-button-color: #104314;
-    }
-
-    /* Yellow Mode */
-    .yellow-mode {
-      --button-color: #f57f17;
-      --ac-button-color: #e65100;
+      --ac-button-color: #002366; /* Darker Blue for AC Button */
     }
 
     /* General Styles */
@@ -54,7 +30,6 @@
       max-width: 900px;
       padding: 20px;
       background: none;
-      border-radius: 15px;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -75,7 +50,7 @@
 
     #buttons {
       display: grid;
-      grid-template-columns: repeat(5, 1fr);
+      grid-template-columns: repeat(4, 1fr) auto; /* Four main columns + one for operations */
       gap: 8px;
       width: 100%;
     }
@@ -87,7 +62,7 @@
       color: white;
       cursor: pointer;
       border-radius: 50%;
-      width: 70%;
+      width: 100%;
       aspect-ratio: 1 / 1;
       transition: 0.2s;
       border: none;
@@ -97,13 +72,17 @@
       background: var(--ac-button-color);
     }
 
+    .operation {
+      background: #ff9800; /* Orange for operation buttons */
+    }
+
     button:hover {
       opacity: 0.8;
     }
 
     #scientific {
       display: none;
-      grid-template-columns: repeat(5, 1fr);
+      grid-template-columns: repeat(4, 1fr);
       gap: 8px;
       margin-top: 10px;
       width: 100%;
@@ -115,7 +94,7 @@
       }
 
       button {
-        width: 60%;
+        width: 80%;
         padding: 6px;
         font-size: 14px;
       }
@@ -127,31 +106,35 @@
     }
   </style>
 </head>
-<body class="blue-mode"> <!-- Default mode is Blue Mode -->
+<body class="blue-mode"> 
   <div id="calculator">
     <input type="text" id="display" disabled>
     <div id="buttons">
       <button onclick="appendNumber(7)">7</button>
       <button onclick="appendNumber(8)">8</button>
       <button onclick="appendNumber(9)">9</button>
-      <button onclick="setOperation('+')">+</button>
       <button onclick="clearDisplay()" id="ac-button">AC</button>
-      <button onclick="calculate()" id="equals-button">=</button>
+      <button class="operation" onclick="setOperation('+')">+</button>
+
       <button onclick="appendNumber(4)">4</button>
       <button onclick="appendNumber(5)">5</button>
       <button onclick="appendNumber(6)">6</button>
-      <button onclick="setOperation('-')">-</button>
-      <button onclick="setOperation('/')">/</button>
+      <button onclick="appendDecimal()">.</button>
+      <button class="operation" onclick="setOperation('-')">-</button>
+
       <button onclick="appendNumber(1)">1</button>
       <button onclick="appendNumber(2)">2</button>
       <button onclick="appendNumber(3)">3</button>
       <button onclick="appendNumber(0)">0</button>
-      <button onclick="appendDecimal()">.</button>
+      <button class="operation" onclick="setOperation('*')">*</button>
+
       <button onclick="calculatePercentage()">%</button>
       <button onclick="toggleMode()">Sci</button>
       <button onclick="toggleTheme()">&#9881;</button> <!-- Gear Symbol -->
-      <button onclick="setOperation('*')">*</button>
+      <button onclick="setOperation('/')">/</button>
+      <button class="operation" onclick="calculate()" id="equals-button">=</button>
     </div>
+    
     <div id="scientific">
       <button onclick="appendFunction('Math.sqrt')">√</button>
       <button onclick="appendFunction('Math.pow')">xⁿ</button>
@@ -201,4 +184,46 @@
     }
 
     function calculate() {
-      if (currentInput === '' || firstOperand === 
+      if (currentInput === '' || firstOperand === null || !operation) return;
+      let secondOperand = parseFloat(currentInput);
+      let result;
+
+      switch (operation) {
+        case '+': result = firstOperand + secondOperand; break;
+        case '-': result = firstOperand - secondOperand; break;
+        case '*': result = firstOperand * secondOperand; break;
+        case '/': result = secondOperand !== 0 ? firstOperand / secondOperand : 'Error'; break;
+        default: return;
+      }
+
+      currentInput = result.toString();
+      firstOperand = null;
+      operation = null;
+      updateDisplay();
+    }
+
+    function calculatePercentage() {
+      if (currentInput !== '') {
+        currentInput = (parseFloat(currentInput) / 100).toString();
+        updateDisplay();
+      }
+    }
+
+    function toggleMode() {
+      isScientificMode = !isScientificMode;
+      document.getElementById('scientific').style.display = isScientificMode ? 'grid' : 'none';
+    }
+
+    function toggleTheme() {
+      const themes = ['blue-mode', 'red-mode', 'green-mode', 'yellow-mode'];
+      let currentTheme = document.body.className;
+      let nextThemeIndex = (themes.indexOf(currentTheme) + 1) % themes.length;
+      document.body.className = themes[nextThemeIndex];
+    }
+
+    function updateDisplay() {
+      document.getElementById('display').value = currentInput;
+    }
+  </script>
+</body>
+</html>
