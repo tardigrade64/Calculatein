@@ -10,7 +10,7 @@
       --bg-color: black;
       --text-color: white;
       --button-color: blue;
-      --ac-button-color: blue; /* Set the AC button color to blue */
+      --ac-button-color: blue; /* AC button is blue */
     }
 
     body {
@@ -43,11 +43,11 @@
       text-align: right;
       color: var(--text-color);
       background: none;
-      border: none; /* Removed the border */
+      border: none;
       padding: 10px;
       margin-bottom: 20px;
       box-sizing: border-box;
-      font-weight: bold; /* Added bold styling */
+      font-weight: bold;
     }
 
     #buttons {
@@ -115,7 +115,7 @@
       <button onclick="appendNumber(9)">9</button>
       <button onclick="setOperation('+')">+</button>
       <button onclick="clearDisplay()" id="ac-button">AC</button>
-      <button onclick="calculate()" id="equals-button">=</button>  <!-- New = button next to AC -->
+      <button onclick="calculate()" id="equals-button">=</button>
 
       <button onclick="appendNumber(4)">4</button>
       <button onclick="appendNumber(5)">5</button>
@@ -131,7 +131,7 @@
 
       <button onclick="calculatePercentage()">%</button>
       <button onclick="toggleMode()">Sci</button>
-      <button onclick="toggleTheme()">&#9881;</button>  <!-- Gear Symbol -->
+      <button onclick="toggleTheme()">&#9881;</button> <!-- Gear Symbol -->
       <button onclick="setOperation('*')">*</button>
     </div>
 
