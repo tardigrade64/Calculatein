@@ -134,27 +134,14 @@
         <button class="button" onclick="setScientific('e')">e</button>
         <button class="button" onclick="setScientific('pow')">^</button>
         <button class="button" onclick="setScientific('factorial')">x!</button>
-        <button class="button" onclick="setScientific('csc')">csc</button>
-        <button class="button" onclick="setScientific('sec')">sec</button>
-        <button class="button" onclick="setScientific('cot')">cot</button>
-        <button class="button" onclick="setScientific('deg')">deg</button>
-        <button class="button" onclick="setScientific('rad')">rad</button>
-        <button class="button" onclick="setScientific('rand')">rand</button>
-        <button class="button" onclick="setScientific('sinh')">sinh</button>
-        <button class="button" onclick="setScientific('cosh')">cosh</button>
-        <button class="button" onclick="setScientific('tanh')">tanh</button>
-        <button class="button" onclick="setScientific('abs')">abs</button>
-        <button class="button" onclick="setScientific('int')">int</button>
-        <button class="button" onclick="setScientific('factor')">factor</button>
     </div>
 
     <script>
         let currentInput = '';
-        let operation = null;
         let firstOperand = null;
-        let scientificFunction = null;
+        let operation = null;
 
-        // Update display
+        // Update the display
         function updateDisplay() {
             document.getElementById('display').value = currentInput;
         }
@@ -185,12 +172,46 @@
             currentInput = '';
         }
 
-        // Set scientific function
+        // Calculate the result
+        function calculate() {
+            let result = 0;
+            let secondOperand = parseFloat(currentInput);
+
+            switch (operation) {
+                case '+':
+                    result = firstOperand + secondOperand;
+                    break;
+                case '-':
+                    result = firstOperand - secondOperand;
+                    break;
+                case '*':
+                    result = firstOperand * secondOperand;
+                    break;
+                case '/':
+                    result = firstOperand / secondOperand;
+                    break;
+                default:
+                    return;
+            }
+
+            currentInput = result.toString();
+            firstOperand = null;
+            operation = null;
+            updateDisplay();
+        }
+
+        // Clear the display
+        function clearDisplay() {
+            currentInput = '';
+            firstOperand = null;
+            operation = null;
+            updateDisplay();
+        }
+
+        // Scientific functions
         function setScientific(func) {
             if (currentInput === '') return;
-
             let num = parseFloat(currentInput);
-
             switch (func) {
                 case 'sin':
                     currentInput = Math.sin(num).toString();
@@ -229,16 +250,24 @@
                     currentInput = Math.E.toString();
                     break;
                 case 'pow':
-                    currentInput = Math.pow(num, 2).toString(); // ^ as square for simplicity
+                    currentInput = Math.pow(num, 2).toString(); // Power of 2
                     break;
                 case 'factorial':
                     currentInput = factorial(num).toString();
                     break;
-                case 'csc':
-                    currentInput = (1 / Math.sin(num)).toString();
-                    break;
-                case 'sec':
-                    currentInput = (1 / Math.cos(num)).toString();
-                    break;
-                case 'cot':
-                    current
+            }
+            updateDisplay();
+        }
+
+        // Factorial function
+        function factorial(n) {
+            if (n === 0 || n === 1) return 1;
+            let result = 1;
+            for (let i = n; i > 1; i--) {
+                result *= i;
+            }
+            return result;
+        }
+    </script>
+</body>
+</html>
