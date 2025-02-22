@@ -123,6 +123,9 @@
         <button class="button" onclick="setScientific('sin')">sin</button>
         <button class="button" onclick="setScientific('cos')">cos</button>
         <button class="button" onclick="setScientific('tan')">tan</button>
+        <button class="button" onclick="setScientific('asin')">asin</button>
+        <button class="button" onclick="setScientific('acos')">acos</button>
+        <button class="button" onclick="setScientific('atan')">atan</button>
         <button class="button" onclick="setScientific('log')">log</button>
         <button class="button" onclick="setScientific('ln')">ln</button>
         <button class="button" onclick="setScientific('sqrt')">√</button>
@@ -131,6 +134,18 @@
         <button class="button" onclick="setScientific('e')">e</button>
         <button class="button" onclick="setScientific('pow')">^</button>
         <button class="button" onclick="setScientific('factorial')">x!</button>
+        <button class="button" onclick="setScientific('csc')">csc</button>
+        <button class="button" onclick="setScientific('sec')">sec</button>
+        <button class="button" onclick="setScientific('cot')">cot</button>
+        <button class="button" onclick="setScientific('deg')">deg</button>
+        <button class="button" onclick="setScientific('rad')">rad</button>
+        <button class="button" onclick="setScientific('rand')">rand</button>
+        <button class="button" onclick="setScientific('sinh')">sinh</button>
+        <button class="button" onclick="setScientific('cosh')">cosh</button>
+        <button class="button" onclick="setScientific('tanh')">tanh</button>
+        <button class="button" onclick="setScientific('abs')">abs</button>
+        <button class="button" onclick="setScientific('int')">int</button>
+        <button class="button" onclick="setScientific('factor')">factor</button>
     </div>
 
     <script>
@@ -186,6 +201,15 @@
                 case 'tan':
                     currentInput = Math.tan(num).toString();
                     break;
+                case 'asin':
+                    currentInput = Math.asin(num).toString();
+                    break;
+                case 'acos':
+                    currentInput = Math.acos(num).toString();
+                    break;
+                case 'atan':
+                    currentInput = Math.atan(num).toString();
+                    break;
                 case 'log':
                     currentInput = Math.log10(num).toString();
                     break;
@@ -210,51 +234,11 @@
                 case 'factorial':
                     currentInput = factorial(num).toString();
                     break;
-                default:
-                    return;
-            }
-
-            updateDisplay();
-        }
-
-        // Calculate the result based on operation
-        function calculate() {
-            if (currentInput === '' || firstOperand === null || !operation) return;
-            let result;
-
-            switch (operation) {
-                case '+': result = firstOperand + parseFloat(currentInput); break;
-                case '-': result = firstOperand - parseFloat(currentInput); break;
-                case '*': result = firstOperand * parseFloat(currentInput); break;
-                case '/': result = firstOperand / parseFloat(currentInput); break;
-                default: return;
-            }
-
-            currentInput = result.toString();
-            firstOperand = null;
-            operation = null;
-            updateDisplay();
-        }
-
-        // Clear the display
-        function clearDisplay() {
-            currentInput = '';
-            firstOperand = null;
-            operation = null;
-            scientificFunction = null;
-            updateDisplay();
-        }
-
-        // Factorial function
-        function factorial(num) {
-            if (num === 0 || num === 1) return 1;
-            let result = 1;
-            for (let i = 2; i <= num; i++) {
-                result *= i;
-            }
-            return result;
-        }
-    </script>
-
-</body>
-</html>
+                case 'csc':
+                    currentInput = (1 / Math.sin(num)).toString();
+                    break;
+                case 'sec':
+                    currentInput = (1 / Math.cos(num)).toString();
+                    break;
+                case 'cot':
+                    currentInput = (1 /
