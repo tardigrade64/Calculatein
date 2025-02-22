@@ -6,11 +6,17 @@
   <title>Scientific Calculator</title>
   <style>
     :root {
-      --bg-color: #000000; /* Black Background */
+      --bg-color: #000000; /* Black background */
       --text-color: white;
-      --button-color: #00338D; /* Buffalo Bills Royal Blue */
-      --ac-button-color: #002366; /* Darker Blue for AC Button */
+      --button-color: #00338D; /* Default: Buffalo Bills Blue */
+      --ac-button-color: #002366; /* Darker blue for AC button */
     }
+
+    /* Theme Colors */
+    .blue-mode { --button-color: #00338D; }
+    .red-mode { --button-color: #D32F2F; }
+    .green-mode { --button-color: #388E3C; }
+    .yellow-mode { --button-color: #FBC02D; }
 
     /* General Styles */
     body {
@@ -27,7 +33,7 @@
 
     #calculator {
       width: 100%;
-      max-width: 900px;
+      max-width: 600px;
       padding: 20px;
       background: none;
       display: flex;
@@ -37,27 +43,26 @@
 
     #display {
       width: 100%;
-      height: 80px;
-      font-size: 36px;
+      height: 60px;
+      font-size: 32px;
       text-align: right;
       color: var(--text-color);
       background: none;
       border: none;
       padding: 10px;
-      margin-bottom: 20px;
       font-weight: bold;
     }
 
     #buttons {
       display: grid;
       grid-template-columns: repeat(4, 1fr) auto; /* Four main columns + one for operations */
-      gap: 8px;
+      gap: 5px;
       width: 100%;
     }
 
     button {
-      padding: 8px;
-      font-size: 16px;
+      padding: 10px;
+      font-size: 18px;
       background: var(--button-color);
       color: white;
       cursor: pointer;
@@ -83,25 +88,25 @@
     #scientific {
       display: none;
       grid-template-columns: repeat(4, 1fr);
-      gap: 8px;
+      gap: 5px;
       margin-top: 10px;
       width: 100%;
     }
 
     @media (min-width: 768px) {
       #calculator {
-        max-width: 900px;
+        max-width: 600px;
       }
 
       button {
         width: 80%;
-        padding: 6px;
-        font-size: 14px;
+        padding: 8px;
+        font-size: 16px;
       }
 
       #display {
-        font-size: 36px;
-        height: 80px;
+        font-size: 32px;
+        height: 60px;
       }
     }
   </style>
