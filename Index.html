@@ -5,29 +5,35 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Scientific Calculator</title>
     <style>
+        /* Body and overall design */
         body {
             font-family: Arial, sans-serif;
             background-color: #333;
             color: white;
             margin: 0;
             padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #1e1e1e;
         }
 
         #calculator {
             display: grid;
             grid-template-columns: repeat(5, 1fr);
             grid-gap: 10px;
+            width: 100%;
+            max-width: 500px;  /* Keep it within iPad screen size */
             padding: 20px;
-            max-width: 500px;
-            margin: 0 auto;
         }
 
         .button {
             background-color: #444;
             border: none;
             color: white;
-            padding: 20px;
-            font-size: 20px;
+            padding: 15px;
+            font-size: 18px;
             border-radius: 50%;
             cursor: pointer;
             transition: background-color 0.3s ease;
@@ -53,6 +59,40 @@
             border: none;
             color: white;
             margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            #calculator {
+                grid-template-columns: repeat(4, 1fr); /* 4 columns for smaller screens */
+                max-width: 400px;
+            }
+
+            .button {
+                padding: 12px;
+                font-size: 16px; /* Slightly smaller font for mobile */
+            }
+
+            #display {
+                font-size: 24px;  /* Smaller text for display */
+            }
+        }
+
+        @media (max-width: 600px) {
+            #calculator {
+                grid-template-columns: repeat(3, 1fr); /* 3 columns for very small screens */
+                max-width: 300px;
+            }
+
+            .button {
+                padding: 10px;
+                font-size: 14px; /* Smaller font size */
+            }
+
+            #display {
+                font-size: 20px;  /* Smaller text for display */
+            }
         }
 
     </style>
