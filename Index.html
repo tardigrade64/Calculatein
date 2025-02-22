@@ -28,7 +28,7 @@
         }
 
         .button {
-            background-color: blue; /* Set buttons to blue */
+            background-color: blue;
             border: none;
             color: white;
             padding: 20px;
@@ -40,7 +40,7 @@
         }
 
         .button:active {
-            background-color: darkblue; /* Slightly darker blue when pressed */
+            background-color: darkblue;
         }
 
         .button:disabled {
@@ -241,4 +241,30 @@
             switch (func) {
                 case 'sin':
                     currentInput = Math.sin(num).toString();
-                   
+                    break;
+                case 'cos':
+                    currentInput = Math.cos(num).toString();
+                    break;
+                case 'tan':
+                    currentInput = Math.tan(num).toString();
+                    break;
+                case 'asin':
+                    currentInput = Math.asin(num).toString();
+                    break;
+                case 'acos':
+                    currentInput = Math.acos(num).toString();
+                    break;
+                case 'atan':
+                    currentInput = Math.atan(num).toString();
+                    break;
+                case 'log':
+                    currentInput = Math.log10(num).toString();
+                    break;
+                case 'ln':
+                    currentInput = Math.log(num).toString();
+                    break;
+                case 'sqrt':
+                    currentInput = Math.sqrt(num).toString();
+                    break;
+                case 'exp':
+                    currentInput = Math.exp(num).to
