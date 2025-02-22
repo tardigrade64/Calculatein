@@ -54,27 +54,6 @@
             margin-bottom: 20px;
         }
 
-        #scientific {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 10px;
-            grid-column: span 4;
-        }
-
-        .scientific-button {
-            background-color: #444;
-            border: none;
-            color: white;
-            padding: 20px;
-            font-size: 20px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-
-        .scientific-button:active {
-            background-color: #555;
-        }
-
     </style>
 </head>
 <body>
@@ -98,37 +77,12 @@
         <button class="button" onclick="appendDecimal()">.</button>
         <button class="button" onclick="calculate()">=</button>
         <button class="button" onclick="setOperation('+')">+</button>
-        <button class="button" onclick="appendFunction('sin')">sin</button>
-        <button class="button" onclick="appendFunction('cos')">cos</button>
-        <button class="button" onclick="appendFunction('tan')">tan</button>
-        <button class="button" onclick="toggleTheme()">Change Color</button>
-
-        <div id="scientific">
-            <button class="scientific-button" onclick="appendFunction('sinh')">sinh</button>
-            <button class="scientific-button" onclick="appendFunction('cosh')">cosh</button>
-            <button class="scientific-button" onclick="appendFunction('tanh')">tanh</button>
-            <button class="scientific-button" onclick="generateRand()">Rand</button>
-            <button class="scientific-button" onclick="toggleDegRad()">Deg/Rad</button>
-            <button class="scientific-button" onclick="calculateGamma()">Gamma</button>
-            <button class="scientific-button" onclick="calculateBeta()">Beta</button>
-            <button class="scientific-button" onclick="memoryRecall()">MR</button>
-            <button class="scientific-button" onclick="memoryClear()">MC</button>
-            <button class="scientific-button" onclick="memoryAdd()">M+</button>
-            <button class="scientific-button" onclick="memorySubtract()">M-</button>
-            <button class="scientific-button" onclick="appendLeftParenthesis()"> ( </button>
-            <button class="scientific-button" onclick="appendParenthesis()"> ) </button>
-            <button class="scientific-button" onclick="setOperation('^')">^</button>
-        </div>
-
     </div>
 
     <script>
         let currentInput = '';
         let operation = null;
         let firstOperand = null;
-        let secondOperand = null;
-        let memory = 0;  // Variable to store memory value
-        let isDegreeMode = true; // Degree mode flag
 
         // Update display
         function updateDisplay() {
@@ -171,7 +125,6 @@
                 case '-': result = firstOperand - parseFloat(currentInput); break;
                 case '*': result = firstOperand * parseFloat(currentInput); break;
                 case '/': result = firstOperand / parseFloat(currentInput); break;
-                case '^': result = Math.pow(firstOperand, parseFloat(currentInput)); break;
                 default: return;
             }
 
@@ -185,65 +138,8 @@
         function clearDisplay() {
             currentInput = '';
             firstOperand = null;
-            secondOperand = null;
             operation = null;
             updateDisplay();
-        }
-
-        // Toggle between degree and radian mode
-        function toggleDegRad() {
-            isDegreeMode = !isDegreeMode;
-            if (isDegreeMode) {
-                alert('Now in Degree mode');
-            } else {
-                alert('Now in Radian mode');
-            }
-        }
-
-        // Generate random number
-        function generateRand() {
-            currentInput = (Math.random()).toString();
-            updateDisplay();
-        }
-
-        // Append function (sin, cos, tan, etc.)
-        function appendFunction(func) {
-            currentInput += func + '(';
-            updateDisplay();
-        }
-
-        // Memory Recall (MR)
-        function memoryRecall() {
-            currentInput = memory.toString();
-            updateDisplay();
-        }
-
-        // Memory Clear (MC)
-        function memoryClear() {
-            memory = 0;
-            currentInput = '';
-            updateDisplay();
-        }
-
-        // Memory Add (M+)
-        function memoryAdd() {
-            memory += parseFloat(currentInput);
-            currentInput = '';
-            updateDisplay();
-        }
-
-        // Memory Subtract (M-)
-        function memorySubtract() {
-            memory -= parseFloat(currentInput);
-            currentInput = '';
-            updateDisplay();
-        }
-
-        // Toggle theme between different colors
-        function toggleTheme() {
-            const body = document.body;
-            body.style.backgroundColor = body.style.backgroundColor === 'black' ? '#333' : 'black';
-            body.style.color = body.style.color === 'white' ? 'black' : 'white';
         }
     </script>
 
