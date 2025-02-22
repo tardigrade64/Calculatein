@@ -99,12 +99,27 @@
         <button class="button" onclick="setScientific('e')">e</button>
         <button class="button" onclick="setScientific('pow')">^</button>
         <button class="button" onclick="setScientific('factorial')">x!</button>
+
+        <!-- Memory Buttons -->
+        <button class="button" onclick="memoryClear()">MC</button>
+        <button class="button" onclick="memoryRecall()">MR</button>
+        <button class="button" onclick="memoryAdd()">M+</button>
+        <button class="button" onclick="memorySubtract()">M-</button>
+
+        <!-- Clear/Parentheses/Percent/Inverse -->
+        <button class="button" onclick="clearCurrent()">C</button> <!-- Clear current input -->
+        <button class="button" onclick="appendParenthesis('(')">(</button>
+        <button class="button" onclick="appendParenthesis(')')">)</button>
+        <button class="button" onclick="calculatePercentage()">%</button>
+        <button class="button" onclick="inverse()">1/x</button> <!-- Inverse -->
+        <button class="button" onclick="random()">rand</button>
     </div>
 
     <script>
         let currentInput = '';
         let firstOperand = null;
         let operation = null;
+        let memory = 0; // Memory store
 
         // Update the display
         function updateDisplay() {
@@ -171,6 +186,54 @@
             updateDisplay();
         }
 
+        // Clear current input
+        function clearCurrent() {
+            currentInput = '';
+            updateDisplay();
+        }
+
+        // Memory functions
+        function memoryClear() {
+            memory = 0;
+        }
+
+        function memoryRecall() {
+            currentInput = memory.toString();
+            updateDisplay();
+        }
+
+        function memoryAdd() {
+            memory += parseFloat(currentInput);
+        }
+
+        function memorySubtract() {
+            memory -= parseFloat(currentInput);
+        }
+
+        // Parentheses
+        function appendParenthesis(par) {
+            currentInput += par;
+            updateDisplay();
+        }
+
+        // Percentage calculation
+        function calculatePercentage() {
+            currentInput = (parseFloat(currentInput) / 100).toString();
+            updateDisplay();
+        }
+
+        // Inverse (1/x)
+        function inverse() {
+            currentInput = (1 / parseFloat(currentInput)).toString();
+            updateDisplay();
+        }
+
+        // Random number generator
+        function random() {
+            currentInput = Math.random().toString();
+            updateDisplay();
+        }
+
         // Scientific functions
         function setScientific(func) {
             if (currentInput === '') return;
@@ -178,59 +241,4 @@
             switch (func) {
                 case 'sin':
                     currentInput = Math.sin(num).toString();
-                    break;
-                case 'cos':
-                    currentInput = Math.cos(num).toString();
-                    break;
-                case 'tan':
-                    currentInput = Math.tan(num).toString();
-                    break;
-                case 'asin':
-                    currentInput = Math.asin(num).toString();
-                    break;
-                case 'acos':
-                    currentInput = Math.acos(num).toString();
-                    break;
-                case 'atan':
-                    currentInput = Math.atan(num).toString();
-                    break;
-                case 'log':
-                    currentInput = Math.log10(num).toString();
-                    break;
-                case 'ln':
-                    currentInput = Math.log(num).toString();
-                    break;
-                case 'sqrt':
-                    currentInput = Math.sqrt(num).toString();
-                    break;
-                case 'exp':
-                    currentInput = Math.exp(num).toString();
-                    break;
-                case 'pi':
-                    currentInput = Math.PI.toString();
-                    break;
-                case 'e':
-                    currentInput = Math.E.toString();
-                    break;
-                case 'pow':
-                    currentInput = Math.pow(num, 2).toString(); // Power of 2
-                    break;
-                case 'factorial':
-                    currentInput = factorial(num).toString();
-                    break;
-            }
-            updateDisplay();
-        }
-
-        // Factorial function
-        function factorial(n) {
-            if (n === 0 || n === 1) return 1;
-            let result = 1;
-            for (let i = n; i > 1; i--) {
-                result *= i;
-            }
-            return result;
-        }
-    </script>
-</body>
-</html>
+                   
