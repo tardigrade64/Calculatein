@@ -10,9 +10,65 @@
       --bg-color: black;
       --text-color: white;
       --button-color: blue;
-      --ac-button-color: blue; /* AC button is blue */
+      --ac-button-color: blue;
+      --button-border: 1px solid #ddd;
     }
 
+    /* Red Mode */
+    .red-mode {
+      --bg-color: #e57373;
+      --text-color: white;
+      --button-color: #f44336;
+      --ac-button-color: #d32f2f;
+      --button-border: 1px solid #ddd;
+    }
+
+    /* Yellow Mode */
+    .yellow-mode {
+      --bg-color: #fff176;
+      --text-color: black;
+      --button-color: #ffeb3b;
+      --ac-button-color: #fbc02d;
+      --button-border: 1px solid #ddd;
+    }
+
+    /* Orange Mode */
+    .orange-mode {
+      --bg-color: #ffb74d;
+      --text-color: white;
+      --button-color: #ff9800;
+      --ac-button-color: #f57c00;
+      --button-border: 1px solid #ddd;
+    }
+
+    /* Green Mode */
+    .green-mode {
+      --bg-color: #81c784;
+      --text-color: white;
+      --button-color: #4caf50;
+      --ac-button-color: #388e3c;
+      --button-border: 1px solid #ddd;
+    }
+
+    /* Blue Mode */
+    .blue-mode {
+      --bg-color: #0288d1;
+      --text-color: white;
+      --button-color: #03a9f4;
+      --ac-button-color: #0288d1;
+      --button-border: 1px solid #ddd;
+    }
+
+    /* Purple Mode */
+    .purple-mode {
+      --bg-color: #9c27b0;
+      --text-color: white;
+      --button-color: #ba68c8;
+      --ac-button-color: #8e24aa;
+      --button-border: 1px solid #ddd;
+    }
+
+    /* Basic Layout */
     body {
       font-family: Arial, sans-serif;
       display: flex;
@@ -41,7 +97,7 @@
       height: 80px;
       font-size: 36px;
       text-align: right;
-      color: var(--text-color); /* Ensure text is white */
+      color: var(--text-color);
       background: none;
       border: none;
       padding: 10px;
@@ -60,7 +116,7 @@
     button {
       padding: 8px;
       font-size: 16px;
-      border: none;
+      border: var(--button-border);
       background: var(--button-color);
       color: white;
       cursor: pointer;
@@ -71,7 +127,7 @@
     }
 
     #ac-button {
-      background: var(--ac-button-color); /* AC button is blue */
+      background: var(--ac-button-color);
     }
 
     button:hover {
@@ -105,7 +161,8 @@
   </style>
 </head>
 
-<body>
+<body class="blue-mode"> <!-- Default mode is Blue Mode -->
+
   <div id="calculator">
     <input type="text" id="display" disabled>
 
@@ -234,9 +291,10 @@
     }
 
     function toggleTheme() {
-      isDarkMode = !isDarkMode;
-      document.documentElement.style.setProperty('--bg-color', isDarkMode ? 'black' : 'white');
-      document.documentElement.style.setProperty('--text-color', isDarkMode ? 'white' : 'black');
+      let themes = ['red-mode', 'yellow-mode', 'orange-mode', 'green-mode', 'blue-mode', 'purple-mode'];
+      let currentTheme = document.body.className;
+      let nextTheme = themes[(themes.indexOf(currentTheme) + 1) % themes.length];
+      document.body.className = nextTheme;
     }
 
     function updateDisplay() {
