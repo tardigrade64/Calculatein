@@ -5,46 +5,29 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Scientific Calculator</title>
     <style>
-        /* Prevent scrolling */
-        html, body {
-            margin: 0;
-            padding: 0;
-            overflow: hidden;
-            height: 100%;
+        body {
             font-family: Arial, sans-serif;
             background-color: #1e1e1e;
             color: white;
             display: flex;
             justify-content: center;
             align-items: center;
+            height: 100vh;
+            margin: 0;
         }
 
-        /* Calculator layout */
         #calculator {
             display: grid;
-            grid-template-columns: repeat(5, 1fr);
-            grid-gap: 10px;
-            width: 90vw;
-            max-width: 600px;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 10px;
+            max-width: 700px;
             padding: 20px;
-        }
-
-        /* Display */
-        #display {
-            grid-column: span 5;
-            padding: 20px;
-            text-align: right;
-            font-size: 30px;
             background-color: #222;
             border-radius: 10px;
-            border: none;
-            color: white;
-            font-weight: bold;
         }
 
-        /* Buttons */
         .button {
-            background-color: #444;
+            background-color: blue;
             border: none;
             color: white;
             padding: 20px;
@@ -56,39 +39,32 @@
         }
 
         .button:active {
-            background-color: #555;
+            background-color: darkblue;
         }
 
-        /* Color Change Button */
-        #color-btn {
-            grid-column: span 1;
-            font-size: 24px;
+        #display {
+            grid-column: span 7;
+            padding: 15px;
+            text-align: right;
+            font-size: 30px;
+            background-color: #222;
+            border-radius: 10px;
+            border: none;
+            color: white;
+            font-weight: bold;
         }
 
-        /* Responsive layout */
-        @media (max-width: 768px) {
-            #calculator {
-                grid-template-columns: repeat(4, 1fr);
-            }
-            .button {
-                padding: 15px;
-                font-size: 16px;
-            }
-            #display {
-                font-size: 24px;
-            }
+        #paint-btn {
+            background-color: gray;
         }
+
     </style>
 </head>
 <body>
 
     <div id="calculator">
         <input id="display" type="text" disabled>
-
-        <!-- Color Change Button -->
-        <button id="color-btn" class="button" onclick="changeColor()">🖌️</button>
-        
-        <!-- Standard Calculator Buttons -->
+        <button id="paint-btn" class="button" onclick="changeButtonColor()">🖌️</button>
         <button class="button" onclick="clearDisplay()">AC</button>
         <button class="button" onclick="appendNumber('7')">7</button>
         <button class="button" onclick="appendNumber('8')">8</button>
@@ -97,7 +73,7 @@
         <button class="button" onclick="appendNumber('4')">4</button>
         <button class="button" onclick="appendNumber('5')">5</button>
         <button class="button" onclick="appendNumber('6')">6</button>
-        <button class="button" onclick="setOperation('*')">×</button>
+        <button class="button" onclick="setOperation('*')">*</button>
         <button class="button" onclick="appendNumber('1')">1</button>
         <button class="button" onclick="appendNumber('2')">2</button>
         <button class="button" onclick="appendNumber('3')">3</button>
@@ -113,23 +89,25 @@
         <button class="button" onclick="setScientific('tan')">tan</button>
         <button class="button" onclick="setScientific('log')">log</button>
         <button class="button" onclick="setScientific('sqrt')">√</button>
-        <button class="button" onclick="setScientific('exp')">exp</button>
-        <button class="button" onclick="setScientific('pi')">π</button>
-        <button class="button" onclick="setScientific('e')">e</button>
         <button class="button" onclick="setScientific('pow')">^</button>
+        <button class="button" onclick="setScientific('factorial')">x!</button>
+
+        <!-- Memory Functions -->
+        <button class="button" onclick="memoryStore()">M+</button>
+        <button class="button" onclick="memoryRecall()">MR</button>
+        <button class="button" onclick="memoryClear()">MC</button>
 
         <!-- Unit Conversion -->
-        <button class="button" onclick="convertUnits('length')">Length</button>
-        <button class="button" onclick="convertUnits('weight')">Weight</button>
-        <button class="button" onclick="convertUnits('volume')">Volume</button>
-        <button class="button" onclick="convertUnits('time')">Time</button>
-        <button class="button" onclick="convertUnits('currency')">Money</button>
+        <button class="button" onclick="convertUnits()">Convert</button>
     </div>
 
     <script>
         let currentInput = '';
         let operation = null;
         let firstOperand = null;
+        let memory = 0;
+        let colors = ['red', 'orange', 'yellow', 'green', 'blue'];
+        let colorIndex = 0;
 
         function updateDisplay() {
             document.getElementById('display').value = currentInput;
@@ -149,16 +127,13 @@
 
         function setOperation(op) {
             if (currentInput === '') return;
-            if (firstOperand === null) {
-                firstOperand = parseFloat(currentInput);
-            } else {
-                firstOperand = calculate();
-            }
+            firstOperand = parseFloat(currentInput);
             operation = op;
             currentInput = '';
         }
 
         function calculate() {
+            if (firstOperand === null || operation === null) return;
             let secondOperand = parseFloat(currentInput);
             switch (operation) {
                 case '+': currentInput = (firstOperand + secondOperand).toString(); break;
@@ -166,8 +141,9 @@
                 case '*': currentInput = (firstOperand * secondOperand).toString(); break;
                 case '/': currentInput = (firstOperand / secondOperand).toString(); break;
             }
-            updateDisplay();
             firstOperand = null;
+            operation = null;
+            updateDisplay();
         }
 
         function setScientific(func) {
@@ -178,23 +154,45 @@
                 case 'tan': currentInput = Math.tan(num).toString(); break;
                 case 'log': currentInput = Math.log10(num).toString(); break;
                 case 'sqrt': currentInput = Math.sqrt(num).toString(); break;
-                case 'exp': currentInput = Math.exp(num).toString(); break;
-                case 'pi': currentInput = Math.PI.toString(); break;
-                case 'e': currentInput = Math.E.toString(); break;
                 case 'pow': currentInput = Math.pow(num, 2).toString(); break;
+                case 'factorial': currentInput = factorial(num).toString(); break;
             }
             updateDisplay();
         }
 
-        function convertUnits(type) {
-            alert(`Converting ${type}! (Feature placeholder)`);
+        function factorial(n) {
+            return n === 0 ? 1 : n * factorial(n - 1);
         }
 
-        function changeColor() {
-            let colors = ['red', 'orange', 'yellow', 'green', 'blue'];
+        function memoryStore() {
+            memory = parseFloat(currentInput);
+        }
+
+        function memoryRecall() {
+            currentInput = memory.toString();
+            updateDisplay();
+        }
+
+        function memoryClear() {
+            memory = 0;
+        }
+
+        function changeButtonColor() {
+            colorIndex = (colorIndex + 1) % colors.length;
             document.querySelectorAll('.button').forEach(btn => {
-                btn.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                btn.style.backgroundColor = colors[colorIndex];
             });
+        }
+
+        function convertUnits() {
+            let value = parseFloat(prompt("Enter value to convert:"));
+            let type = prompt("Convert: 1. Length (cm ↔ in), 2. Weight (kg ↔ lb), 3. Volume (L ↔ gal)");
+
+            if (type === '1') value = value * 0.393701; // cm to in
+            if (type === '2') value = value * 2.20462; // kg to lb
+            if (type === '3') value = value * 0.264172; // L to gal
+
+            alert("Converted value: " + value);
         }
 
         function clearDisplay() {
@@ -202,5 +200,6 @@
             updateDisplay();
         }
     </script>
+
 </body>
 </html>
