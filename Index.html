@@ -2,67 +2,98 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Full-Screen Scientific Calculator</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scientific Calculator</title>
     <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            overflow: hidden; /* Prevents scrolling */
-        }
-
-        html, body {
+        /* Body and overall design */
+        body {
             font-family: Arial, sans-serif;
             background-color: #333;
             color: white;
-            height: 100vh;
-            width: 100vw;
+            margin: 0;
+            padding: 0;
             display: flex;
             justify-content: center;
             align-items: center;
+            height: 100vh;
+            background-color: #1e1e1e;
         }
 
         #calculator {
             display: grid;
-            grid-template-columns: repeat(7, 1fr);
+            grid-template-columns: repeat(7, 1fr); /* 7 columns */
             grid-gap: 10px;
-            width: 100vw;
-            height: 95vh; /* Adjusted height */
-            padding: 15px;
-            background: #1e1e1e;
+            width: 100%;
+            max-width: 700px;  /* Limit to iPad width */
+            height: calc(95vh + 1cm); /* Increased by 1cm */
+            padding: 20px;
+        }
+
+        .button {
+            background-color: #444;
+            border: none;
+            color: white;
+            padding: 20px;
+            font-size: 18px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            text-align: center;
+        }
+
+        .button:active {
+            background-color: #555;
+        }
+
+        .button:disabled {
+            background-color: #666;
+            cursor: not-allowed;
         }
 
         #display {
-            grid-column: span 7;
-            height: 10vh; /* Reduced height */
-            font-size: 4vh;
+            grid-column: span 7; /* Full width of the grid */
+            padding: 20px;
             text-align: right;
-            padding: 1.5vh;
+            font-size: 30px;
             background-color: #222;
             border-radius: 10px;
             border: none;
             color: white;
+            margin-bottom: 20px;
             font-weight: bold;
-            width: 100%;
         }
 
-        .button {
-            width: 100%;
-            height: 11vh; /* Adjusted size */
-            font-size: 3.5vh;
-            background-color: blue;
-            border: none;
-            color: white;
-            border-radius: 10px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        /* Responsive design */
+        @media (max-width: 768px) {
+            #calculator {
+                grid-template-columns: repeat(5, 1fr); /* 5 columns for smaller screens */
+                max-width: 500px;
+            }
+
+            .button {
+                padding: 15px;
+                font-size: 16px; /* Smaller font for mobile */
+            }
+
+            #display {
+                font-size: 24px;  /* Smaller text for display */
+            }
         }
 
-        .button:active {
-            background-color: darkblue;
+        @media (max-width: 600px) {
+            #calculator {
+                grid-template-columns: repeat(4, 1fr); /* 4 columns for very small screens */
+                max-width: 400px;
+            }
+
+            .button {
+                padding: 12px;
+                font-size: 14px; /* Smaller font size */
+            }
+
+            #display {
+                font-size: 20px;  /* Smaller text for display */
+            }
         }
     </style>
 </head>
@@ -70,22 +101,19 @@
 
     <div id="calculator">
         <input id="display" type="text" disabled>
-
-        <!-- Numbers and Basic Operations -->
-        <button class="button" onclick="deleteOne()">✖️</button>
         <button class="button" onclick="clearDisplay()">AC</button>
         <button class="button" onclick="appendNumber('7')">7</button>
         <button class="button" onclick="appendNumber('8')">8</button>
         <button class="button" onclick="appendNumber('9')">9</button>
-        <button class="button" onclick="setOperation('/')">÷</button>
+        <button class="button" onclick="setOperation('/')">/</button>
         <button class="button" onclick="appendNumber('4')">4</button>
         <button class="button" onclick="appendNumber('5')">5</button>
         <button class="button" onclick="appendNumber('6')">6</button>
-        <button class="button" onclick="setOperation('*')">×</button>
+        <button class="button" onclick="setOperation('*')">*</button>
         <button class="button" onclick="appendNumber('1')">1</button>
         <button class="button" onclick="appendNumber('2')">2</button>
         <button class="button" onclick="appendNumber('3')">3</button>
-        <button class="button" onclick="setOperation('-')">−</button>
+        <button class="button" onclick="setOperation('-')">-</button>
         <button class="button" onclick="appendNumber('0')">0</button>
         <button class="button" onclick="appendDecimal()">.</button>
         <button class="button" onclick="calculate()">=</button>
@@ -95,49 +123,49 @@
         <button class="button" onclick="setScientific('sin')">sin</button>
         <button class="button" onclick="setScientific('cos')">cos</button>
         <button class="button" onclick="setScientific('tan')">tan</button>
+        <button class="button" onclick="setScientific('asin')">asin</button>
+        <button class="button" onclick="setScientific('acos')">acos</button>
+        <button class="button" onclick="setScientific('atan')">atan</button>
         <button class="button" onclick="setScientific('log')">log</button>
+        <button class="button" onclick="setScientific('ln')">ln</button>
         <button class="button" onclick="setScientific('sqrt')">√</button>
-        <button class="button" onclick="setScientific('exp')">e^x</button>
-        <button class="button" onclick="setPower()">^</button>
-
-        <!-- Conversion Functions -->
-        <button class="button" onclick="convert('currency')">Currency</button>
-        <button class="button" onclick="convert('weight')">Weight</button>
-        <button class="button" onclick="convert('volume')">Volume</button>
-        <button class="button" onclick="convert('time')">Time</button>
+        <button class="button" onclick="setScientific('exp')">exp</button>
+        <button class="button" onclick="setScientific('pi')">π</button>
+        <button class="button" onclick="setScientific('e')">e</button>
+        <button class="button" onclick="setScientific('pow')">^</button>
+        <button class="button" onclick="setScientific('factorial')">x!</button>
+        <button class="button" onclick="setScientific('csc')">csc</button>
+        <button class="button" onclick="setScientific('sec')">sec</button>
+        <button class="button" onclick="setScientific('cot')">cot</button>
+        <button class="button" onclick="setScientific('deg')">deg</button>
+        <button class="button" onclick="setScientific('rad')">rad</button>
+        <button class="button" onclick="setScientific('rand')">rand</button>
+        <button class="button" onclick="setScientific('sinh')">sinh</button>
+        <button class="button" onclick="setScientific('cosh')">cosh</button>
+        <button class="button" onclick="setScientific('tanh')">tanh</button>
+        <button class="button" onclick="setScientific('abs')">abs</button>
+        <button class="button" onclick="setScientific('int')">int</button>
+        <button class="button" onclick="setScientific('factor')">factor</button>
     </div>
 
     <script>
         let currentInput = '';
-        let firstOperand = null;
         let operation = null;
+        let firstOperand = null;
+        let scientificFunction = null;
 
-        // Update the display
+        // Update display
         function updateDisplay() {
             document.getElementById('display').value = currentInput;
         }
 
-        // Delete one character
-        function deleteOne() {
-            currentInput = currentInput.slice(0, -1);
-            updateDisplay();
-        }
-
-        // Clear the display
-        function clearDisplay() {
-            currentInput = '';
-            firstOperand = null;
-            operation = null;
-            updateDisplay();
-        }
-
-        // Append a number
+        // Append number to the display
         function appendNumber(number) {
             currentInput += number;
             updateDisplay();
         }
 
-        // Append decimal point
+        // Append decimal point to the display
         function appendDecimal() {
             if (!currentInput.includes('.')) {
                 currentInput += '.';
@@ -145,78 +173,72 @@
             }
         }
 
-        // Set an operation
+        // Set the operation (addition, subtraction, etc.)
         function setOperation(op) {
             if (currentInput === '') return;
-            firstOperand = parseFloat(currentInput);
+            if (firstOperand === null) {
+                firstOperand = parseFloat(currentInput);
+            } else {
+                firstOperand = calculate();
+            }
             operation = op;
             currentInput = '';
         }
 
-        // Calculate result
-        function calculate() {
-            if (firstOperand === null || currentInput === '') return;
-
-            let secondOperand = parseFloat(currentInput);
-            let result = 0;
-
-            switch (operation) {
-                case '+': result = firstOperand + secondOperand; break;
-                case '-': result = firstOperand - secondOperand; break;
-                case '*': result = firstOperand * secondOperand; break;
-                case '/': result = secondOperand !== 0 ? firstOperand / secondOperand : 'Error'; break;
-                case '^': result = Math.pow(firstOperand, secondOperand); break;
-                default: return;
-            }
-
-            currentInput = result.toString();
-            firstOperand = null;
-            operation = null;
-            updateDisplay();
-        }
-
-        // Set power function (^)
-        function setPower() {
-            if (currentInput === '') return;
-            firstOperand = parseFloat(currentInput);
-            operation = '^';
-            currentInput = '';
-        }
-
-        // Scientific functions
+        // Set scientific function
         function setScientific(func) {
             if (currentInput === '') return;
+
             let num = parseFloat(currentInput);
+
             switch (func) {
-                case 'sin': currentInput = Math.sin(num).toString(); break;
-                case 'cos': currentInput = Math.cos(num).toString(); break;
-                case 'tan': currentInput = Math.tan(num).toString(); break;
-                case 'log': currentInput = Math.log10(num).toString(); break;
-                case 'sqrt': currentInput = Math.sqrt(num).toString(); break;
-                case 'exp': currentInput = Math.exp(num).toString(); break;
-            }
-            updateDisplay();
-        }
-
-        // Conversion functions
-        function convert(type) {
-            let value = parseFloat(currentInput);
-            if (isNaN(value)) {
-                currentInput = "Invalid";
-                updateDisplay();
-                return;
-            }
-
-            switch (type) {
-                case 'currency': currentInput = (value * 0.92).toFixed(2) + " EUR"; break;
-                case 'weight': currentInput = (value * 2.20462).toFixed(2) + " lb"; break;
-                case 'volume': currentInput = (value * 0.264172).toFixed(2) + " gal"; break;
-                case 'time': currentInput = (value * 60).toFixed(2) + " min"; break;
-            }
-
-            updateDisplay();
-        }
-    </script>
-
-</body>
-</html>
+                case 'sin':
+                    currentInput = Math.sin(num).toString();
+                    break;
+                case 'cos':
+                    currentInput = Math.cos(num).toString();
+                    break;
+                case 'tan':
+                    currentInput = Math.tan(num).toString();
+                    break;
+                case 'asin':
+                    currentInput = Math.asin(num).toString();
+                    break;
+                case 'acos':
+                    currentInput = Math.acos(num).toString();
+                    break;
+                case 'atan':
+                    currentInput = Math.atan(num).toString();
+                    break;
+                case 'log':
+                    currentInput = Math.log10(num).toString();
+                    break;
+                case 'ln':
+                    currentInput = Math.log(num).toString();
+                    break;
+                case 'sqrt':
+                    currentInput = Math.sqrt(num).toString();
+                    break;
+                case 'exp':
+                    currentInput = Math.exp(num).toString();
+                    break;
+                case 'pi':
+                    currentInput = Math.PI.toString();
+                    break;
+                case 'e':
+                    currentInput = Math.E.toString();
+                    break;
+                case 'pow':
+                    currentInput = Math.pow(num, 2).toString(); // ^ as square for simplicity
+                    break;
+                case 'factorial':
+                    currentInput = factorial(num).toString();
+                    break;
+                case 'csc':
+                    currentInput = (1 / Math.sin(num)).toString();
+                    break;
+                case 'sec':
+                    currentInput = (1 / Math.cos(num)).toString();
+                    break;
+                case 'cot':
+                    currentInput = (1 / Math.t
