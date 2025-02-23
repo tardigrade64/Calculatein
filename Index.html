@@ -59,7 +59,6 @@
         .button:active {
             background-color: darkblue;
         }
-
     </style>
 </head>
 <body>
@@ -95,6 +94,7 @@
         <button class="button" onclick="setScientific('sqrt')">√</button>
         <button class="button" onclick="setScientific('exp')">e^x</button>
         <button class="button" onclick="setScientific('pi')">π</button>
+        <button class="button" onclick="setPower()">^</button>
 
         <!-- Conversion Functions -->
         <button class="button" onclick="convert('currency')">Currency</button>
@@ -161,6 +161,7 @@
                 case '-': result = firstOperand - secondOperand; break;
                 case '*': result = firstOperand * secondOperand; break;
                 case '/': result = secondOperand !== 0 ? firstOperand / secondOperand : 'Error'; break;
+                case '^': result = Math.pow(firstOperand, secondOperand); break;
                 default: return;
             }
 
@@ -168,6 +169,14 @@
             firstOperand = null;
             operation = null;
             updateDisplay();
+        }
+
+        // Set power function (^)
+        function setPower() {
+            if (currentInput === '') return;
+            firstOperand = parseFloat(currentInput);
+            operation = '^';
+            currentInput = '';
         }
 
         // Scientific functions
