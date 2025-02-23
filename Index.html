@@ -33,12 +33,12 @@
             background-color: #444;
             border: none;
             color: white;
-            padding: 20px;
+            padding: 20px 40px; /* Increased horizontal padding for rectangular shape */
             font-size: 18px;
-            border-radius: 50%;
             cursor: pointer;
             transition: background-color 0.3s ease;
             text-align: center;
+            border-radius: 5px; /* Change to make buttons rectangular */
         }
 
         .button:active {
@@ -240,4 +240,16 @@
                     currentInput = Math.PI.toString();
                     break;
                 case 'e':
-                    currentInput
+                    currentInput = Math.E.toString();
+                    break;
+                case 'pow':
+                    currentInput = Math.pow(num, 2).toString(); // ^ as square for simplicity
+                    break;
+                case 'factorial':
+                    currentInput = factorial(num).toString();
+                    break;
+                case 'csc':
+                    currentInput = (1 / Math.sin(num)).toString();
+                    break;
+                case 'sec':
+                    currentInput = (1 /
