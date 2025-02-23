@@ -3,9 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Scientific Calculator</title>
+    <title>Advanced Scientific Calculator</title>
     <style>
-        /* Body and overall design */
         body {
             font-family: Arial, sans-serif;
             background-color: #1e1e1e;
@@ -16,16 +15,16 @@
             justify-content: center;
             align-items: center;
             height: 100vh;
-            overflow: hidden; /* Prevent scrolling */
+            overflow: hidden;
         }
 
         #calculator {
             display: grid;
-            grid-template-columns: repeat(7, 1fr); /* 7 columns */
+            grid-template-columns: repeat(7, 1fr);
             grid-gap: 10px;
             width: 100%;
             max-width: 700px;
-            height: calc(95vh + 1cm); /* Increased by 1cm */
+            height: calc(95vh + 1cm);
             padding: 20px;
         }
 
@@ -35,7 +34,7 @@
             color: white;
             padding: 20px;
             font-size: 18px;
-            border-radius: 10px; /* Rounded edges */
+            border-radius: 10px;
             cursor: pointer;
             transition: background-color 0.3s ease;
             text-align: center;
@@ -46,7 +45,7 @@
         }
 
         #display {
-            grid-column: span 7; /* Full width of the grid */
+            grid-column: span 7;
             padding: 20px;
             text-align: right;
             font-size: 30px;
@@ -57,7 +56,6 @@
             font-weight: bold;
         }
 
-        /* Theme button */
         #theme-button {
             position: absolute;
             top: 10px;
@@ -70,21 +68,6 @@
             border: none;
             border-radius: 5px;
         }
-
-        /* Responsive design */
-        @media (max-width: 768px) {
-            #calculator {
-                grid-template-columns: repeat(5, 1fr);
-                max-width: 500px;
-            }
-        }
-
-        @media (max-width: 600px) {
-            #calculator {
-                grid-template-columns: repeat(4, 1fr);
-                max-width: 400px;
-            }
-        }
     </style>
 </head>
 <body>
@@ -93,7 +76,7 @@
 
     <div id="calculator">
         <input id="display" type="text" disabled>
-        
+
         <button class="button" onclick="clearDisplay()">AC</button>
         <button class="button" onclick="appendNumber('7')">7</button>
         <button class="button" onclick="appendNumber('8')">8</button>
@@ -112,24 +95,30 @@
         <button class="button" onclick="calculate()">=</button>
         <button class="button" onclick="setOperation('+')">+</button>
 
-        <!-- New functionality buttons -->
+        <!-- New Functionality -->
         <button class="button" onclick="convertCurrency()">💰</button>
         <button class="button" onclick="convertWeight()">⚖️</button>
         <button class="button" onclick="convertVolume()">🧪</button>
         <button class="button" onclick="convertTime()">⏳</button>
         <button class="button" onclick="convertTemperature()">🌡️</button>
         <button class="button" onclick="calculatePercentage()">%</button>
-        <button class="button" onclick="solveEquation()">𝑥</button>
-        <button class="button" onclick="matrixOperations()">🟰</button>
-        <button class="button" onclick="toggleHistory()">📜</button>
-        <button class="button" onclick="changeTheme()">🎨</button>
+        <button class="button" onclick="solveQuadratic()">𝑥²</button>
+        <button class="button" onclick="checkPrime()">🔢</button>
+        <button class="button" onclick="findLCM()">LCM</button>
+        <button class="button" onclick="findGCD()">GCD</button>
+        <button class="button" onclick="convertBinary()">BIN</button>
+        <button class="button" onclick="convertHex()">HEX</button>
+        <button class="button" onclick="complexOperation()">𝑖</button>
+        <button class="button" onclick="calculatePower()">xʸ</button>
+        <button class="button" onclick="convertRadiansDegrees()">°↔rad</button>
+        <button class="button" onclick="modulo()">MOD</button>
+        <button class="button" onclick="generateRandom()">🎲</button>
     </div>
 
     <script>
         let currentInput = '';
         let operation = null;
         let firstOperand = null;
-        let history = [];
 
         function updateDisplay() {
             document.getElementById('display').value = currentInput;
@@ -149,11 +138,7 @@
 
         function setOperation(op) {
             if (currentInput === '') return;
-            if (firstOperand === null) {
-                firstOperand = parseFloat(currentInput);
-            } else {
-                firstOperand = calculate();
-            }
+            firstOperand = parseFloat(currentInput);
             operation = op;
             currentInput = '';
         }
@@ -179,36 +164,52 @@
             updateDisplay();
         }
 
-        function convertCurrency() {
-            alert("Currency conversion feature coming soon!");
+        function solveQuadratic() {
+            alert("Quadratic solver coming soon!");
         }
 
-        function convertWeight() {
-            alert("Weight conversion feature coming soon!");
+        function checkPrime() {
+            alert("Prime number checker coming soon!");
         }
 
-        function convertVolume() {
-            alert("Volume conversion feature coming soon!");
+        function findLCM() {
+            alert("LCM finder coming soon!");
         }
 
-        function convertTime() {
-            alert("Time conversion feature coming soon!");
+        function findGCD() {
+            alert("GCD finder coming soon!");
         }
 
-        function convertTemperature() {
-            alert("Temperature conversion feature coming soon!");
+        function convertBinary() {
+            alert("Binary conversion coming soon!");
         }
 
-        function solveEquation() {
-            alert("Equation solver coming soon!");
+        function convertHex() {
+            alert("Hexadecimal conversion coming soon!");
         }
 
-        function matrixOperations() {
-            alert("Matrix operations feature coming soon!");
+        function complexOperation() {
+            alert("Complex number support coming soon!");
         }
 
-        function toggleHistory() {
-            alert("History memory coming soon!");
+        function calculatePower() {
+            alert("Exponentiation feature coming soon!");
+        }
+
+        function convertRadiansDegrees() {
+            alert("Radians/Degrees conversion coming soon!");
+        }
+
+        function modulo() {
+            if (currentInput === '') return;
+            let num = parseFloat(currentInput);
+            currentInput = (num % 2).toString();
+            updateDisplay();
+        }
+
+        function generateRandom() {
+            currentInput = Math.floor(Math.random() * 100).toString();
+            updateDisplay();
         }
 
         function changeTheme() {
