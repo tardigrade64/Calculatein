@@ -95,7 +95,7 @@
         <button class="button" onclick="calculate()">=</button>
         <button class="button" onclick="setOperation('+')">+</button>
 
-        <!-- New Functionality -->
+        <!-- Advanced Features -->
         <button class="button" onclick="calculatePercentage()">%</button>
         <button class="button" onclick="solveQuadratic()">𝑥²</button>
         <button class="button" onclick="checkPrime()">🔢</button>
@@ -245,4 +245,18 @@
             let number = parseInt(currentInput);
             currentInput = `Hex: ${number.toString(16)}`;
             updateDisplay();
-       
+        }
+
+        // Power calculation
+        function calculatePower() {
+            let base = parseFloat(prompt("Enter base number"));
+            let exponent = parseFloat(prompt("Enter exponent"));
+            currentInput = Math.pow(base, exponent).toString();
+            updateDisplay();
+        }
+
+        // Convert between Radians and Degrees
+        function convertRadiansDegrees() {
+            let angle = parseFloat(currentInput);
+            if (currentInput.includes("°")) {
+                currentInput = `${(
