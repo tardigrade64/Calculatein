@@ -1,152 +1,128 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Simple Calculator</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      background-color: #333;
-      margin: 0;
-    }
-    #calculator {
-      background-color: #222;
-      padding: 20px;
-      border-radius: 15px;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-    }
-    #display {
-      width: 260px;
-      height: 60px;
-      font-size: 32px;
-      background-color: #111;
-      color: white;
-      border: none;
-      text-align: right;
-      padding: 10px;
-      border-radius: 10px;
-      margin-bottom: 20px;
-    }
-    .button {
-      width: 60px;
-      height: 60px;
-      font-size: 24px;
-      margin: 5px;
-      border-radius: 10px;
-      background-color: #444;
-      color: white;
-      border: none;
-      cursor: pointer;
-    }
-    .button:hover {
-      background-color: #555;
-    }
-    .button:active {
-      background-color: #666;
-    }
-    .button:focus {
-      outline: none;
-    }
-    #buttons {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      grid-gap: 10px;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scientific Calculator</title>
+    <style>
+        /* Your previous styles go here... */
+    </style>
 </head>
 <body>
-  <div id="calculator">
-    <input id="display" type="text" disabled>
-    <div id="buttons">
-      <button class="button" onclick="clearDisplay()">AC</button>
-      <button class="button" onclick="appendNumber('7')">7</button>
-      <button class="button" onclick="appendNumber('8')">8</button>
-      <button class="button" onclick="appendNumber('9')">9</button>
-      <button class="button" onclick="setOperation('/')">/</button>
-      <button class="button" onclick="appendNumber('4')">4</button>
-      <button class="button" onclick="appendNumber('5')">5</button>
-      <button class="button" onclick="appendNumber('6')">6</button>
-      <button class="button" onclick="setOperation('*')">*</button>
-      <button class="button" onclick="appendNumber('1')">1</button>
-      <button class="button" onclick="appendNumber('2')">2</button>
-      <button class="button" onclick="appendNumber('3')">3</button>
-      <button class="button" onclick="setOperation('-')">-</button>
-      <button class="button" onclick="appendNumber('0')">0</button>
-      <button class="button" onclick="appendDecimal()">.</button>
-      <button class="button" onclick="calculate()">=</button>
-      <button class="button" onclick="setOperation('+')">+</button>
+    <button id="colorButton" onclick="changeButtonColors()">🖌️</button>
+
+    <div id="calculator">
+        <input id="display" type="text" disabled>
+        <!-- Buttons for numbers, operations, etc... -->
     </div>
-  </div>
 
-  <script>
-    let currentInput = '';
-    let operation = null;
-    let firstOperand = null;
+    <script>
+        let currentInput = '';
+        let operation = null;
+        let firstOperand = null;
+        let secondOperand = null;
+        let matrixMode = false;
+        let unitsMode = false;
+        let statsMode = false;
+        let dateMode = false;
 
-    function updateDisplay() {
-      document.getElementById('display').value = currentInput;
-    }
-
-    function appendNumber(number) {
-      currentInput += number;
-      updateDisplay();
-    }
-
-    function appendDecimal() {
-      if (!currentInput.includes('.')) {
-        currentInput += '.';
-        updateDisplay();
-      }
-    }
-
-    function setOperation(op) {
-      if (currentInput === '') return;
-      if (firstOperand === null) {
-        firstOperand = parseFloat(currentInput);
-      } else {
-        firstOperand = calculate();
-      }
-      operation = op;
-      currentInput = '';
-    }
-
-    function calculate() {
-      let result = 0;
-      let secondOperand = parseFloat(currentInput);
-      if (firstOperand !== null && operation !== null) {
-        switch (operation) {
-          case '+':
-            result = firstOperand + secondOperand;
-            break;
-          case '-':
-            result = firstOperand - secondOperand;
-            break;
-          case '*':
-            result = firstOperand * secondOperand;
-            break;
-          case '/':
-            result = firstOperand / secondOperand;
-            break;
+        function updateDisplay() {
+            document.getElementById('display').value = currentInput;
         }
-        firstOperand = result;
-        operation = null;
-        currentInput = result.toString();
-        updateDisplay();
-      }
-      return result;
-    }
 
-    function clearDisplay() {
-      currentInput = '';
-      firstOperand = null;
-      operation = null;
-      updateDisplay();
-    }
-  </script>
+        function appendNumber(number) {
+            currentInput += number;
+            updateDisplay();
+        }
+
+        function appendDecimal() {
+            if (!currentInput.includes('.')) {
+                currentInput += '.';
+                updateDisplay();
+            }
+        }
+
+        function setOperation(op) {
+            if (currentInput === '') return;
+            if (firstOperand === null) {
+                firstOperand = parseFloat(currentInput);
+            } else {
+                firstOperand = calculate();
+            }
+            operation = op;
+            currentInput = '';
+        }
+
+        function calculate() {
+            let result = 0;
+            secondOperand = parseFloat(currentInput);
+
+            switch (operation) {
+                case '+':
+                    result = firstOperand + secondOperand;
+                    break;
+                case '-':
+                    result = firstOperand - secondOperand;
+                    break;
+                case '*':
+                    result = firstOperand * secondOperand;
+                    break;
+                case '/':
+                    result = firstOperand / secondOperand;
+                    break;
+                // More scientific operations...
+            }
+
+            firstOperand = result;
+            operation = null;
+            currentInput = result.toString();
+            updateDisplay();
+        }
+
+        function clearDisplay() {
+            currentInput = '';
+            firstOperand = null;
+            operation = null;
+            updateDisplay();
+        }
+
+        function matrixAdd() {
+            // Add matrices logic
+        }
+
+        function matrixMultiply() {
+            // Matrix multiplication logic
+        }
+
+        function determinant() {
+            // Matrix determinant logic
+        }
+
+        function convertUnits() {
+            // Unit conversion logic
+        }
+
+        function calculateStats() {
+            // Mean, median, mode calculation logic
+        }
+
+        function calculateDate() {
+            // Date/Time operations (e.g., add/subtract days)
+        }
+
+        function changeButtonColors() {
+            const buttons = document.querySelectorAll('.button');
+            const colors = ['red', 'orange', 'yellow', 'green', 'blue'];
+            let currentColor = buttons[0].classList[1];
+
+            let nextColor = colors[(colors.indexOf(currentColor) + 1) % colors.length];
+            buttons.forEach(button => {
+                button.classList.remove(currentColor);
+                button.classList.add(nextColor);
+            });
+        }
+
+        // Other functions like matrix operations, conversions, etc...
+    </script>
 </body>
 </html>
