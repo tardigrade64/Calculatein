@@ -63,7 +63,7 @@
             font-weight: bold;
         }
 
-        #settings {
+        #settings, #colorPicker {
             position: absolute;
             top: 20px;
             left: 20px;
@@ -72,6 +72,10 @@
             padding: 10px;
             border-radius: 50%;
             cursor: pointer;
+        }
+
+        #colorPicker {
+            left: 70px; /* Position it next to the settings button */
         }
 
         /* Responsive design */
@@ -111,6 +115,7 @@
 <body>
 
     <button id="settings" onclick="toggleButtonColors()">⚙️</button>
+    <button id="colorPicker" onclick="changeButtonColor()">🎨</button>
 
     <div id="calculator">
         <input id="display" type="text" disabled>
@@ -167,6 +172,8 @@
         let firstOperand = null;
         let scientificFunction = null;
         let darkMode = true;  // Initial state for button color scheme (dark mode)
+        let buttonColors = ['green', 'blue', 'red', 'yellow', 'orange'];
+        let currentColorIndex = 0;
 
         // Update display
         function updateDisplay() {
@@ -252,4 +259,43 @@
                     currentInput = (1 / Math.sin(num)).toString();
                     break;
                 case 'sec':
-                    currentInput = (1 /
+                    currentInput = (1 / Math.cos(num)).toString();
+                    break;
+                case 'cot':
+                    currentInput = (1 / Math.tan(num)).toString();
+                    break;
+                case 'deg':
+                    currentInput = (num * (180 / Math.PI)).toString();
+                    break;
+                case 'rad':
+                    currentInput = (num * (Math.PI / 180)).toString();
+                    break;
+                case 'rand':
+                    currentInput = Math.random().toString();
+                    break;
+                case 'sinh':
+                    currentInput = Math.sinh(num).toString();
+                    break;
+                case 'cosh':
+                    currentInput = Math.cosh(num).toString();
+                    break;
+                case 'tanh':
+                    currentInput = Math.tanh(num).toString();
+                    break;
+                case 'abs':
+                    currentInput = Math.abs(num).toString();
+                    break;
+                case 'int':
+                    currentInput = Math.floor(num).toString();
+                    break;
+                case 'factor':
+                    currentInput = factorial(num).toString();
+                    break;
+            }
+            updateDisplay();
+        }
+
+        // Calculate result
+        function calculate() {
+            let result = 0;
+            let secondOperand = parseFloat(currentInput);
