@@ -63,6 +63,17 @@
             font-weight: bold;
         }
 
+        #settings {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background-color: #444;
+            color: white;
+            padding: 10px;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
         /* Responsive design */
         @media (max-width: 768px) {
             #calculator {
@@ -99,6 +110,8 @@
 </head>
 <body>
 
+    <button id="settings" onclick="toggleButtonColors()">⚙️</button>
+
     <div id="calculator">
         <input id="display" type="text" disabled>
         <button class="button" onclick="clearDisplay()">AC</button>
@@ -109,7 +122,7 @@
         <button class="button" onclick="appendNumber('4')">4</button>
         <button class="button" onclick="appendNumber('5')">5</button>
         <button class="button" onclick="appendNumber('6')">6</button>
-        <button class="button" onclick="setOperation('*')">*</button>
+        <button class="button" onclick="setOperation('*')">✖️</button>
         <button class="button" onclick="appendNumber('1')">1</button>
         <button class="button" onclick="appendNumber('2')">2</button>
         <button class="button" onclick="appendNumber('3')">3</button>
@@ -153,6 +166,7 @@
         let operation = null;
         let firstOperand = null;
         let scientificFunction = null;
+        let darkMode = true;  // Initial state for button color scheme (dark mode)
 
         // Update display
         function updateDisplay() {
@@ -226,19 +240,4 @@
                     currentInput = Math.PI.toString();
                     break;
                 case 'e':
-                    currentInput = Math.E.toString();
-                    break;
-                case 'pow':
-                    currentInput = Math.pow(num, 2).toString(); // ^ as square for simplicity
-                    break;
-                case 'factorial':
-                    currentInput = factorial(num).toString();
-                    break;
-                case 'csc':
-                    currentInput = (1 / Math.sin(num)).toString();
-                    break;
-                case 'sec':
-                    currentInput = (1 / Math.cos(num)).toString();
-                    break;
-                case 'cot':
-                    currentInput = (1 / Math.t
+                    currentInput
