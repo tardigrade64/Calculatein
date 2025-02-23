@@ -5,28 +5,44 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Scientific Calculator</title>
     <style>
-        /* General styling */
-        body {
+        /* Prevent scrolling */
+        html, body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            height: 100%;
             font-family: Arial, sans-serif;
             background-color: #1e1e1e;
             color: white;
-            margin: 0;
-            padding: 0;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
         }
 
+        /* Calculator layout */
         #calculator {
             display: grid;
             grid-template-columns: repeat(5, 1fr);
             grid-gap: 10px;
-            max-width: 500px;
+            width: 90vw;
+            max-width: 600px;
             padding: 20px;
         }
 
-        /* Button styling */
+        /* Display */
+        #display {
+            grid-column: span 5;
+            padding: 20px;
+            text-align: right;
+            font-size: 30px;
+            background-color: #222;
+            border-radius: 10px;
+            border: none;
+            color: white;
+            font-weight: bold;
+        }
+
+        /* Buttons */
         .button {
             background-color: #444;
             border: none;
@@ -43,31 +59,25 @@
             background-color: #555;
         }
 
-        /* Display */
-        #display {
-            grid-column: span 5;
-            padding: 20px;
-            text-align: right;
-            font-size: 30px;
-            background-color: #222;
-            border-radius: 10px;
-            color: white;
-            font-weight: bold;
+        /* Color Change Button */
+        #color-btn {
+            grid-column: span 1;
+            font-size: 24px;
         }
 
-        /* Unit Converter Popup */
-        .popup {
-            display: none;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: #222;
-            padding: 20px;
-            border-radius: 10px;
-            text-align: center;
+        /* Responsive layout */
+        @media (max-width: 768px) {
+            #calculator {
+                grid-template-columns: repeat(4, 1fr);
+            }
+            .button {
+                padding: 15px;
+                font-size: 16px;
+            }
+            #display {
+                font-size: 24px;
+            }
         }
-
     </style>
 </head>
 <body>
@@ -75,59 +85,51 @@
     <div id="calculator">
         <input id="display" type="text" disabled>
 
-        <!-- Buttons -->
+        <!-- Color Change Button -->
+        <button id="color-btn" class="button" onclick="changeColor()">🖌️</button>
+        
+        <!-- Standard Calculator Buttons -->
         <button class="button" onclick="clearDisplay()">AC</button>
         <button class="button" onclick="appendNumber('7')">7</button>
         <button class="button" onclick="appendNumber('8')">8</button>
         <button class="button" onclick="appendNumber('9')">9</button>
         <button class="button" onclick="setOperation('/')">/</button>
-
         <button class="button" onclick="appendNumber('4')">4</button>
         <button class="button" onclick="appendNumber('5')">5</button>
         <button class="button" onclick="appendNumber('6')">6</button>
-        <button class="button" onclick="setOperation('*')">*</button>
-
+        <button class="button" onclick="setOperation('*')">×</button>
         <button class="button" onclick="appendNumber('1')">1</button>
         <button class="button" onclick="appendNumber('2')">2</button>
         <button class="button" onclick="appendNumber('3')">3</button>
         <button class="button" onclick="setOperation('-')">-</button>
-
         <button class="button" onclick="appendNumber('0')">0</button>
         <button class="button" onclick="appendDecimal()">.</button>
         <button class="button" onclick="calculate()">=</button>
         <button class="button" onclick="setOperation('+')">+</button>
 
         <!-- Scientific Functions -->
-        <button class="button" onclick="setScientific('sqrt')">√</button>
+        <button class="button" onclick="setScientific('sin')">sin</button>
+        <button class="button" onclick="setScientific('cos')">cos</button>
+        <button class="button" onclick="setScientific('tan')">tan</button>
         <button class="button" onclick="setScientific('log')">log</button>
-        <button class="button" onclick="setScientific('ln')">ln</button>
+        <button class="button" onclick="setScientific('sqrt')">√</button>
+        <button class="button" onclick="setScientific('exp')">exp</button>
+        <button class="button" onclick="setScientific('pi')">π</button>
+        <button class="button" onclick="setScientific('e')">e</button>
         <button class="button" onclick="setScientific('pow')">^</button>
 
         <!-- Unit Conversion -->
-        <button class="button" onclick="openUnitConverter()">🔁 Unit Convert</button>
-        <!-- Color Change -->
-        <button class="button" onclick="changeColor()">🖌️</button>
-    </div>
-
-    <!-- Unit Conversion Popup -->
-    <div id="unitConverter" class="popup">
-        <h3>Unit Converter</h3>
-        <label for="unitType">Select Measurement:</label>
-        <select id="unitType">
-            <option value="length">Length (m ↔ ft)</option>
-            <option value="weight">Weight (kg ↔ lb)</option>
-            <option value="volume">Volume (L ↔ gal)</option>
-            <option value="temperature">Temperature (°C ↔ °F)</option>
-        </select>
-        
-        <input type="number" id="unitInput" placeholder="Enter value">
-        <button onclick="convertUnit()">Convert</button>
-        <p id="unitResult"></p>
-        <button onclick="closeUnitConverter()">Close</button>
+        <button class="button" onclick="convertUnits('length')">Length</button>
+        <button class="button" onclick="convertUnits('weight')">Weight</button>
+        <button class="button" onclick="convertUnits('volume')">Volume</button>
+        <button class="button" onclick="convertUnits('time')">Time</button>
+        <button class="button" onclick="convertUnits('currency')">Money</button>
     </div>
 
     <script>
         let currentInput = '';
+        let operation = null;
+        let firstOperand = null;
 
         function updateDisplay() {
             document.getElementById('display').value = currentInput;
@@ -146,71 +148,59 @@
         }
 
         function setOperation(op) {
-            currentInput += ` ${op} `;
-            updateDisplay();
+            if (currentInput === '') return;
+            if (firstOperand === null) {
+                firstOperand = parseFloat(currentInput);
+            } else {
+                firstOperand = calculate();
+            }
+            operation = op;
+            currentInput = '';
         }
 
         function calculate() {
-            try {
-                currentInput = eval(currentInput).toString();
-            } catch {
-                currentInput = 'Error';
+            let secondOperand = parseFloat(currentInput);
+            switch (operation) {
+                case '+': currentInput = (firstOperand + secondOperand).toString(); break;
+                case '-': currentInput = (firstOperand - secondOperand).toString(); break;
+                case '*': currentInput = (firstOperand * secondOperand).toString(); break;
+                case '/': currentInput = (firstOperand / secondOperand).toString(); break;
             }
             updateDisplay();
+            firstOperand = null;
+        }
+
+        function setScientific(func) {
+            let num = parseFloat(currentInput);
+            switch (func) {
+                case 'sin': currentInput = Math.sin(num).toString(); break;
+                case 'cos': currentInput = Math.cos(num).toString(); break;
+                case 'tan': currentInput = Math.tan(num).toString(); break;
+                case 'log': currentInput = Math.log10(num).toString(); break;
+                case 'sqrt': currentInput = Math.sqrt(num).toString(); break;
+                case 'exp': currentInput = Math.exp(num).toString(); break;
+                case 'pi': currentInput = Math.PI.toString(); break;
+                case 'e': currentInput = Math.E.toString(); break;
+                case 'pow': currentInput = Math.pow(num, 2).toString(); break;
+            }
+            updateDisplay();
+        }
+
+        function convertUnits(type) {
+            alert(`Converting ${type}! (Feature placeholder)`);
+        }
+
+        function changeColor() {
+            let colors = ['red', 'orange', 'yellow', 'green', 'blue'];
+            document.querySelectorAll('.button').forEach(btn => {
+                btn.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+            });
         }
 
         function clearDisplay() {
             currentInput = '';
             updateDisplay();
         }
-
-        function setScientific(func) {
-            let num = parseFloat(currentInput);
-            switch (func) {
-                case 'sqrt': currentInput = Math.sqrt(num).toString(); break;
-                case 'log': currentInput = Math.log10(num).toString(); break;
-                case 'ln': currentInput = Math.log(num).toString(); break;
-                case 'pow': currentInput = Math.pow(num, 2).toString(); break;
-            }
-            updateDisplay();
-        }
-
-        // Open/Close Unit Converter
-        function openUnitConverter() {
-            document.getElementById("unitConverter").style.display = "block";
-        }
-
-        function closeUnitConverter() {
-            document.getElementById("unitConverter").style.display = "none";
-        }
-
-        // Unit Conversion Logic
-        function convertUnit() {
-            let type = document.getElementById("unitType").value;
-            let input = parseFloat(document.getElementById("unitInput").value);
-            let result = "";
-
-            if (isNaN(input)) {
-                result = "Enter a valid number!";
-            } else {
-                switch (type) {
-                    case "length": result = `${input} m = ${(input * 3.28084).toFixed(2)} ft`; break;
-                    case "weight": result = `${input} kg = ${(input * 2.20462).toFixed(2)} lb`; break;
-                    case "volume": result = `${input} L = ${(input * 0.264172).toFixed(2)} gal`; break;
-                    case "temperature": result = `${input}°C = ${((input * 9/5) + 32).toFixed(2)}°F`; break;
-                }
-            }
-            document.getElementById("unitResult").innerText = result;
-        }
-
-        // Button Color Changer
-        function changeColor() {
-            let colors = ["red", "orange", "yellow", "green", "blue"];
-            let buttons = document.querySelectorAll(".button");
-            let randomColor = colors[Math.floor(Math.random() * colors.length)];
-            buttons.forEach(button => button.style.backgroundColor = randomColor);
-        }
     </script>
-
 </body>
 </html>
