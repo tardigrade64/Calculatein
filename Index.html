@@ -96,11 +96,6 @@
         <button class="button" onclick="setOperation('+')">+</button>
 
         <!-- New Functionality -->
-        <button class="button" onclick="convertCurrency()">💰</button>
-        <button class="button" onclick="convertWeight()">⚖️</button>
-        <button class="button" onclick="convertVolume()">🧪</button>
-        <button class="button" onclick="convertTime()">⏳</button>
-        <button class="button" onclick="convertTemperature()">🌡️</button>
         <button class="button" onclick="calculatePercentage()">%</button>
         <button class="button" onclick="solveQuadratic()">𝑥²</button>
         <button class="button" onclick="checkPrime()">🔢</button>
@@ -108,11 +103,17 @@
         <button class="button" onclick="findGCD()">GCD</button>
         <button class="button" onclick="convertBinary()">BIN</button>
         <button class="button" onclick="convertHex()">HEX</button>
-        <button class="button" onclick="complexOperation()">𝑖</button>
         <button class="button" onclick="calculatePower()">xʸ</button>
         <button class="button" onclick="convertRadiansDegrees()">°↔rad</button>
         <button class="button" onclick="modulo()">MOD</button>
         <button class="button" onclick="generateRandom()">🎲</button>
+
+        <!-- Unit Conversion -->
+        <button class="button" onclick="convertCurrency()">💰</button>
+        <button class="button" onclick="convertWeight()">⚖️</button>
+        <button class="button" onclick="convertVolume()">🧪</button>
+        <button class="button" onclick="convertTime()">⏳</button>
+        <button class="button" onclick="convertTemperature()">🌡️</button>
     </div>
 
     <script>
@@ -120,15 +121,18 @@
         let operation = null;
         let firstOperand = null;
 
+        // Update display
         function updateDisplay() {
             document.getElementById('display').value = currentInput;
         }
 
+        // Append number to the display
         function appendNumber(number) {
             currentInput += number;
             updateDisplay();
         }
 
+        // Append decimal point to the display
         function appendDecimal() {
             if (!currentInput.includes('.')) {
                 currentInput += '.';
@@ -136,6 +140,7 @@
             }
         }
 
+        // Set operation (+, -, *, /)
         function setOperation(op) {
             if (currentInput === '') return;
             firstOperand = parseFloat(currentInput);
@@ -143,6 +148,7 @@
             currentInput = '';
         }
 
+        // Perform the calculation
         function calculate() {
             let secondOperand = parseFloat(currentInput);
             if (operation === '+') currentInput = (firstOperand + secondOperand).toString();
@@ -154,71 +160,89 @@
             updateDisplay();
         }
 
+        // Clear display
         function clearDisplay() {
             currentInput = '';
             updateDisplay();
         }
 
+        // Calculate percentage
         function calculatePercentage() {
             currentInput = (parseFloat(currentInput) / 100).toString();
             updateDisplay();
         }
 
+        // Solve quadratic equation (ax² + bx + c = 0)
         function solveQuadratic() {
-            alert("Quadratic solver coming soon!");
+            let a = parseFloat(prompt("Enter coefficient a"));
+            let b = parseFloat(prompt("Enter coefficient b"));
+            let c = parseFloat(prompt("Enter coefficient c"));
+
+            let discriminant = b * b - 4 * a * c;
+            if (discriminant > 0) {
+                let root1 = (-b + Math.sqrt(discriminant)) / (2 * a);
+                let root2 = (-b - Math.sqrt(discriminant)) / (2 * a);
+                currentInput = `Roots: ${root1}, ${root2}`;
+            } else if (discriminant === 0) {
+                let root = -b / (2 * a);
+                currentInput = `Root: ${root}`;
+            } else {
+                currentInput = "No Real Roots";
+            }
+            updateDisplay();
         }
 
+        // Check if a number is prime
         function checkPrime() {
-            alert("Prime number checker coming soon!");
+            let number = parseInt(currentInput);
+            if (number <= 1) {
+                currentInput = "Not prime";
+            } else {
+                let isPrime = true;
+                for (let i = 2; i < number; i++) {
+                    if (number % i === 0) {
+                        isPrime = false;
+                        break;
+                    }
+                }
+                currentInput = isPrime ? "Prime" : "Not prime";
+            }
+            updateDisplay();
         }
 
+        // Find the Least Common Multiple (LCM)
         function findLCM() {
-            alert("LCM finder coming soon!");
+            let num1 = parseInt(prompt("Enter first number"));
+            let num2 = parseInt(prompt("Enter second number"));
+            let lcm = (num1 * num2) / findGCD(num1, num2);
+            currentInput = `LCM: ${lcm}`;
+            updateDisplay();
         }
 
+        // Find the Greatest Common Divisor (GCD)
         function findGCD() {
-            alert("GCD finder coming soon!");
+            let num1 = parseInt(prompt("Enter first number"));
+            let num2 = parseInt(prompt("Enter second number"));
+            let gcd = 1;
+            for (let i = 1; i <= num1 && i <= num2; i++) {
+                if (num1 % i === 0 && num2 % i === 0) {
+                    gcd = i;
+                }
+            }
+            currentInput = `GCD: ${gcd}`;
+            updateDisplay();
         }
 
+        // Convert Decimal to Binary
         function convertBinary() {
-            alert("Binary conversion coming soon!");
+            let number = parseInt(currentInput);
+            currentInput = `Bin: ${number.toString(2)}`;
+            updateDisplay();
         }
 
+        // Convert Decimal to Hexadecimal
         function convertHex() {
-            alert("Hexadecimal conversion coming soon!");
-        }
-
-        function complexOperation() {
-            alert("Complex number support coming soon!");
-        }
-
-        function calculatePower() {
-            alert("Exponentiation feature coming soon!");
-        }
-
-        function convertRadiansDegrees() {
-            alert("Radians/Degrees conversion coming soon!");
-        }
-
-        function modulo() {
-            if (currentInput === '') return;
-            let num = parseFloat(currentInput);
-            currentInput = (num % 2).toString();
+            let number = parseInt(currentInput);
+            currentInput = `Hex: ${number.toString(16)}`;
             updateDisplay();
-        }
-
-        function generateRandom() {
-            currentInput = Math.floor(Math.random() * 100).toString();
-            updateDisplay();
-        }
-
-        function changeTheme() {
-            const colors = ["red", "orange", "yellow", "green", "blue"];
-            let buttons = document.querySelectorAll(".button");
-            let newColor = colors[Math.floor(Math.random() * colors.length)];
-            buttons.forEach(button => button.style.backgroundColor = newColor);
-        }
-    </script>
-
-</body>
-</html>
+       
