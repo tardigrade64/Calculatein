@@ -33,12 +33,12 @@
             background-color: #444;
             border: none;
             color: white;
-            padding: 20px 40px; /* Increased horizontal padding for rectangular shape */
+            padding: 20px;
             font-size: 18px;
+            border-radius: 50%;
             cursor: pointer;
             transition: background-color 0.3s ease;
             text-align: center;
-            border-radius: 5px; /* Change to make buttons rectangular */
         }
 
         .button:active {
@@ -61,21 +61,6 @@
             color: white;
             margin-bottom: 20px;
             font-weight: bold;
-        }
-
-        #settings, #colorPicker {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            background-color: #444;
-            color: white;
-            padding: 10px;
-            border-radius: 50%;
-            cursor: pointer;
-        }
-
-        #colorPicker {
-            left: 70px; /* Position it next to the settings button */
         }
 
         /* Responsive design */
@@ -110,12 +95,30 @@
                 font-size: 20px;  /* Smaller text for display */
             }
         }
+
+        #colorButton {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background-color: #444;
+            border: none;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+            padding: 10px;
+            border-radius: 50%;
+        }
+
+        .red { background-color: red; }
+        .orange { background-color: orange; }
+        .yellow { background-color: yellow; color: black; }
+        .green { background-color: green; }
+        .blue { background-color: blue; }
     </style>
 </head>
 <body>
 
-    <button id="settings" onclick="toggleButtonColors()">⚙️</button>
-    <button id="colorPicker" onclick="changeButtonColor()">🎨</button>
+    <button id="colorButton" onclick="changeButtonColors()">🖌️</button>
 
     <div id="calculator">
         <input id="display" type="text" disabled>
@@ -127,7 +130,7 @@
         <button class="button" onclick="appendNumber('4')">4</button>
         <button class="button" onclick="appendNumber('5')">5</button>
         <button class="button" onclick="appendNumber('6')">6</button>
-        <button class="button" onclick="setOperation('*')">✖️</button>
+        <button class="button" onclick="setOperation('*')">*</button>
         <button class="button" onclick="appendNumber('1')">1</button>
         <button class="button" onclick="appendNumber('2')">2</button>
         <button class="button" onclick="appendNumber('3')">3</button>
@@ -171,9 +174,6 @@
         let operation = null;
         let firstOperand = null;
         let scientificFunction = null;
-        let darkMode = true;  // Initial state for button color scheme (dark mode)
-        let buttonColors = ['green', 'blue', 'red', 'yellow', 'orange'];
-        let currentColorIndex = 0;
 
         // Update display
         function updateDisplay() {
@@ -299,3 +299,60 @@
         function calculate() {
             let result = 0;
             let secondOperand = parseFloat(currentInput);
+
+            if (firstOperand !== null && operation !== null) {
+                switch (operation) {
+                    case '+':
+                        result = firstOperand + secondOperand;
+                        break;
+                    case '-':
+                        result = firstOperand - secondOperand;
+                        break;
+                    case '*':
+                        result = firstOperand * secondOperand;
+                        break;
+                    case '/':
+                        result = firstOperand / secondOperand;
+                        break;
+                }
+                firstOperand = result;
+                operation = null;
+                currentInput = result.toString();
+                updateDisplay();
+            }
+        }
+
+        // Clear the display
+        function clearDisplay() {
+            currentInput = '';
+            firstOperand = null;
+            operation = null;
+            updateDisplay();
+        }
+
+        // Factorial function
+        function factorial(n) {
+            if (n === 0 || n === 1) return 1;
+            let result = 1;
+            for (let i = 2; i <= n; i++) {
+                result *= i;
+            }
+            return result;
+        }
+
+        // Change button colors
+        function changeButtonColors() {
+            const buttons = document.querySelectorAll('.button');
+            const colors = ['red', 'orange', 'yellow', 'green', 'blue'];
+            let currentColor = buttons[0].classList[1];
+
+            let nextColor = colors[(colors.indexOf(currentColor) + 1) % colors.length];
+            buttons.forEach(button => {
+                button.classList.remove(currentColor);
+                button.classList.add(nextColor);
+            });
+        }
+    </script>
+
+</body>
+</html>
