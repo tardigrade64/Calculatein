@@ -15,16 +15,29 @@
             justify-content: center;
             align-items: center;
             height: 100vh;
-            background-color: #1e1e1e;
         }
 
         #calculator {
             display: grid;
-            grid-template-columns: repeat(7, 1fr); /* 7 columns */
+            grid-template-columns: repeat(7, 1fr);
             grid-gap: 10px;
-            width: 100%;
             max-width: 700px;
             padding: 20px;
+            background: #1e1e1e;
+            border-radius: 10px;
+        }
+
+        #display {
+            grid-column: span 7;
+            padding: 20px;
+            text-align: right;
+            font-size: 30px;
+            background-color: #222;
+            border-radius: 10px;
+            border: none;
+            color: white;
+            font-weight: bold;
+            width: 100%;
         }
 
         .button {
@@ -35,25 +48,11 @@
             font-size: 18px;
             border-radius: 50%;
             cursor: pointer;
-            transition: background-color 0.3s ease;
             text-align: center;
         }
 
         .button:active {
             background-color: darkblue;
-        }
-
-        #display {
-            grid-column: span 7; /* Full width of the grid */
-            padding: 20px;
-            text-align: right;
-            font-size: 30px;
-            background-color: #222;
-            border-radius: 10px;
-            border: none;
-            color: white;
-            margin-bottom: 20px;
-            font-weight: bold;
         }
 
     </style>
@@ -62,19 +61,22 @@
 
     <div id="calculator">
         <input id="display" type="text" disabled>
+
+        <!-- Numbers and Basic Operations -->
+        <button class="button" onclick="deleteOne()">✖️</button>
         <button class="button" onclick="clearDisplay()">AC</button>
         <button class="button" onclick="appendNumber('7')">7</button>
         <button class="button" onclick="appendNumber('8')">8</button>
         <button class="button" onclick="appendNumber('9')">9</button>
-        <button class="button" onclick="setOperation('/')">/</button>
+        <button class="button" onclick="setOperation('/')">÷</button>
         <button class="button" onclick="appendNumber('4')">4</button>
         <button class="button" onclick="appendNumber('5')">5</button>
         <button class="button" onclick="appendNumber('6')">6</button>
-        <button class="button" onclick="setOperation('*')">*</button>
+        <button class="button" onclick="setOperation('*')">×</button>
         <button class="button" onclick="appendNumber('1')">1</button>
         <button class="button" onclick="appendNumber('2')">2</button>
         <button class="button" onclick="appendNumber('3')">3</button>
-        <button class="button" onclick="setOperation('-')">-</button>
+        <button class="button" onclick="setOperation('-')">−</button>
         <button class="button" onclick="appendNumber('0')">0</button>
         <button class="button" onclick="appendDecimal()">.</button>
         <button class="button" onclick="calculate()">=</button>
@@ -86,6 +88,8 @@
         <button class="button" onclick="setScientific('tan')">tan</button>
         <button class="button" onclick="setScientific('log')">log</button>
         <button class="button" onclick="setScientific('sqrt')">√</button>
+        <button class="button" onclick="setScientific('exp')">e^x</button>
+        <button class="button" onclick="setScientific('pi')">π</button>
 
         <!-- Conversion Functions -->
         <button class="button" onclick="convert('currency')">Currency</button>
@@ -104,6 +108,12 @@
             document.getElementById('display').value = currentInput;
         }
 
+        // Delete one character
+        function deleteOne() {
+            currentInput = currentInput.slice(0, -1);
+            updateDisplay();
+        }
+
         // Clear the display
         function clearDisplay() {
             currentInput = '';
@@ -112,13 +122,13 @@
             updateDisplay();
         }
 
-        // Append a number to the display
+        // Append a number
         function appendNumber(number) {
             currentInput += number;
             updateDisplay();
         }
 
-        // Append decimal to the display
+        // Append decimal point
         function appendDecimal() {
             if (!currentInput.includes('.')) {
                 currentInput += '.';
@@ -126,42 +136,27 @@
             }
         }
 
-        // Set the operation (addition, subtraction, etc.)
+        // Set an operation
         function setOperation(op) {
             if (currentInput === '') return;
-            if (firstOperand === null) {
-                firstOperand = parseFloat(currentInput);
-            } else {
-                firstOperand = calculate();
-            }
+            firstOperand = parseFloat(currentInput);
             operation = op;
             currentInput = '';
         }
 
-        // Perform the calculation
+        // Calculate result
         function calculate() {
-            let result = 0;
+            if (firstOperand === null || currentInput === '') return;
+
             let secondOperand = parseFloat(currentInput);
+            let result = 0;
 
             switch (operation) {
-                case '+':
-                    result = firstOperand + secondOperand;
-                    break;
-                case '-':
-                    result = firstOperand - secondOperand;
-                    break;
-                case '*':
-                    result = firstOperand * secondOperand;
-                    break;
-                case '/':
-                    if (secondOperand !== 0) {
-                        result = firstOperand / secondOperand;
-                    } else {
-                        result = 'Error';
-                    }
-                    break;
-                default:
-                    return;
+                case '+': result = firstOperand + secondOperand; break;
+                case '-': result = firstOperand - secondOperand; break;
+                case '*': result = firstOperand * secondOperand; break;
+                case '/': result = secondOperand !== 0 ? firstOperand / secondOperand : 'Error'; break;
+                default: return;
             }
 
             currentInput = result.toString();
@@ -170,62 +165,36 @@
             updateDisplay();
         }
 
-        // Scientific functions (sin, cos, etc.)
+        // Scientific functions
         function setScientific(func) {
             if (currentInput === '') return;
-
             let num = parseFloat(currentInput);
-
             switch (func) {
-                case 'sin':
-                    currentInput = Math.sin(num).toString();
-                    break;
-                case 'cos':
-                    currentInput = Math.cos(num).toString();
-                    break;
-                case 'tan':
-                    currentInput = Math.tan(num).toString();
-                    break;
-                case 'log':
-                    currentInput = Math.log10(num).toString();
-                    break;
-                case 'sqrt':
-                    currentInput = Math.sqrt(num).toString();
-                    break;
-                default:
-                    break;
+                case 'sin': currentInput = Math.sin(num).toString(); break;
+                case 'cos': currentInput = Math.cos(num).toString(); break;
+                case 'tan': currentInput = Math.tan(num).toString(); break;
+                case 'log': currentInput = Math.log10(num).toString(); break;
+                case 'sqrt': currentInput = Math.sqrt(num).toString(); break;
+                case 'exp': currentInput = Math.exp(num).toString(); break;
+                case 'pi': currentInput = Math.PI.toString(); break;
             }
             updateDisplay();
         }
 
-        // Conversion functions (currency, weight, etc.)
+        // Conversion functions
         function convert(type) {
             let value = parseFloat(currentInput);
             if (isNaN(value)) {
-                currentInput = "Invalid Input";
+                currentInput = "Invalid";
                 updateDisplay();
                 return;
             }
 
             switch (type) {
-                case 'currency':
-                    // Example conversion: USD to EUR (1 USD = 0.92 EUR)
-                    currentInput = (value * 0.92).toFixed(2) + " EUR";
-                    break;
-                case 'weight':
-                    // Example conversion: kg to lb (1 kg = 2.20462 lb)
-                    currentInput = (value * 2.20462).toFixed(2) + " lb";
-                    break;
-                case 'volume':
-                    // Example conversion: liter to gallon (1 liter = 0.264172 gallon)
-                    currentInput = (value * 0.264172).toFixed(2) + " gal";
-                    break;
-                case 'time':
-                    // Example conversion: hours to minutes (1 hour = 60 minutes)
-                    currentInput = (value * 60).toFixed(2) + " min";
-                    break;
-                default:
-                    break;
+                case 'currency': currentInput = (value * 0.92).toFixed(2) + " EUR"; break;
+                case 'weight': currentInput = (value * 2.20462).toFixed(2) + " lb"; break;
+                case 'volume': currentInput = (value * 0.264172).toFixed(2) + " gal"; break;
+                case 'time': currentInput = (value * 60).toFixed(2) + " min"; break;
             }
 
             updateDisplay();
