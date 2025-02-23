@@ -5,66 +5,95 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Scientific Calculator</title>
     <style>
+        /* Body and overall design */
         body {
             font-family: Arial, sans-serif;
             background-color: #1e1e1e;
             color: white;
+            margin: 0;
+            padding: 0;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
-            margin: 0;
+            overflow: hidden; /* Prevent scrolling */
         }
 
         #calculator {
             display: grid;
-            grid-template-columns: repeat(7, 1fr);
-            gap: 10px;
+            grid-template-columns: repeat(7, 1fr); /* 7 columns */
+            grid-gap: 10px;
+            width: 100%;
             max-width: 700px;
+            height: calc(95vh + 1cm); /* Increased by 1cm */
             padding: 20px;
-            background-color: #222;
-            border-radius: 10px;
         }
 
         .button {
-            background-color: blue;
+            background-color: #444;
             border: none;
             color: white;
             padding: 20px;
             font-size: 18px;
-            border-radius: 10px;
+            border-radius: 10px; /* Rounded edges */
             cursor: pointer;
             transition: background-color 0.3s ease;
             text-align: center;
         }
 
         .button:active {
-            background-color: darkblue;
+            background-color: #555;
         }
 
         #display {
-            grid-column: span 7;
-            padding: 15px;
+            grid-column: span 7; /* Full width of the grid */
+            padding: 20px;
             text-align: right;
             font-size: 30px;
             background-color: #222;
             border-radius: 10px;
-            border: none;
             color: white;
+            margin-bottom: 20px;
             font-weight: bold;
         }
 
-        #paint-btn {
-            background-color: gray;
+        /* Theme button */
+        #theme-button {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            padding: 10px;
+            font-size: 20px;
+            cursor: pointer;
+            background-color: #444;
+            color: white;
+            border: none;
+            border-radius: 5px;
         }
 
+        /* Responsive design */
+        @media (max-width: 768px) {
+            #calculator {
+                grid-template-columns: repeat(5, 1fr);
+                max-width: 500px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            #calculator {
+                grid-template-columns: repeat(4, 1fr);
+                max-width: 400px;
+            }
+        }
     </style>
 </head>
 <body>
 
+    <button id="theme-button" onclick="changeTheme()">🖌️</button>
+
     <div id="calculator">
         <input id="display" type="text" disabled>
-        <button id="paint-btn" class="button" onclick="changeButtonColor()">🖌️</button>
+        
         <button class="button" onclick="clearDisplay()">AC</button>
         <button class="button" onclick="appendNumber('7')">7</button>
         <button class="button" onclick="appendNumber('8')">8</button>
@@ -83,31 +112,24 @@
         <button class="button" onclick="calculate()">=</button>
         <button class="button" onclick="setOperation('+')">+</button>
 
-        <!-- Scientific Functions -->
-        <button class="button" onclick="setScientific('sin')">sin</button>
-        <button class="button" onclick="setScientific('cos')">cos</button>
-        <button class="button" onclick="setScientific('tan')">tan</button>
-        <button class="button" onclick="setScientific('log')">log</button>
-        <button class="button" onclick="setScientific('sqrt')">√</button>
-        <button class="button" onclick="setScientific('pow')">^</button>
-        <button class="button" onclick="setScientific('factorial')">x!</button>
-
-        <!-- Memory Functions -->
-        <button class="button" onclick="memoryStore()">M+</button>
-        <button class="button" onclick="memoryRecall()">MR</button>
-        <button class="button" onclick="memoryClear()">MC</button>
-
-        <!-- Unit Conversion -->
-        <button class="button" onclick="convertUnits()">Convert</button>
+        <!-- New functionality buttons -->
+        <button class="button" onclick="convertCurrency()">💰</button>
+        <button class="button" onclick="convertWeight()">⚖️</button>
+        <button class="button" onclick="convertVolume()">🧪</button>
+        <button class="button" onclick="convertTime()">⏳</button>
+        <button class="button" onclick="convertTemperature()">🌡️</button>
+        <button class="button" onclick="calculatePercentage()">%</button>
+        <button class="button" onclick="solveEquation()">𝑥</button>
+        <button class="button" onclick="matrixOperations()">🟰</button>
+        <button class="button" onclick="toggleHistory()">📜</button>
+        <button class="button" onclick="changeTheme()">🎨</button>
     </div>
 
     <script>
         let currentInput = '';
         let operation = null;
         let firstOperand = null;
-        let memory = 0;
-        let colors = ['red', 'orange', 'yellow', 'green', 'blue'];
-        let colorIndex = 0;
+        let history = [];
 
         function updateDisplay() {
             document.getElementById('display').value = currentInput;
@@ -127,77 +149,73 @@
 
         function setOperation(op) {
             if (currentInput === '') return;
-            firstOperand = parseFloat(currentInput);
+            if (firstOperand === null) {
+                firstOperand = parseFloat(currentInput);
+            } else {
+                firstOperand = calculate();
+            }
             operation = op;
             currentInput = '';
         }
 
         function calculate() {
-            if (firstOperand === null || operation === null) return;
             let secondOperand = parseFloat(currentInput);
-            switch (operation) {
-                case '+': currentInput = (firstOperand + secondOperand).toString(); break;
-                case '-': currentInput = (firstOperand - secondOperand).toString(); break;
-                case '*': currentInput = (firstOperand * secondOperand).toString(); break;
-                case '/': currentInput = (firstOperand / secondOperand).toString(); break;
-            }
-            firstOperand = null;
+            if (operation === '+') currentInput = (firstOperand + secondOperand).toString();
+            if (operation === '-') currentInput = (firstOperand - secondOperand).toString();
+            if (operation === '*') currentInput = (firstOperand * secondOperand).toString();
+            if (operation === '/') currentInput = (firstOperand / secondOperand).toString();
             operation = null;
+            firstOperand = null;
             updateDisplay();
-        }
-
-        function setScientific(func) {
-            let num = parseFloat(currentInput);
-            switch (func) {
-                case 'sin': currentInput = Math.sin(num).toString(); break;
-                case 'cos': currentInput = Math.cos(num).toString(); break;
-                case 'tan': currentInput = Math.tan(num).toString(); break;
-                case 'log': currentInput = Math.log10(num).toString(); break;
-                case 'sqrt': currentInput = Math.sqrt(num).toString(); break;
-                case 'pow': currentInput = Math.pow(num, 2).toString(); break;
-                case 'factorial': currentInput = factorial(num).toString(); break;
-            }
-            updateDisplay();
-        }
-
-        function factorial(n) {
-            return n === 0 ? 1 : n * factorial(n - 1);
-        }
-
-        function memoryStore() {
-            memory = parseFloat(currentInput);
-        }
-
-        function memoryRecall() {
-            currentInput = memory.toString();
-            updateDisplay();
-        }
-
-        function memoryClear() {
-            memory = 0;
-        }
-
-        function changeButtonColor() {
-            colorIndex = (colorIndex + 1) % colors.length;
-            document.querySelectorAll('.button').forEach(btn => {
-                btn.style.backgroundColor = colors[colorIndex];
-            });
-        }
-
-        function convertUnits() {
-            let value = parseFloat(prompt("Enter value to convert:"));
-            let type = prompt("Convert: 1. Length (cm ↔ in), 2. Weight (kg ↔ lb), 3. Volume (L ↔ gal)");
-
-            if (type === '1') value = value * 0.393701; // cm to in
-            if (type === '2') value = value * 2.20462; // kg to lb
-            if (type === '3') value = value * 0.264172; // L to gal
-
-            alert("Converted value: " + value);
         }
 
         function clearDisplay() {
             currentInput = '';
             updateDisplay();
+        }
+
+        function calculatePercentage() {
+            currentInput = (parseFloat(currentInput) / 100).toString();
+            updateDisplay();
+        }
+
+        function convertCurrency() {
+            alert("Currency conversion feature coming soon!");
+        }
+
+        function convertWeight() {
+            alert("Weight conversion feature coming soon!");
+        }
+
+        function convertVolume() {
+            alert("Volume conversion feature coming soon!");
+        }
+
+        function convertTime() {
+            alert("Time conversion feature coming soon!");
+        }
+
+        function convertTemperature() {
+            alert("Temperature conversion feature coming soon!");
+        }
+
+        function solveEquation() {
+            alert("Equation solver coming soon!");
+        }
+
+        function matrixOperations() {
+            alert("Matrix operations feature coming soon!");
+        }
+
+        function toggleHistory() {
+            alert("History memory coming soon!");
+        }
+
+        function changeTheme() {
+            const colors = ["red", "orange", "yellow", "green", "blue"];
+            let buttons = document.querySelectorAll(".button");
+            let newColor = colors[Math.floor(Math.random() * colors.length)];
+            buttons.forEach(button => button.style.backgroundColor = newColor);
         }
     </script>
 
