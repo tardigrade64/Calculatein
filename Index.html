@@ -3,11 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Advanced Scientific Calculator</title>
+    <title>Scientific Calculator</title>
     <style>
+        /* Body and overall design */
         body {
             font-family: Arial, sans-serif;
-            background-color: #1e1e1e;
+            background-color: #333;
             color: white;
             margin: 0;
             padding: 0;
@@ -15,16 +16,16 @@
             justify-content: center;
             align-items: center;
             height: 100vh;
-            overflow: hidden;
+            background-color: #1e1e1e;
         }
 
         #calculator {
             display: grid;
-            grid-template-columns: repeat(7, 1fr);
+            grid-template-columns: repeat(7, 1fr); /* 7 columns */
             grid-gap: 10px;
             width: 100%;
-            max-width: 700px;
-            height: calc(95vh + 1cm);
+            max-width: 700px;  /* Limit to iPad width */
+            height: calc(95vh + 1cm); /* Increased by 1cm */
             padding: 20px;
         }
 
@@ -34,7 +35,7 @@
             color: white;
             padding: 20px;
             font-size: 18px;
-            border-radius: 10px;
+            border-radius: 15px;  /* Rounded edges */
             cursor: pointer;
             transition: background-color 0.3s ease;
             text-align: center;
@@ -44,39 +45,83 @@
             background-color: #555;
         }
 
+        .button:disabled {
+            background-color: #666;
+            cursor: not-allowed;
+        }
+
         #display {
-            grid-column: span 7;
+            grid-column: span 7; /* Full width of the grid */
             padding: 20px;
             text-align: right;
             font-size: 30px;
             background-color: #222;
             border-radius: 10px;
+            border: none;
             color: white;
             margin-bottom: 20px;
             font-weight: bold;
         }
 
-        #theme-button {
+        /* Responsive design */
+        @media (max-width: 768px) {
+            #calculator {
+                grid-template-columns: repeat(5, 1fr); /* 5 columns for smaller screens */
+                max-width: 500px;
+            }
+
+            .button {
+                padding: 15px;
+                font-size: 16px; /* Smaller font for mobile */
+            }
+
+            #display {
+                font-size: 24px;  /* Smaller text for display */
+            }
+        }
+
+        @media (max-width: 600px) {
+            #calculator {
+                grid-template-columns: repeat(4, 1fr); /* 4 columns for very small screens */
+                max-width: 400px;
+            }
+
+            .button {
+                padding: 12px;
+                font-size: 14px; /* Smaller font size */
+            }
+
+            #display {
+                font-size: 20px;  /* Smaller text for display */
+            }
+        }
+
+        #colorButton {
             position: absolute;
-            top: 10px;
-            left: 10px;
-            padding: 10px;
+            top: 20px;
+            left: 20px;
+            background-color: #444;
+            border: none;
+            color: white;
             font-size: 20px;
             cursor: pointer;
-            background-color: #444;
-            color: white;
-            border: none;
-            border-radius: 5px;
+            padding: 10px;
+            border-radius: 50%;
         }
+
+        .red { background-color: red; }
+        .orange { background-color: orange; }
+        .yellow { background-color: yellow; color: black; }
+        .green { background-color: green; }
+        .blue { background-color: blue; }
     </style>
 </head>
 <body>
 
-    <button id="theme-button" onclick="changeTheme()">🖌️</button>
+    <button id="colorButton" onclick="changeButtonColors()">🖌️</button>
 
     <div id="calculator">
         <input id="display" type="text" disabled>
-
         <button class="button" onclick="clearDisplay()">AC</button>
         <button class="button" onclick="appendNumber('7')">7</button>
         <button class="button" onclick="appendNumber('8')">8</button>
@@ -95,31 +140,40 @@
         <button class="button" onclick="calculate()">=</button>
         <button class="button" onclick="setOperation('+')">+</button>
 
-        <!-- Advanced Features -->
-        <button class="button" onclick="calculatePercentage()">%</button>
-        <button class="button" onclick="solveQuadratic()">𝑥²</button>
-        <button class="button" onclick="checkPrime()">🔢</button>
-        <button class="button" onclick="findLCM()">LCM</button>
-        <button class="button" onclick="findGCD()">GCD</button>
-        <button class="button" onclick="convertBinary()">BIN</button>
-        <button class="button" onclick="convertHex()">HEX</button>
-        <button class="button" onclick="calculatePower()">xʸ</button>
-        <button class="button" onclick="convertRadiansDegrees()">°↔rad</button>
-        <button class="button" onclick="modulo()">MOD</button>
-        <button class="button" onclick="generateRandom()">🎲</button>
-
-        <!-- Unit Conversion -->
-        <button class="button" onclick="convertCurrency()">💰</button>
-        <button class="button" onclick="convertWeight()">⚖️</button>
-        <button class="button" onclick="convertVolume()">🧪</button>
-        <button class="button" onclick="convertTime()">⏳</button>
-        <button class="button" onclick="convertTemperature()">🌡️</button>
+        <!-- Scientific Functions -->
+        <button class="button" onclick="setScientific('sin')">sin</button>
+        <button class="button" onclick="setScientific('cos')">cos</button>
+        <button class="button" onclick="setScientific('tan')">tan</button>
+        <button class="button" onclick="setScientific('asin')">asin</button>
+        <button class="button" onclick="setScientific('acos')">acos</button>
+        <button class="button" onclick="setScientific('atan')">atan</button>
+        <button class="button" onclick="setScientific('log')">log</button>
+        <button class="button" onclick="setScientific('ln')">ln</button>
+        <button class="button" onclick="setScientific('sqrt')">√</button>
+        <button class="button" onclick="setScientific('exp')">exp</button>
+        <button class="button" onclick="setScientific('pi')">π</button>
+        <button class="button" onclick="setScientific('e')">e</button>
+        <button class="button" onclick="setScientific('pow')">^</button>
+        <button class="button" onclick="setScientific('factorial')">x!</button>
+        <button class="button" onclick="setScientific('csc')">csc</button>
+        <button class="button" onclick="setScientific('sec')">sec</button>
+        <button class="button" onclick="setScientific('cot')">cot</button>
+        <button class="button" onclick="setScientific('deg')">deg</button>
+        <button class="button" onclick="setScientific('rad')">rad</button>
+        <button class="button" onclick="setScientific('rand')">rand</button>
+        <button class="button" onclick="setScientific('sinh')">sinh</button>
+        <button class="button" onclick="setScientific('cosh')">cosh</button>
+        <button class="button" onclick="setScientific('tanh')">tanh</button>
+        <button class="button" onclick="setScientific('abs')">abs</button>
+        <button class="button" onclick="setScientific('int')">int</button>
+        <button class="button" onclick="setScientific('factor')">factor</button>
     </div>
 
     <script>
         let currentInput = '';
         let operation = null;
         let firstOperand = null;
+        let scientificFunction = null;
 
         // Update display
         function updateDisplay() {
@@ -140,123 +194,165 @@
             }
         }
 
-        // Set operation (+, -, *, /)
+        // Set the operation (addition, subtraction, etc.)
         function setOperation(op) {
             if (currentInput === '') return;
-            firstOperand = parseFloat(currentInput);
+            if (firstOperand === null) {
+                firstOperand = parseFloat(currentInput);
+            } else {
+                firstOperand = calculate();
+            }
             operation = op;
             currentInput = '';
         }
 
-        // Perform the calculation
-        function calculate() {
-            let secondOperand = parseFloat(currentInput);
-            if (operation === '+') currentInput = (firstOperand + secondOperand).toString();
-            if (operation === '-') currentInput = (firstOperand - secondOperand).toString();
-            if (operation === '*') currentInput = (firstOperand * secondOperand).toString();
-            if (operation === '/') currentInput = (firstOperand / secondOperand).toString();
-            operation = null;
-            firstOperand = null;
+        // Set scientific function
+        function setScientific(func) {
+            if (currentInput === '') return;
+
+            let num = parseFloat(currentInput);
+
+            switch (func) {
+                case 'sin':
+                    currentInput = Math.sin(num).toString();
+                    break;
+                case 'cos':
+                    currentInput = Math.cos(num).toString();
+                    break;
+                case 'tan':
+                    currentInput = Math.tan(num).toString();
+                    break;
+                case 'asin':
+                    currentInput = Math.asin(num).toString();
+                    break;
+                case 'acos':
+                    currentInput = Math.acos(num).toString();
+                    break;
+                case 'atan':
+                    currentInput = Math.atan(num).toString();
+                    break;
+                case 'log':
+                    currentInput = Math.log10(num).toString();
+                    break;
+                case 'ln':
+                    currentInput = Math.log(num).toString();
+                    break;
+                case 'sqrt':
+                    currentInput = Math.sqrt(num).toString();
+                    break;
+                case 'exp':
+                    currentInput = Math.exp(num).toString();
+                    break;
+                case 'pi':
+                    currentInput = Math.PI.toString();
+                    break;
+                case 'e':
+                    currentInput = Math.E.toString();
+                    break;
+                case 'pow':
+                    currentInput = Math.pow(num, 2).toString(); // ^ as square for simplicity
+                    break;
+                case 'factorial':
+                    currentInput = factorial(num).toString();
+                    break;
+                case 'csc':
+                    currentInput = (1 / Math.sin(num)).toString();
+                    break;
+                case 'sec':
+                    currentInput = (1 / Math.cos(num)).toString();
+                    break;
+                case 'cot':
+                    currentInput = (1 / Math.tan(num)).toString();
+                    break;
+                case 'deg':
+                    currentInput = (num * (180 / Math.PI)).toString();
+                    break;
+                case 'rad':
+                    currentInput = (num * (Math.PI / 180)).toString();
+                    break;
+                case 'rand':
+                    currentInput = Math.random().toString();
+                    break;
+                case 'sinh':
+                    currentInput = Math.sinh(num).toString();
+                    break;
+                case 'cosh':
+                    currentInput = Math.cosh(num).toString();
+                    break;
+                case 'tanh':
+                    currentInput = Math.tanh(num).toString();
+                    break;
+                case 'abs':
+                    currentInput = Math.abs(num).toString();
+                    break;
+                case 'int':
+                    currentInput = Math.floor(num).toString();
+                    break;
+                case 'factor':
+                    currentInput = factorial(num).toString();
+                    break;
+            }
             updateDisplay();
         }
 
-        // Clear display
+        // Calculate result
+        function calculate() {
+            let result = 0;
+            let secondOperand = parseFloat(currentInput);
+
+            if (firstOperand !== null && operation !== null) {
+                switch (operation) {
+                    case '+':
+                        result = firstOperand + secondOperand;
+                        break;
+                    case '-':
+                        result = firstOperand - secondOperand;
+                        break;
+                    case '*':
+                        result = firstOperand * secondOperand;
+                        break;
+                    case '/':
+                        result = firstOperand / secondOperand;
+                        break;
+                }
+                firstOperand = result;
+                operation = null;
+                currentInput = result.toString();
+                updateDisplay();
+            }
+        }
+
+        // Clear the display
         function clearDisplay() {
             currentInput = '';
+            firstOperand = null;
+            operation = null;
             updateDisplay();
         }
 
-        // Calculate percentage
-        function calculatePercentage() {
-            currentInput = (parseFloat(currentInput) / 100).toString();
-            updateDisplay();
-        }
-
-        // Solve quadratic equation (ax² + bx + c = 0)
-        function solveQuadratic() {
-            let a = parseFloat(prompt("Enter coefficient a"));
-            let b = parseFloat(prompt("Enter coefficient b"));
-            let c = parseFloat(prompt("Enter coefficient c"));
-
-            let discriminant = b * b - 4 * a * c;
-            if (discriminant > 0) {
-                let root1 = (-b + Math.sqrt(discriminant)) / (2 * a);
-                let root2 = (-b - Math.sqrt(discriminant)) / (2 * a);
-                currentInput = `Roots: ${root1}, ${root2}`;
-            } else if (discriminant === 0) {
-                let root = -b / (2 * a);
-                currentInput = `Root: ${root}`;
-            } else {
-                currentInput = "No Real Roots";
+        // Factorial function
+        function factorial(n) {
+            if (n === 0 || n === 1) return 1;
+            let result = 1;
+            for (let i = 2; i <= n; i++) {
+                result *= i;
             }
-            updateDisplay();
+            return result;
         }
 
-        // Check if a number is prime
-        function checkPrime() {
-            let number = parseInt(currentInput);
-            if (number <= 1) {
-                currentInput = "Not prime";
-            } else {
-                let isPrime = true;
-                for (let i = 2; i < number; i++) {
-                    if (number % i === 0) {
-                        isPrime = false;
-                        break;
-                    }
-                }
-                currentInput = isPrime ? "Prime" : "Not prime";
-            }
-            updateDisplay();
-        }
+        // Change button colors
+        function changeButtonColors() {
+            const buttons = document.querySelectorAll('.button');
+            const colors = ['red', 'orange', 'yellow', 'green', 'blue'];
+            let currentColor = buttons[0].classList[1];
 
-        // Find the Least Common Multiple (LCM)
-        function findLCM() {
-            let num1 = parseInt(prompt("Enter first number"));
-            let num2 = parseInt(prompt("Enter second number"));
-            let lcm = (num1 * num2) / findGCD(num1, num2);
-            currentInput = `LCM: ${lcm}`;
-            updateDisplay();
+            let nextColor = colors[(colors.indexOf(currentColor) + 1) % colors.length];
+            buttons.forEach(button => {
+                button.classList.remove(currentColor);
+                button.classList.add(nextColor);
+            });
         }
+    </script>
 
-        // Find the Greatest Common Divisor (GCD)
-        function findGCD() {
-            let num1 = parseInt(prompt("Enter first number"));
-            let num2 = parseInt(prompt("Enter second number"));
-            let gcd = 1;
-            for (let i = 1; i <= num1 && i <= num2; i++) {
-                if (num1 % i === 0 && num2 % i === 0) {
-                    gcd = i;
-                }
-            }
-            currentInput = `GCD: ${gcd}`;
-            updateDisplay();
-        }
-
-        // Convert Decimal to Binary
-        function convertBinary() {
-            let number = parseInt(currentInput);
-            currentInput = `Bin: ${number.toString(2)}`;
-            updateDisplay();
-        }
-
-        // Convert Decimal to Hexadecimal
-        function convertHex() {
-            let number = parseInt(currentInput);
-            currentInput = `Hex: ${number.toString(16)}`;
-            updateDisplay();
-        }
-
-        // Power calculation
-        function calculatePower() {
-            let base = parseFloat(prompt("Enter base number"));
-            let exponent = parseFloat(prompt("Enter exponent"));
-            currentInput = Math.pow(base, exponent).toString();
-            updateDisplay();
-        }
-
-        // Convert between Radians and Degrees
-        function convertRadiansDegrees() {
-            let angle = parseFloat(currentInput);
-            if (currentInput.includes("°")) {
-                currentInput = `${(
+</body>
+</html>
