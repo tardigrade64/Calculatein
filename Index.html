@@ -167,10 +167,10 @@
         <button class="button" onclick="setScientific('abs')">abs</button>
         <button class="button" onclick="setScientific('int')">int</button>
         <button class="button" onclick="setScientific('factor')">factor</button>
-        <!-- New root functions -->
-        <button class="button" onclick="setScientific('sqrt')">√</button>
-        <button class="button" onclick="setScientific('cbrt')">∛</button>
-        <button class="button" onclick="setScientific('root')">x√y</button>
+        <!-- New added buttons -->
+        <button class="button" onclick="setScientific('squared')">x²</button>
+        <button class="button" onclick="setScientific('cubed')">x³</button>
+        <button class="button" onclick="setScientific('exp')">xⁿ</button>
     </div>
 
     <script>
@@ -295,12 +295,11 @@
                 case 'factor':
                     currentInput = factorial(num).toString();
                     break;
-                case 'cbrt':
-                    currentInput = Math.cbrt(num).toString(); // Cube root
+                case 'squared':
+                    currentInput = Math.pow(num, 2).toString(); // x²
                     break;
-                case 'root':
-                    let y = parseFloat(prompt("Enter the root index:"));
-                    currentInput = Math.pow(num, 1/y).toString(); // General root
+                case 'cubed':
+                    currentInput = Math.pow(num, 3).toString(); // x³
                     break;
             }
             updateDisplay();
