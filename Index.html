@@ -21,16 +21,17 @@
         /* Calculator Container */
         #calculator {
             display: grid;
-            grid-template-columns: repeat(7, 1fr);
+            grid-template-columns: repeat(10, 1fr); /* 10 columns for scientific mode */
+            grid-template-rows: repeat(5, 1fr); /* 5 rows for scientific mode */
             grid-gap: 10px;
             width: 100%;
-            max-width: 450px;
+            max-width: 500px;
             padding: 20px;
         }
 
         /* Display */
         #display {
-            grid-column: span 7;
+            grid-column: span 10;
             padding: 15px;
             text-align: right;
             font-size: 28px;
@@ -48,7 +49,7 @@
             border: none;
             color: white;
             padding: 15px;
-            font-size: 18px;
+            font-size: 16px;
             border-radius: 10px;
             cursor: pointer;
             transition: background-color 0.3s ease;
@@ -140,7 +141,6 @@
 
         <!-- Scientific Mode Buttons -->
         <div id="scientificModeButtons" style="display:none;">
-            <!-- Same buttons as before, plus the advanced ones like square root, factorial, etc. -->
             <button class="button" onclick="clearDisplay()">C</button>
             <button class="button" onclick="deleteLast()">⌫</button>
             <button class="button" onclick="appendToDisplay('(')">(</button>
@@ -165,6 +165,17 @@
             <button class="button" onclick="appendToDisplay('Math.sqrt(')">√</button>
             <button class="button" onclick="appendToDisplay('root(3,')">∛</button>
             <button class="button" onclick="appendToDisplay('factorial(')">x!</button>
+            <button class="button" onclick="appendToDisplay('Math.pow(')">x^y</button>
+            <button class="button" onclick="appendToDisplay('Math.sin(')">sin</button>
+            <button class="button" onclick="appendToDisplay('Math.cos(')">cos</button>
+            <button class="button" onclick="appendToDisplay('Math.tan(')">tan</button>
+            <button class="button" onclick="appendToDisplay('Math.log(')">log</button>
+            <button class="button" onclick="appendToDisplay('Math.exp(')">exp</button>
+            <button class="button" onclick="appendToDisplay('Math.abs(')">abs</button>
+            <button class="button" onclick="appendToDisplay('Math.round(')">round</button>
+            <button class="button" onclick="appendToDisplay('Math.random()')">rand</button>
+            <button class="button" onclick="appendToDisplay('Math.max(')">max</button>
+            <button class="button" onclick="appendToDisplay('Math.min(')">min</button>
             <button class="button" onclick="calculateResult()">=</button>
         </div>
     </div>
@@ -214,7 +225,7 @@
             isScientificMode = !isScientificMode;
 
             if (isScientificMode) {
-                document.getElementById('scientificModeButtons').style.display = 'block';
+                document.getElementById('scientificModeButtons').style.display = 'grid';
                 document.getElementById('basicModeButtons').style.display = 'none';
                 document.getElementById('modeToggle').innerText = 'Switch to Basic Mode';
             } else {
