@@ -23,9 +23,9 @@
         /* Calculator Container */
         #calculator {
             display: grid;
-            grid-template-columns: repeat(5, 1fr); /* For responsive grid */
-            grid-template-rows: repeat(10, 1fr); /* Flexible for buttons */
-            grid-gap: 10px;
+            grid-template-columns: repeat(5, 1fr); /* 5 columns for the layout */
+            grid-template-rows: repeat(10, 1fr); /* 10 rows to fit the buttons */
+            gap: 10px;
             width: 100%;
             max-width: 600px; /* Make it responsive for iPad */
             padding: 20px;
@@ -38,7 +38,7 @@
             grid-column: span 5;
             padding: 20px;
             text-align: right;
-            font-size: 36px; /* Larger font size for iPad */
+            font-size: 36px; /* Larger font size */
             background-color: #222;
             border-radius: 10px;
             border: none;
@@ -99,10 +99,9 @@
 
         /* Responsive Design */
         @media screen and (max-width: 768px) {
-            /* For smaller devices, adjust the grid and button sizes */
             #calculator {
-                grid-template-columns: repeat(5, 1fr); /* 5 columns for smaller screens */
-                grid-template-rows: repeat(10, 1fr); /* 10 rows for smaller screens */
+                grid-template-columns: repeat(5, 1fr);
+                grid-template-rows: repeat(10, 1fr);
             }
 
             #display {
@@ -115,7 +114,6 @@
                 font-size: 18px;
             }
 
-            /* Make the sidebar button larger for touch devices */
             #sidebarToggle {
                 padding: 15px;
                 font-size: 24px;
