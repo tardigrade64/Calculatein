@@ -5,9 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Scientific Calculator</title>
     <style>
+        /* Body and overall design */
         body {
             font-family: Arial, sans-serif;
-            background-color: #1e1e1e;
+            background-color: #333;
             color: white;
             margin: 0;
             padding: 0;
@@ -15,14 +16,16 @@
             justify-content: center;
             align-items: center;
             height: 100vh;
+            background-color: #1e1e1e;
         }
 
         #calculator {
             display: grid;
             grid-template-columns: repeat(7, 1fr); /* 7 columns */
-            grid-gap: 8px;
-            width: 90%;
-            max-width: 700px;
+            grid-gap: 10px;
+            width: 100%;
+            max-width: 700px;  /* Limit to iPad width */
+            height: calc(95vh + 1cm); /* Increased by 1cm */
             padding: 20px;
         }
 
@@ -30,11 +33,11 @@
             background-color: #444;
             border: none;
             color: white;
-            padding: 15px;
+            padding: 20px;
             font-size: 18px;
-            border-radius: 10px;
+            border-radius: 15px;  /* Rounded edges */
             cursor: pointer;
-            transition: background-color 0.3s;
+            transition: background-color 0.3s ease;
             text-align: center;
         }
 
@@ -42,8 +45,13 @@
             background-color: #555;
         }
 
+        .button:disabled {
+            background-color: #666;
+            cursor: not-allowed;
+        }
+
         #display {
-            grid-column: span 7;
+            grid-column: span 7; /* Full width of the grid */
             padding: 20px;
             text-align: right;
             font-size: 30px;
@@ -51,77 +59,101 @@
             border-radius: 10px;
             border: none;
             color: white;
-            margin-bottom: 10px;
+            margin-bottom: 20px;
             font-weight: bold;
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            #calculator {
+                grid-template-columns: repeat(5, 1fr); /* 5 columns for smaller screens */
+                max-width: 500px;
+            }
+
+            .button {
+                padding: 15px;
+                font-size: 16px; /* Smaller font for mobile */
+            }
+
+            #display {
+                font-size: 24px;  /* Smaller text for display */
+            }
         }
 
         @media (max-width: 600px) {
             #calculator {
-                grid-template-columns: repeat(5, 1fr);
+                grid-template-columns: repeat(4, 1fr); /* 4 columns for very small screens */
+                max-width: 400px;
             }
 
             .button {
                 padding: 12px;
-                font-size: 14px;
+                font-size: 14px; /* Smaller font size */
             }
 
             #display {
-                font-size: 24px;
+                font-size: 20px;  /* Smaller text for display */
             }
         }
+
+        #colorButton {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background-color: #444;
+            border: none;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+            padding: 10px;
+            border-radius: 50%;
+        }
+
+        .red { background-color: red; }
+        .orange { background-color: orange; }
+        .yellow { background-color: yellow; color: black; }
+        .green { background-color: green; }
+        .blue { background-color: blue; }
     </style>
 </head>
 <body>
 
+    <button id="colorButton" onclick="changeButtonColors()">🖌️</button>
+
     <div id="calculator">
         <input id="display" type="text" disabled>
-        
-        <!-- Row 1 -->
         <button class="button" onclick="clearDisplay()">AC</button>
-        <button class="button" onclick="setScientific('pi')">π</button>
-        <button class="button" onclick="setScientific('e')">e</button>
-        <button class="button" onclick="setScientific('sqrt')">√</button>
-        <button class="button" onclick="setScientific('cbrt')">∛</button>
-        <button class="button" onclick="setScientific('nthRoot')">ⁿ√</button>
-        <button class="button" onclick="setOperation('/')">/</button>
-
-        <!-- Row 2 -->
         <button class="button" onclick="appendNumber('7')">7</button>
         <button class="button" onclick="appendNumber('8')">8</button>
         <button class="button" onclick="appendNumber('9')">9</button>
-        <button class="button" onclick="setScientific('sin')">sin</button>
-        <button class="button" onclick="setScientific('cos')">cos</button>
-        <button class="button" onclick="setScientific('tan')">tan</button>
-        <button class="button" onclick="setOperation('*')">*</button>
-
-        <!-- Row 3 -->
+        <button class="button" onclick="setOperation('/')">/</button>
         <button class="button" onclick="appendNumber('4')">4</button>
         <button class="button" onclick="appendNumber('5')">5</button>
         <button class="button" onclick="appendNumber('6')">6</button>
-        <button class="button" onclick="setScientific('asin')">asin</button>
-        <button class="button" onclick="setScientific('acos')">acos</button>
-        <button class="button" onclick="setScientific('atan')">atan</button>
-        <button class="button" onclick="setOperation('-')">-</button>
-
-        <!-- Row 4 -->
+        <button class="button" onclick="setOperation('*')">*</button>
         <button class="button" onclick="appendNumber('1')">1</button>
         <button class="button" onclick="appendNumber('2')">2</button>
         <button class="button" onclick="appendNumber('3')">3</button>
-        <button class="button" onclick="setScientific('sinh')">sinh</button>
-        <button class="button" onclick="setScientific('cosh')">cosh</button>
-        <button class="button" onclick="setScientific('tanh')">tanh</button>
-        <button class="button" onclick="setOperation('+')">+</button>
-
-        <!-- Row 5 -->
+        <button class="button" onclick="setOperation('-')">-</button>
         <button class="button" onclick="appendNumber('0')">0</button>
         <button class="button" onclick="appendDecimal()">.</button>
         <button class="button" onclick="calculate()">=</button>
+        <button class="button" onclick="setOperation('+')">+</button>
+
+        <!-- Scientific Functions -->
+        <button class="button" onclick="setScientific('sin')">sin</button>
+        <button class="button" onclick="setScientific('cos')">cos</button>
+        <button class="button" onclick="setScientific('tan')">tan</button>
+        <button class="button" onclick="setScientific('asin')">asin</button>
+        <button class="button" onclick="setScientific('acos')">acos</button>
+        <button class="button" onclick="setScientific('atan')">atan</button>
         <button class="button" onclick="setScientific('log')">log</button>
         <button class="button" onclick="setScientific('ln')">ln</button>
+        <button class="button" onclick="setScientific('sqrt')">√</button>
         <button class="button" onclick="setScientific('exp')">exp</button>
+        <button class="button" onclick="setScientific('pi')">π</button>
+        <button class="button" onclick="setScientific('e')">e</button>
         <button class="button" onclick="setScientific('pow')">^</button>
-
-        <!-- Row 6 -->
         <button class="button" onclick="setScientific('factorial')">x!</button>
         <button class="button" onclick="setScientific('csc')">csc</button>
         <button class="button" onclick="setScientific('sec')">sec</button>
@@ -129,22 +161,36 @@
         <button class="button" onclick="setScientific('deg')">deg</button>
         <button class="button" onclick="setScientific('rad')">rad</button>
         <button class="button" onclick="setScientific('rand')">rand</button>
+        <button class="button" onclick="setScientific('sinh')">sinh</button>
+        <button class="button" onclick="setScientific('cosh')">cosh</button>
+        <button class="button" onclick="setScientific('tanh')">tanh</button>
+        <button class="button" onclick="setScientific('abs')">abs</button>
+        <button class="button" onclick="setScientific('int')">int</button>
+        <button class="button" onclick="setScientific('factor')">factor</button>
+        <!-- New added buttons -->
+        <button class="button" onclick="setScientific('squared')">x²</button>
+        <button class="button" onclick="setScientific('cubed')">x³</button>
+        <button class="button" onclick="setScientific('exp')">xⁿ</button>
     </div>
 
     <script>
         let currentInput = '';
         let operation = null;
         let firstOperand = null;
+        let scientificFunction = null;
 
+        // Update display
         function updateDisplay() {
             document.getElementById('display').value = currentInput;
         }
 
+        // Append number to the display
         function appendNumber(number) {
             currentInput += number;
             updateDisplay();
         }
 
+        // Append decimal point to the display
         function appendDecimal() {
             if (!currentInput.includes('.')) {
                 currentInput += '.';
@@ -152,6 +198,7 @@
             }
         }
 
+        // Set the operation (addition, subtraction, etc.)
         function setOperation(op) {
             if (currentInput === '') return;
             if (firstOperand === null) {
@@ -163,38 +210,120 @@
             currentInput = '';
         }
 
+        // Set scientific function
         function setScientific(func) {
+            if (currentInput === '') return;
+
             let num = parseFloat(currentInput);
 
             switch (func) {
-                case 'sqrt': currentInput = Math.sqrt(num).toString(); break;
-                case 'cbrt': currentInput = Math.cbrt(num).toString(); break;
-                case 'nthRoot': 
-                    let root = prompt("Enter root value:");
-                    currentInput = Math.pow(num, 1 / parseFloat(root)).toString();
+                case 'sin':
+                    currentInput = Math.sin(num).toString();
                     break;
-                case 'pow': currentInput = Math.pow(num, 2).toString(); break;
-                case 'factorial': currentInput = factorial(num).toString(); break;
-                case 'log': currentInput = Math.log10(num).toString(); break;
-                case 'ln': currentInput = Math.log(num).toString(); break;
-                case 'exp': currentInput = Math.exp(num).toString(); break;
-                case 'sin': currentInput = Math.sin(num).toString(); break;
-                case 'cos': currentInput = Math.cos(num).toString(); break;
-                case 'tan': currentInput = Math.tan(num).toString(); break;
+                case 'cos':
+                    currentInput = Math.cos(num).toString();
+                    break;
+                case 'tan':
+                    currentInput = Math.tan(num).toString();
+                    break;
+                case 'asin':
+                    currentInput = Math.asin(num).toString();
+                    break;
+                case 'acos':
+                    currentInput = Math.acos(num).toString();
+                    break;
+                case 'atan':
+                    currentInput = Math.atan(num).toString();
+                    break;
+                case 'log':
+                    currentInput = Math.log10(num).toString();
+                    break;
+                case 'ln':
+                    currentInput = Math.log(num).toString();
+                    break;
+                case 'sqrt':
+                    currentInput = Math.sqrt(num).toString();
+                    break;
+                case 'exp':
+                    currentInput = Math.exp(num).toString();
+                    break;
+                case 'pi':
+                    currentInput = Math.PI.toString();
+                    break;
+                case 'e':
+                    currentInput = Math.E.toString();
+                    break;
+                case 'pow':
+                    currentInput = Math.pow(num, 2).toString(); // ^ as square for simplicity
+                    break;
+                case 'factorial':
+                    currentInput = factorial(num).toString();
+                    break;
+                case 'csc':
+                    currentInput = (1 / Math.sin(num)).toString();
+                    break;
+                case 'sec':
+                    currentInput = (1 / Math.cos(num)).toString();
+                    break;
+                case 'cot':
+                    currentInput = (1 / Math.tan(num)).toString();
+                    break;
+                case 'deg':
+                    currentInput = (num * (180 / Math.PI)).toString();
+                    break;
+                case 'rad':
+                    currentInput = (num * (Math.PI / 180)).toString();
+                    break;
+                case 'rand':
+                    currentInput = Math.random().toString();
+                    break;
+                case 'sinh':
+                    currentInput = Math.sinh(num).toString();
+                    break;
+                case 'cosh':
+                    currentInput = Math.cosh(num).toString();
+                    break;
+                case 'tanh':
+                    currentInput = Math.tanh(num).toString();
+                    break;
+                case 'abs':
+                    currentInput = Math.abs(num).toString();
+                    break;
+                case 'int':
+                    currentInput = Math.floor(num).toString();
+                    break;
+                case 'factor':
+                    currentInput = factorial(num).toString();
+                    break;
+                case 'squared':
+                    currentInput = Math.pow(num, 2).toString(); // x²
+                    break;
+                case 'cubed':
+                    currentInput = Math.pow(num, 3).toString(); // x³
+                    break;
             }
             updateDisplay();
         }
 
+        // Calculate result
         function calculate() {
             let result = 0;
             let secondOperand = parseFloat(currentInput);
 
             if (firstOperand !== null && operation !== null) {
                 switch (operation) {
-                    case '+': result = firstOperand + secondOperand; break;
-                    case '-': result = firstOperand - secondOperand; break;
-                    case '*': result = firstOperand * secondOperand; break;
-                    case '/': result = firstOperand / secondOperand; break;
+                    case '+':
+                        result = firstOperand + secondOperand;
+                        break;
+                    case '-':
+                        result = firstOperand - secondOperand;
+                        break;
+                    case '*':
+                        result = firstOperand * secondOperand;
+                        break;
+                    case '/':
+                        result = firstOperand / secondOperand;
+                        break;
                 }
                 firstOperand = result;
                 operation = null;
@@ -203,11 +332,35 @@
             }
         }
 
+        // Clear the display
         function clearDisplay() {
             currentInput = '';
             firstOperand = null;
             operation = null;
             updateDisplay();
+        }
+
+        // Factorial function
+        function factorial(n) {
+            if (n === 0 || n === 1) return 1;
+            let result = 1;
+            for (let i = 2; i <= n; i++) {
+                result *= i;
+            }
+            return result;
+        }
+
+        // Change button colors
+        function changeButtonColors() {
+            const buttons = document.querySelectorAll('.button');
+            const colors = ['red', 'orange', 'yellow', 'green', 'blue'];
+            let currentColor = buttons[0].classList[1];
+
+            let nextColor = colors[(colors.indexOf(currentColor) + 1) % colors.length];
+            buttons.forEach(button => {
+                button.classList.remove(currentColor);
+                button.classList.add(nextColor);
+            });
         }
     </script>
 
