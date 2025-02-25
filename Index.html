@@ -16,6 +16,8 @@
             align-items: center;
             justify-content: center;
             height: 100vh;
+            padding: 20px;
+            box-sizing: border-box;
         }
 
         /* Calculator Container */
@@ -25,22 +27,24 @@
             grid-template-rows: repeat(5, 1fr); /* 5 rows for scientific mode */
             grid-gap: 10px;
             width: 100%;
-            max-width: 500px;
+            max-width: 600px; /* Make it responsive for iPad */
             padding: 20px;
+            box-sizing: border-box;
         }
 
         /* Display */
         #display {
             grid-column: span 10;
-            padding: 15px;
+            padding: 20px;
             text-align: right;
-            font-size: 28px;
+            font-size: 36px; /* Larger font size for iPad */
             background-color: #222;
             border-radius: 10px;
             border: none;
             color: white;
             margin-bottom: 20px;
             font-weight: bold;
+            box-sizing: border-box;
         }
 
         /* Buttons */
@@ -48,8 +52,8 @@
             background-color: #444;
             border: none;
             color: white;
-            padding: 15px;
-            font-size: 16px;
+            padding: 20px; /* Larger padding for better touch interaction */
+            font-size: 20px; /* Larger font size */
             border-radius: 10px;
             cursor: pointer;
             transition: background-color 0.3s ease;
@@ -91,6 +95,44 @@
         #sidebar.open {
             left: 0;
         }
+
+        /* Responsive Design */
+        @media screen and (max-width: 768px) {
+            /* For smaller devices, adjust the grid and button sizes */
+            #calculator {
+                grid-template-columns: repeat(5, 1fr); /* 5 columns for smaller screens */
+                grid-template-rows: repeat(10, 1fr); /* 10 rows for smaller screens */
+            }
+
+            #display {
+                font-size: 28px; /* Adjust display font size */
+                padding: 15px;
+            }
+
+            .button {
+                padding: 15px;
+                font-size: 18px;
+            }
+
+            /* Make the sidebar button larger for touch devices */
+            #sidebarToggle {
+                padding: 15px;
+                font-size: 24px;
+            }
+        }
+
+        /* Basic Mode Button */
+        #modeToggle {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #444;
+            color: white;
+            border: none;
+            font-size: 18px;
+            cursor: pointer;
+            border-radius: 10px;
+        }
+
     </style>
 </head>
 <body>
