@@ -1,57 +1,55 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Scientific Calculator with Sidebar</title>
+    <title>Scientific Calculator</title>
     <style>
-        /* Body and overall design */
+        /* Page Styling */
         body {
             font-family: Arial, sans-serif;
-            background-color: #333;
+            background-color: #1e1e1e;
             color: white;
             margin: 0;
-            padding: 0;
-            display: flex;
-            height: 100vh;
-            overflow: hidden;
-        }
-
-        #sidebar {
-            width: 250px;
-            background-color: #444;
-            padding: 20px;
-            box-sizing: border-box;
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
-        }
-
-        #calculator-container {
-            flex: 1;
-            display: flex;
-            justify-content: center;
             align-items: center;
-            padding: 20px;
-            box-sizing: border-box;
+            justify-content: center;
+            height: 100vh;
         }
 
+        /* Calculator Container */
         #calculator {
             display: grid;
             grid-template-columns: repeat(7, 1fr);
             grid-gap: 10px;
             width: 100%;
-            max-width: 700px;
+            max-width: 450px;
+            padding: 20px;
         }
 
+        /* Display */
+        #display {
+            grid-column: span 7;
+            padding: 15px;
+            text-align: right;
+            font-size: 28px;
+            background-color: #222;
+            border-radius: 10px;
+            border: none;
+            color: white;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        /* Buttons */
         .button {
             background-color: #444;
             border: none;
             color: white;
-            padding: 20px;
+            padding: 15px;
             font-size: 18px;
-            border-radius: 15px;
+            border-radius: 10px;
             cursor: pointer;
             transition: background-color 0.3s ease;
             text-align: center;
@@ -61,156 +59,191 @@
             background-color: #555;
         }
 
-        .button:disabled {
-            background-color: #666;
-            cursor: not-allowed;
-        }
-
-        #display {
-            grid-column: span 7;
-            padding: 20px;
-            text-align: right;
-            font-size: 30px;
-            background-color: #222;
-            border-radius: 10px;
-            border: none;
+        /* Sidebar */
+        #sidebar {
+            position: fixed;
+            left: -250px;
+            width: 250px;
+            height: 100%;
+            background-color: #444;
             color: white;
-            margin-bottom: 20px;
-            font-weight: bold;
+            padding: 20px;
+            transition: left 0.3s;
+            overflow-y: auto;
+            top: 0;
         }
 
-        /* Responsive design */
-        @media (max-width: 768px) {
-            #calculator {
-                grid-template-columns: repeat(5, 1fr);
-                max-width: 500px;
-            }
-
-            .button {
-                padding: 15px;
-                font-size: 16px;
-            }
-
-            #display {
-                font-size: 24px;
-            }
-        }
-
-        @media (max-width: 600px) {
-            #calculator {
-                grid-template-columns: repeat(4, 1fr);
-                max-width: 400px;
-            }
-
-            .button {
-                padding: 12px;
-                font-size: 14px;
-            }
-
-            #display {
-                font-size: 20px;
-            }
-        }
-
-        #colorButton {
+        #sidebarToggle {
+            position: fixed;
+            top: 20px;
+            left: 20px;
             background-color: #444;
             border: none;
             color: white;
             font-size: 20px;
             cursor: pointer;
             padding: 10px;
-            border-radius: 50%;
-            margin-bottom: 20px;
-        }
-
-        .color-option {
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            margin: 5px;
-            cursor: pointer;
-            border: 2px solid #fff;
-        }
-
-        .red {
-            background-color: red;
-        }
-
-        .orange {
-            background-color: orange;
-        }
-
-        .yellow {
-            background-color: yellow;
-        }
-
-        .green {
-            background-color: green;
-        }
-
-        .blue {
-            background-color: blue;
-        }
-
-        #memory {
-            margin-top: 20px;
-            overflow-y: auto;
-            max-height: 300px;
-        }
-
-        .memory-item {
-            background-color: #555;
-            padding: 10px;
             border-radius: 5px;
-            margin-bottom: 5px;
-            font-size: 14px;
+            z-index: 1000;
+        }
+
+        #sidebar.open {
+            left: 0;
         }
     </style>
 </head>
-
 <body>
 
+    <!-- Sidebar button -->
+    <button id="sidebarToggle">☰</button>
+
+    <!-- Sidebar -->
     <div id="sidebar">
+        <h2>Settings</h2>
         <div>
-            <button id="colorButton">Change Colors</button>
-            <div id="colorOptions" style="display: none;">
-                <div class="color-option red" onclick="changeButtonColors('red')"></div>
-                <div class="color-option orange" onclick="changeButtonColors('orange')"></div>
-                <div class="color-option yellow" onclick="changeButtonColors('yellow')"></div>
-                <div class="color-option green" onclick="changeButtonColors('green')"></div>
-                <div class="color-option blue" onclick="changeButtonColors('blue')"></div>
-            </div>
+            <h3>Change Button Color</h3>
+            <button onclick="changeButtonColor('red')">Red</button>
+            <button onclick="changeButtonColor('green')">Green</button>
+            <button onclick="changeButtonColor('blue')">Blue</button>
         </div>
-        <div id="memory">
-            <h3>Memory</h3>
-            <!-- Memory items will be appended here -->
+        <div>
+            <h3>Past Calculations</h3>
+            <ul id="pastProblemsList"></ul>
         </div>
     </div>
 
-    <div id="calculator-container">
-        <div id="calculator">
-            <input id="display" type="text" disabled>
-            <button class="button" onclick="clearDisplay()">AC</button>
-            <button class="button" onclick="appendNumber('7')">7</button>
-            <button class="button" onclick="appendNumber('8')">8</button>
-            <button class="button" onclick="appendNumber('9')">9</button>
-            <button class="button" onclick="setOperation('/')">/</button>
-            <button class="button" onclick="appendNumber('4')">4</button>
-            <button class="button" onclick="appendNumber('5')">5</button>
-            <button class="button" onclick="appendNumber('6')">6</button>
-            <button class="button" onclick="setOperation('*')">*</button>
-            <button class="button" onclick="appendNumber('1')">1</button>
-            <button class="button" onclick="appendNumber('2')">2</button>
-            <button class="button" onclick="appendNumber('3')">3</button>
-            <button class="button" onclick="setOperation('-')">-</button>
-            <button class="button" onclick="appendNumber('0')">0</button>
-            <button class="button" onclick="appendDecimal()">.</button>
-            <button class="button" onclick="calculate()">=</button>
-            <button class="button" onclick="setOperation('+')">+</button>
+    <!-- Calculator -->
+    <input type="text" id="display" disabled>
+    <div id="calculator">
+        <!-- First row -->
+        <button class="button" onclick="clearDisplay()">C</button>
+        <button class="button" onclick="deleteLast()">⌫</button>
+        <button class="button" onclick="appendToDisplay('(')">(</button>
+        <button class="button" onclick="appendToDisplay(')')">)</button>
+        <button class="button" onclick="appendToDisplay('/')">÷</button>
+        <button class="button" onclick="appendToDisplay('7')">7</button>
+        <button class="button" onclick="appendToDisplay('8')">8</button>
 
-            <!-- Scientific Functions -->
-            <button class="button" onclick="setScientific('sin')">sin</button>
-            <button class="button" onclick="setScientific('cos')">cos</button>
-            <button class="button" onclick="setScientific('tan')">tan</button>
-            <button class="button" onclick="setScientific('asin')">asin</button>
-            <button class="button" onclick="setScientific(' 
+        <!-- Second row -->
+        <button class="button" onclick="appendToDisplay('9')">9</button>
+        <button class="button" onclick="appendToDisplay('*')">×</button>
+        <button class="button" onclick="appendToDisplay('4')">4</button>
+        <button class="button" onclick="appendToDisplay('5')">5</button>
+        <button class="button" onclick="appendToDisplay('6')">6</button>
+        <button class="button" onclick="appendToDisplay('-')">−</button>
+        <button class="button" onclick="appendToDisplay('1')">1</button>
+
+        <!-- Third row -->
+        <button class="button" onclick="appendToDisplay('2')">2</button>
+        <button class="button" onclick="appendToDisplay('3')">3</button>
+        <button class="button" onclick="appendToDisplay('+')">+</button>
+        <button class="button" onclick="appendToDisplay('0')">0</button>
+        <button class="button" onclick="appendToDisplay('.')">.</button>
+        <button class="button" onclick="appendToDisplay('Math.PI')">π</button>
+        <button class="button" onclick="appendToDisplay('Math.E')">e</button>
+
+        <!-- Fourth row -->
+        <button class="button" onclick="appendToDisplay('Math.sin(')">sin</button>
+        <button class="button" onclick="appendToDisplay('Math.cos(')">cos</button>
+        <button class="button" onclick="appendToDisplay('Math.tan(')">tan</button>
+        <button class="button" onclick="appendToDisplay('Math.log10(')">log</button>
+        <button class="button" onclick="appendToDisplay('Math.log(')">ln</button>
+        <button class="button" onclick="appendToDisplay('Math.sqrt(')">√</button>
+        <button class="button" onclick="appendToDisplay('root(3,')">∛</button>
+
+        <!-- Fifth row -->
+        <button class="button" onclick="appendToDisplay('root(4,')">⁴√</button>
+        <button class="button" onclick="appendToDisplay('root(')">ⁿ√</button>
+        <button class="button" onclick="appendToDisplay('factorial(')">x!</button>
+        <button class="button" onclick="appendToDisplay('%')">%</button>
+        <button class="button" onclick="calculateResult()">=</button>
+        <button class="button" onclick="appendToDisplay('^')">^</button>
+        <button class="button" onclick="appendToDisplay('Math.abs(')">|x|</button>
+
+        <!-- Sixth row -->
+        <button class="button" onclick="appendToDisplay('Math.ceil(')">ceil</button>
+        <button class="button" onclick="appendToDisplay('Math.floor(')">floor</button>
+        <button class="button" onclick="appendToDisplay('Math.round(')">round</button>
+        <button class="button" onclick="appendToDisplay('Math.max(')">max</button>
+        <button class="button" onclick="appendToDisplay('Math.min(')">min</button>
+        <button class="button" onclick="appendToDisplay('Math.random(')">random</button>
+        <button class="button" onclick="appendToDisplay('1/')">1/x</button>
+
+        <!-- Seventh row -->
+        <button class="button" onclick="appendToDisplay('Math.sinh(')">sinh</button>
+        <button class="button" onclick="appendToDisplay('Math.cosh(')">cosh</button>
+        <button class="button" onclick="appendToDisplay('Math.tanh(')">tanh</button>
+        <button class="button" onclick="appendToDisplay('Math.asin(')">asin</button>
+        <button class="button" onclick="appendToDisplay('Math.acos(')">acos</button>
+        <button class="button" onclick="appendToDisplay('Math.atan(')">atan</button>
+        <button class="button" onclick="appendToDisplay('Math.exp(')">exp</button>
+    </div>
+
+    <script>
+        let pastProblems = [];
+
+        // Append to display
+        function appendToDisplay(value) {
+            document.getElementById('display').value += value;
+        }
+
+        // Clear display
+        function clearDisplay() {
+            document.getElementById('display').value = '';
+        }
+
+        // Delete last character
+        function deleteLast() {
+            let display = document.getElementById('display');
+            display.value = display.value.slice(0, -1);
+        }
+
+        // Calculate result
+        function calculateResult() {
+            let display = document.getElementById('display');
+            try {
+                let expression = display.value.replace(/\^/g, '**').replace(/root\((\d),/g, 'Math.pow($2, 1/');  // handles nth roots
+                let result = eval(expression);
+                pastProblems.push(display.value + " = " + result);
+                updatePastProblems();
+                display.value = result;
+            } catch {
+                display.value = "Error";
+            }
+        }
+
+        // Factorial function
+        function factorial(n) {
+            return n === 0 ? 1 : n * factorial(n - 1);
+        }
+
+        // Root function
+        function root(n, x) {
+            return Math.pow(x, 1 / n);
+        }
+
+        // Change button colors
+        function changeButtonColor(color) {
+            let buttons = document.querySelectorAll('.button');
+            buttons.forEach(button => button.style.backgroundColor = color);
+        }
+
+        // Toggle Sidebar
+        document.getElementById('sidebarToggle').addEventListener('click', function() {
+            document.getElementById('sidebar').classList.toggle('open');
+        });
+
+        // Update past problems
+        function updatePastProblems() {
+            let list = document.getElementById('pastProblemsList');
+            list.innerHTML = '';
+            pastProblems.forEach(problem => {
+                let listItem = document.createElement('li');
+                listItem.textContent = problem;
+                list.appendChild(listItem);
+            });
+        }
+    </script>
+
+</body>
+</html>
