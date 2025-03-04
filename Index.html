@@ -1,297 +1,304 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Scientific Calculator</title>
-    <style>
-        /* Page Styling */
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #1e1e1e;
-            color: white;
-            margin: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            padding: 20px;
-            box-sizing: border-box;
-        }
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Scientific Calculator</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 100vh;
+                background-color: #222;
+                color: white;
+            }
 
-        /* Calculator Container */
-        #calculator {
-            display: grid;
-            grid-template-columns: repeat(5, 1fr); /* 5 columns for the layout */
-            grid-template-rows: repeat(10, 1fr); /* 10 rows to fit the buttons */
-            gap: 10px;
-            width: 100%;
-            max-width: 600px; /* Make it responsive for iPad */
-            padding: 20px;
-            box-sizing: border-box;
-            display: block; /* Ensure calculator grid is shown */
-        }
+            .container {
+                display: flex;
+            }
 
-        /* Display */
-        #display {
-            grid-column: span 5;
-            padding: 20px;
-            text-align: right;
-            font-size: 36px; /* Larger font size */
-            background-color: #222;
-            border-radius: 10px;
-            border: none;
-            color: white;
-            margin-bottom: 20px;
-            font-weight: bold;
-            box-sizing: border-box;
-        }
+            .sidebar {
+                width: 200px;
+                background: #2a2a2a;
+                padding: 20px;
+                border-radius: 10px 0 0 10px;
+                height: 400px;
+                overflow-y: auto;
+            }
 
-        /* Buttons */
-        .button {
-            background-color: #444;
-            border: none;
-            color: white;
-            padding: 20px; /* Larger padding for better touch interaction */
-            font-size: 20px; /* Larger font size */
-            border-radius: 10px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-            text-align: center;
-        }
+            .sidebar h3 {
+                margin-top: 0;
+                font-size: 1.2em;
+            }
 
-        .button:active {
-            background-color: #555;
-        }
+            .sidebar button {
+                width: 100%;
+                padding: 10px;
+                margin: 5px 0;
+                background: #444;
+                border: none;
+                color: white;
+                border-radius: 5px;
+                cursor: pointer;
+            }
 
-        /* Sidebar */
-        #sidebar {
-            position: fixed;
-            left: -250px;
-            width: 250px;
-            height: 100%;
-            background-color: #444;
-            color: white;
-            padding: 20px;
-            transition: left 0.3s;
-            overflow-y: auto;
-            top: 0;
-        }
+            .sidebar button:hover {
+                background: #555;
+            }
 
-        #sidebarToggle {
-            position: fixed;
-            top: 20px;
-            left: 20px;
-            background-color: #444;
-            border: none;
-            color: white;
-            font-size: 20px;
-            cursor: pointer;
-            padding: 10px;
-            border-radius: 5px;
-            z-index: 1000;
-        }
+            #history {
+                margin-top: 20px;
+                font-size: 0.9em;
+                color: #ccc;
+            }
 
-        #sidebar.open {
-            left: 0;
-        }
-
-        /* Responsive Design */
-        @media screen and (max-width: 768px) {
-            #calculator {
-                grid-template-columns: repeat(5, 1fr);
-                grid-template-rows: repeat(10, 1fr);
+            .calculator {
+                width: 300px;
+                background: #333;
+                padding: 20px;
+                border-radius: 0 10px 10px 0;
+                box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
             }
 
             #display {
-                font-size: 28px; /* Adjust display font size */
-                padding: 15px;
+                width: 100%;
+                height: 50px;
+                font-size: 1.5em;
+                text-align: right;
+                padding: 10px;
+                border: none;
+                background: #111;
+                color: white;
+                border-radius: 5px;
+                margin-bottom: 10px;
+            }
+
+            .buttons {
+                display: grid;
+                grid-template-columns: repeat(4, 1fr);
+                gap: 5px;
             }
 
             .button {
+                background: blue;
+                border: none;
+                color: white;
+                font-size: 1.2em;
                 padding: 15px;
-                font-size: 18px;
+                border-radius: 5px;
+                cursor: pointer;
             }
 
-            #sidebarToggle {
-                padding: 15px;
-                font-size: 24px;
+            .button:active {
+                background: darkblue;
             }
-        }
 
-        /* Basic Mode Button */
-        #modeToggle {
-            margin-top: 20px;
-            padding: 10px;
-            background-color: #444;
-            color: white;
-            border: none;
-            font-size: 18px;
-            cursor: pointer;
-            border-radius: 10px;
-        }
-
-    </style>
-</head>
-<body>
-
-    <!-- Sidebar button -->
-    <button id="sidebarToggle">☰</button>
-
-    <!-- Sidebar -->
-    <div id="sidebar">
-        <h2>Settings</h2>
-        <div>
-            <h3>Change Button Color</h3>
-            <button onclick="changeButtonColor('red')">Red</button>
-            <button onclick="changeButtonColor('green')">Green</button>
-            <button onclick="changeButtonColor('blue')">Blue</button>
-        </div>
-        <div>
-            <h3>Past Calculations</h3>
-            <ul id="pastProblemsList"></ul>
-        </div>
-    </div>
-
-    <!-- Mode Toggle Button -->
-    <button id="modeToggle" onclick="toggleMode()">Switch to Basic Mode</button>
-
-    <!-- Calculator -->
-    <input type="text" id="display" disabled>
-    <div id="calculator">
-        <!-- Basic Mode Buttons -->
-        <div id="basicModeButtons">
-            <button class="button" onclick="clearDisplay()">C</button>
-            <button class="button" onclick="deleteLast()">⌫</button>
-            <button class="button" onclick="appendToDisplay('7')">7</button>
-            <button class="button" onclick="appendToDisplay('8')">8</button>
-            <button class="button" onclick="appendToDisplay('9')">9</button>
-            <button class="button" onclick="appendToDisplay('+')">+</button>
-            <button class="button" onclick="appendToDisplay('4')">4</button>
-            <button class="button" onclick="appendToDisplay('5')">5</button>
-            <button class="button" onclick="appendToDisplay('6')">6</button>
-            <button class="button" onclick="appendToDisplay('-')">−</button>
-            <button class="button" onclick="appendToDisplay('1')">1</button>
-            <button class="button" onclick="appendToDisplay('2')">2</button>
-            <button class="button" onclick="appendToDisplay('3')">3</button>
-            <button class="button" onclick="appendToDisplay('0')">0</button>
-            <button class="button" onclick="appendToDisplay('.')">.</button>
-            <button class="button" onclick="calculateResult()">=</button>
-        </div>
-
-        <!-- Scientific Mode Buttons -->
-        <div id="scientificModeButtons" style="display:none;">
-            <button class="button" onclick="clearDisplay()">C</button>
-            <button class="button" onclick="deleteLast()">⌫</button>
-            <button class="button" onclick="appendToDisplay('(')">(</button>
-            <button class="button" onclick="appendToDisplay(')')">)</button>
-            <button class="button" onclick="appendToDisplay('/')">÷</button>
-            <button class="button" onclick="appendToDisplay('7')">7</button>
-            <button class="button" onclick="appendToDisplay('8')">8</button>
-            <button class="button" onclick="appendToDisplay('9')">9</button>
-            <button class="button" onclick="appendToDisplay('*')">×</button>
-            <button class="button" onclick="appendToDisplay('4')">4</button>
-            <button class="button" onclick="appendToDisplay('5')">5</button>
-            <button class="button" onclick="appendToDisplay('6')">6</button>
-            <button class="button" onclick="appendToDisplay('-')">−</button>
-            <button class="button" onclick="appendToDisplay('1')">1</button>
-            <button class="button" onclick="appendToDisplay('2')">2</button>
-            <button class="button" onclick="appendToDisplay('3')">3</button>
-            <button class="button" onclick="appendToDisplay('+')">+</button>
-            <button class="button" onclick="appendToDisplay('0')">0</button>
-            <button class="button" onclick="appendToDisplay('.')">.</button>
-            <button class="button" onclick="appendToDisplay('Math.PI')">π</button>
-            <button class="button" onclick="appendToDisplay('Math.E')">e</button>
-            <button class="button" onclick="appendToDisplay('Math.sqrt(')">√</button>
-            <button class="button" onclick="appendToDisplay('root(3,')">∛</button>
-            <button class="button" onclick="appendToDisplay('factorial(')">x!</button>
-            <button class="button" onclick="appendToDisplay('Math.pow(')">x^y</button>
-            <button class="button" onclick="appendToDisplay('Math.sin(')">sin</button>
-            <button class="button" onclick="appendToDisplay('Math.cos(')">cos</button>
-            <button class="button" onclick="appendToDisplay('Math.tan(')">tan</button>
-            <button class="button" onclick="appendToDisplay('Math.log(')">log</button>
-            <button class="button" onclick="appendToDisplay('Math.exp(')">exp</button>
-            <button class="button" onclick="appendToDisplay('Math.abs(')">abs</button>
-            <button class="button" onclick="appendToDisplay('Math.round(')">round</button>
-            <button class="button" onclick="appendToDisplay('Math.random()')">rand</button>
-            <button class="button" onclick="appendToDisplay('Math.max(')">max</button>
-            <button class="button" onclick="appendToDisplay('Math.min(')">min</button>
-            <button class="button" onclick="calculateResult()">=</button>
-        </div>
-    </div>
-
-    <script>
-        let pastProblems = [];
-        let isScientificMode = true;
-
-        // Append to display
-        function appendToDisplay(value) {
-            document.getElementById('display').value += value;
-        }
-
-        // Clear display
-        function clearDisplay() {
-            document.getElementById('display').value = '';
-        }
-
-        // Delete last character
-        function deleteLast() {
-            let display = document.getElementById('display');
-            display.value = display.value.slice(0, -1);
-        }
-
-        // Calculate result
-        function calculateResult() {
-            let display = document.getElementById('display');
-            try {
-                let expression = display.value.replace(/\^/g, '**').replace(/root\((\d),/g, 'Math.pow($2, 1/');  // handles nth roots
-                let result = eval(expression);
-                pastProblems.push(display.value + " = " + result);
-                updatePastProblems();
-                display.value = result;
-            } catch {
-                display.value = "Error";
+            .button.function {
+                background: orange;
             }
-        }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <div class="sidebar">
+                <h3>Calculator Tools</h3>
+                <button onclick="memoryStore()">Memory Store</button>
+                <button onclick="memoryRecall()">Memory Recall</button>
+                <button onclick="memoryClear()">Memory Clear</button>
+                <div id="history">
+                    <h3>History</h3>
+                    <div id="historyList"></div>
+                </div>
+            </div>
+            <div class="calculator">
+                <input type="text" id="display" disabled>
+                <div class="buttons">
+                    <button class="button" onclick="appendNumber('7')">7</button>
+                    <button class="button" onclick="appendNumber('8')">8</button>
+                    <button class="button" onclick="appendNumber('9')">9</button>
+                    <button class="button function" onclick="setOperation('/')">÷</button>
 
-        // Change button colors
-        function changeButtonColor(color) {
-            let buttons = document.querySelectorAll('.button');
-            buttons.forEach(button => button.style.backgroundColor = color);
-        }
+                    <button class="button" onclick="appendNumber('4')">4</button>
+                    <button class="button" onclick="appendNumber('5')">5</button>
+                    <button class="button" onclick="appendNumber('6')">6</button>
+                    <button class="button function" onclick="setOperation('*')">×</button>
 
-        // Toggle between modes
-        function toggleMode() {
-            isScientificMode = !isScientificMode;
+                    <button class="button" onclick="appendNumber('1')">1</button>
+                    <button class="button" onclick="appendNumber('2')">2</button>
+                    <button class="button" onclick="appendNumber('3')">3</button>
+                    <button class="button function" onclick="setOperation('-')">−</button>
 
-            if (isScientificMode) {
-                document.getElementById('scientificModeButtons').style.display = 'block';
-                document.getElementById('basicModeButtons').style.display = 'none';
-                document.getElementById('modeToggle').innerText = 'Switch to Basic Mode';
-            } else {
-                document.getElementById('scientificModeButtons').style.display = 'none';
-                document.getElementById('basicModeButtons').style.display = 'block';
-                document.getElementById('modeToggle').innerText = 'Switch to Scientific Mode';
+                    <button class="button" onclick="appendNumber('0')">0</button>
+                    <button class="button" onclick="appendDecimal()">.</button>
+                    <button class="button function" onclick="calculate()">=</button>
+                    <button class="button function" onclick="setOperation('+')">+</button>
+
+                    <button class="button function" onclick="clearDisplay()">C</button>
+                    <button class="button function" onclick="setScientific('sqrt')">√</button>
+                    <button class="button function" onclick="setScientific('pow')">x²</button>
+                    <button class="button function" onclick="setScientific('factorial')">n!</button>
+
+                    <button class="button function" onclick="setScientific('sin')">sin</button>
+                    <button class="button function" onclick="setScientific('cos')">cos</button>
+                    <button class="button function" onclick="setScientific('tan')">tan</button>
+                    <button class="button function" onclick="setScientific('log')">log</button>
+
+                    <button class="button function" onclick="setScientific('exp')">e^x</button>
+                    <button class="button function" onclick="setScientific('pi')">π</button>
+                    <button class="button function" onclick="setScientific('e')">e</button>
+                    <button class="button function" onclick="setScientific('rand')">rand</button>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            let currentInput = '';
+            let operation = null;
+            let firstOperand = null;
+            let memory = 0;
+            let history = [];
+
+            function updateDisplay() {
+                document.getElementById('display').value = currentInput;
             }
-        }
 
-        // Update past problems
-        function updatePastProblems() {
-            let list = document.getElementById('pastProblemsList');
-            list.innerHTML = '';
-            pastProblems.forEach(problem => {
-                let listItem = document.createElement('li');
-                listItem.textContent = problem;
-                list.appendChild(listItem);
-            });
-        }
+            function appendNumber(number) {
+                currentInput += number;
+                updateDisplay();
+            }
 
-        // Sidebar toggle functionality
-        document.getElementById('sidebarToggle').addEventListener('click', function() {
-            document.getElementById('sidebar').classList.toggle('open');
-        });
-    </script>
+            function appendDecimal() {
+                if (!currentInput.includes('.')) {
+                    currentInput += '.';
+                    updateDisplay();
+                }
+            }
 
-</body>
+            function setOperation(op) {
+                if (currentInput === '') return;
+                if (firstOperand === null) {
+                    firstOperand = parseFloat(currentInput);
+                } else {
+                    firstOperand = calculate();
+                }
+                operation = op;
+                currentInput = '';
+            }
+
+            function factorial(n) {
+                if (n === 0 || n === 1) return 1;
+                let result = 1;
+                for (let i = 2; i <= n; i++) {
+                    result *= i;
+                }
+                return result;
+            }
+
+            function setScientific(func) {
+                if (currentInput === '') return;
+                let num = parseFloat(currentInput);
+
+                switch (func) {
+                    case "sin":
+                        currentInput = Math.sin(num).toString();
+                        break;
+                    case "cos":
+                        currentInput = Math.cos(num).toString();
+                        break;
+                    case "tan":
+                        currentInput = Math.tan(num).toString();
+                        break;
+                    case "log":
+                        currentInput = Math.log10(num).toString();
+                        break;
+                    case "sqrt":
+                        currentInput = Math.sqrt(num).toString();
+                        break;
+                    case "exp":
+                        currentInput = Math.exp(num).toString();
+                        break;
+                    case "pi":
+                        currentInput = Math.PI.toString();
+                        break;
+                    case "e":
+                        currentInput = Math.E.toString();
+                        break;
+                    case "pow":
+                        currentInput = Math.pow(num, 2).toString();
+                        break;
+                    case "factorial":
+                        currentInput = factorial(num).toString();
+                        break;
+                    case "rand":
+                        currentInput = Math.random().toString();
+                        break;
+                }
+                updateDisplay();
+            }
+
+            function calculate() {
+                let result = 0;
+                let secondOperand = parseFloat(currentInput);
+                if (firstOperand !== null && operation !== null) {
+                    switch (operation) {
+                        case "+":
+                            result = firstOperand + secondOperand;
+                            break;
+                        case "-":
+                            result = firstOperand - secondOperand;
+                            break;
+                        case "*":
+                            result = firstOperand * secondOperand;
+                            break;
+                        case "/":
+                            result = firstOperand / secondOperand;
+                            break;
+                        case "^":
+                            result = Math.pow(firstOperand, secondOperand);
+                            break;
+                    }
+                    history.push(`${firstOperand} ${operation} ${secondOperand} = ${result}`);
+                    updateHistory();
+                    firstOperand = result;
+                    operation = null;
+                    currentInput = result.toString();
+                    updateDisplay();
+                }
+            }
+
+            function clearDisplay() {
+                currentInput = '';
+                firstOperand = null;
+                operation = null;
+                updateDisplay();
+            }
+
+            function memoryStore() {
+                if (currentInput !== '') {
+                    memory = parseFloat(currentInput);
+                }
+            }
+
+            function memoryRecall() {
+                currentInput = memory.toString();
+                updateDisplay();
+            }
+
+            function memoryClear() {
+                memory = 0;
+            }
+
+            function updateHistory() {
+                const historyList = document.getElementById('historyList');
+                historyList.innerHTML = '';
+                history.forEach(entry => {
+                    const p = document.createElement('p');
+                    p.textContent = entry;
+                    historyList.appendChild(p);
+                });
+            }
+        </script>
+    </body>
 </html>
